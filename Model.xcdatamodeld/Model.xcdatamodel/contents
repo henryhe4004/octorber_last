@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20B50" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FamilyModel" representedClassName="FamilyModel" syncable="YES">
+        <attribute name="familyId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="familyMemberCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="familyName" optional="YES" attributeType="String"/>
+        <attribute name="familyTree" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="MemberModel" representedClassName="MemberModel" syncable="YES">
+        <attribute name="appleId" optional="YES" attributeType="String"/>
+        <attribute name="avatar" optional="YES" attributeType="String"/>
+        <attribute name="birthday" optional="YES" attributeType="String"/>
+        <attribute name="familyId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="familyStatus" optional="YES" attributeType="String"/>
+        <attribute name="missCard" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="FamilyModel" positionX="-63" positionY="-9" width="128" height="89"/>
+        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
+        <element name="MemberModel" positionX="-54" positionY="0" width="128" height="164"/>
+    </elements>
+</model>

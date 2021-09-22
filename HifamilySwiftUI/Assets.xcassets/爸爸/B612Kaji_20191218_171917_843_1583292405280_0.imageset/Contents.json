@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "B612Kaji_20191218_171917_843_1583292405280_0.jpg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
