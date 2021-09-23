@@ -42,8 +42,10 @@ struct photosUIView: View {
                     .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))
                     Spacer()
                 
-            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 0))
+            }
+            .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 0))
 //         Spacer()
+          
                 LazyVGrid(columns: items, content: {
                     ForEach(0 ..< albumTest.imga.count){
                         index1 in
@@ -68,6 +70,7 @@ struct photosUIView: View {
                         }
                     }
                 }
+             
                 
                 )
             
@@ -113,7 +116,9 @@ struct photosUIView: View {
                     }
                 }
             )
+           
         }
+        .frame(width: 360)
     }
 }
 
