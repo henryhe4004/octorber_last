@@ -11,7 +11,8 @@ import SwiftUI
 
 struct EditTimelineView: View {
     
-   
+    @State var isSelected = -1;
+//    @State var isAdd = false
     var body: some View {
         
         VStack {
@@ -19,7 +20,7 @@ struct EditTimelineView: View {
             ScrollView(.vertical){
                 EventData()
                 DescriptionEvent()
-                EventType()
+                EventType(isSelected: $isSelected)
                 EnableReminder()
                 EventMarkers()
                 
@@ -113,39 +114,60 @@ struct DescriptionEvent: View {
 }
 
 struct EventType: View {
-    @State var eventTypes = ["生日","纪念日","学业","生活","事业",""]
-    var items : [GridItem] = [
+    var EventItems : [GridItem] = [
         GridItem(GridItem.Size.flexible(),spacing: 5),
         GridItem(GridItem.Size.flexible(),spacing: 5),
         GridItem(GridItem.Size.flexible(),spacing: 5)
     ]
+    @State var eventTypes = ["生日","纪念日","学业","生活","事业"]
+    @Binding var isSelected : Int
+//    @Binding var isAdd : Bool
     var body: some View {
-        VStack {
-            LazyVGrid(columns: items, content: {
+        VStack{
+            HStack{
+                Text("事件类型:")
+                    .font(.system(size: 20))
+                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 8, trailing: 40))
+                    .foregroundColor(Color("EditTimerColor"))
+//                    .foregroundColor(grayColor2)
+                Spacer()
+            }
+            LazyVGrid(columns: EventItems, content: {
             ForEach (0..<eventTypes.count){
                 index in
                 Button(action:{
-                    
+                    isSelected = index
                 })
                 {
-                    Text(eventTypes[index]).foregroundColor(Color("AccentColor"))
-//
-//                    if(eventTypes[index] == ""){
-//                        Image("plusSign")
-//                    }else{
-//                        Text(eventTypes[index]).foregroundColor("AccentColor")
-//                    }
+                    Text(eventTypes[index])
+                    
+                        .frame(width:100,height:100)
+                        .foregroundColor(isSelected == index ? .white : grayColor )
                 }
-//                .frame(width: 83, height: 37, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-//                .cornerRadius(11)
-//                .shadow(color: /*@START_MENU_TOKEN@*/Color("shadowColor")/*@END_MENU_TOKEN@*/, radius: 8, x: /*@START_MENU_TOKEN@*/0.0/*@END_MENU_TOKEN@*/, y: 2)
-//                .background(Color.white)
+                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .animation(.easeInOut)
+                .background( isSelected == index ? LinearGradient(gradient: Gradient(colors: [Color.init(red : 255/255,green: 144/255,blue: 13/255), Color.init(red: 255/255, green: 169/255, blue: 54/255)]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
+                    .shadow(color: Color("AccentColor"), radius: 3, x: 0.5, y: 0.5)
+                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+
             }
+                
+                Button(action:{
+                    isSelected = eventTypes.count
+                })
+                {
+                    Image("plusSign")
+                }
+                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .animation(.easeInOut)
+                .background( isSelected == eventTypes.count ? LinearGradient(gradient: Gradient(colors: [Color.init(red : 255/255,green: 144/255,blue: 13/255), Color.init(red: 255/255, green: 169/255, blue: 54/255)]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
+                    .shadow(color: Color("AccentColor"), radius: 3, x: 0.5, y: 0.5)
+                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+
             })
-        }
-        .padding(EdgeInsets(top: 20, leading: 33, bottom: 0, trailing: 33))
-        .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/)
-        Divider().frame(width:320)
+            
+        }.frame(width:360)
+//
 
     }
 }
