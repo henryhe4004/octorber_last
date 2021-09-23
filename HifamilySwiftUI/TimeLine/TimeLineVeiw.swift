@@ -82,26 +82,6 @@ struct TimeLineView_Previews: PreviewProvider {
     }
 }
 
-struct UpperLine: View {
-    var body: some View {
-        HStack {
-            Image("Iconly-Bulk-Setting")
-                .resizable()
-                .frame(width:23,
-                       height:23,
-                       alignment:.center)
-            Spacer()
-            Text("写家书")
-                .foregroundColor(Color.black)
-                .font(.system(size: 22))
-            Spacer()
-            Text("寄出")
-                .foregroundColor(Color.black)
-                .font(.system(size: 22))
-        }.padding()
-    }
-}
-
 struct TimeLineRight: View {
     var body: some View {
         ScrollView {

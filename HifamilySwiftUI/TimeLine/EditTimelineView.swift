@@ -16,16 +16,23 @@ struct EditTimelineView: View {
     var body: some View {
         
         VStack {
-            UpperNavigationBarEdit()
+//            UpperNavigationBarEdit()
             ScrollView(.vertical){
+                Spacer()
                 EventData()
                 DescriptionEvent()
                 EventType(isSelected: $isSelected)
                 EnableReminder()
                 EventMarkers()
-                
             }
-        }.padding(EdgeInsets(top: -50, leading: 0, bottom: 0, trailing: 0))
+        }.padding(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
+        .navigationBarTitle(Text("编辑时间轴").foregroundColor(grayColor2)
+            .font(.system(size: 22)),displayMode: .inline)
+        .navigationBarItems(trailing: Button(action:{} ){
+            Text("确定")
+                .foregroundColor(Color.white)
+                .font(.system(size: 22))
+        })
     }
 }
 
