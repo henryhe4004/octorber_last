@@ -32,6 +32,7 @@
 		890C993C26EF3A6800494182 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C993B26EF3A6800494182 /* Persistence.swift */; };
 		893BD75D26F03B7C00026C38 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893BD75C26F03B7C00026C38 /* HomeView.swift */; };
 		893BD76126F04A6000026C38 /* LoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893BD76026F04A6000026C38 /* LoveView.swift */; };
+		8947780426FBEEFC0078E735 /* EditTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8947780326FBEEFC0078E735 /* EditTimelineView.swift */; };
 		8948191C26F5C0C90095E91D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8948191A26F5C0C90095E91D /* Model.xcdatamodeld */; };
 		89628E2626F81DEA00AA41C1 /* Textfield02.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89628E2526F81DEA00AA41C1 /* Textfield02.swift */; };
 		896F3A9226FB45DD005ED305 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896F3A9126FB45DD005ED305 /* CoreData.swift */; };
@@ -75,6 +76,7 @@
 		890C994026EF3A6800494182 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		893BD75C26F03B7C00026C38 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; usesTabs = 0; };
 		893BD76026F04A6000026C38 /* LoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveView.swift; sourceTree = "<group>"; };
+		8947780326FBEEFC0078E735 /* EditTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTimelineView.swift; sourceTree = "<group>"; };
 		8948191B26F5C0C90095E91D /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		89628E2526F81DEA00AA41C1 /* Textfield02.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Textfield02.swift; sourceTree = "<group>"; };
 		896F3A9126FB45DD005ED305 /* CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreData.swift; path = HifamilySwiftUI/CoreData.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 			children = (
 				8900C06926FB60B6007E7D4D /* TimeLineVeiw.swift */,
 				8900C06A26FB60B6007E7D4D /* MyTimeLineView.swift */,
+				8947780326FBEEFC0078E735 /* EditTimelineView.swift */,
 			);
 			path = TimeLine;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				8900C06126FB4DC8007E7D4D /* MemberModel+CoreDataProperties.swift in Sources */,
 				8979282426F21053008F49AB /* HomeLandUIView.swift in Sources */,
 				CDE09D0826F79449004DE2AB /* DataTest.swift in Sources */,
+				8947780426FBEEFC0078E735 /* EditTimelineView.swift in Sources */,
 				7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */,
 				890C993326EF3A6700494182 /* HifamilySwiftUIApp.swift in Sources */,
 				718E65EF26F74E430010165C /* IssueUIView.swift in Sources */,
