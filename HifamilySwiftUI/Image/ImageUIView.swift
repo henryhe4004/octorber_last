@@ -56,141 +56,152 @@ struct ImageUIView: View {
        
         NavigationView {
             
-        VStack{
-            
-            ZStack {
-                HStack{
-                Image("Iconly-Bulk-Setting")
-                    .resizable()
-                    .frame(width:23,
-                           height:23,
-                           alignment:.center)
-                Spacer()
-                Text("Family album")
-                    .foregroundColor(Color("AccentColor"))
-                    .font(.system(size: 18))
-                Spacer()
-                NavigationLink(
-                    destination: IssueUIView())
-                {
-                    Image("Iconly-Bulk-Plus")
-                        .resizable()
-                        .frame(width:23,
-                               height:23,
-                               alignment:.center)
+            ZStack{
+                VStack{
                     
-                }.navigationBarTitle("",displayMode: .inline)
-                .navigationBarHidden(true)
-                .navigationTitle("返回")
-                
-                    
-                }
-                
-            }.padding()
-            Divider()
-            HStack{
-                  
-                    Button(action: {
+                    HStack {
+                        Image("Iconly-Bulk-Setting")
+                            .resizable()
+                            .frame(width:23,
+                                   height:23,
+                                   alignment:.center)
+                        Spacer()
+                        Text("Family album")
+                            .foregroundColor(Color("AccentColor"))
+                            .font(.system(size: 18))
+                        Spacer()
+                        NavigationLink(
+                            destination: IssueUIView())
+                        {
+                            Image("Iconly-Bulk-Plus")
+                                .resizable()
+                                .frame(width:23,
+                                       height:23,
+                                       alignment:.center)
+                            
+                        }
+                        .navigationBarTitle("",displayMode: .inline)
+                        .navigationBarHidden(true)
+                        .navigationTitle("返回")
+                        
+                        
+                    }.padding()
                        
-                            indexSelected=1
+                    
+              
+                Divider()
+                HStack{
+                    
+                    Button(action: {
+                        
+                        indexSelected=1
                         
                         
                     }){
                         HStack {
                             Image(indexSelected == 1 ? "c1" : "gray camera" )
                             Text("照片")
-                            .frame(width: 40, height: 20, alignment: .center)
-                            .cornerRadius(32)
-                            .foregroundColor( grayColor )
+                                .frame(width: 40, height: 20, alignment: .center)
+                                .cornerRadius(32)
+                                .foregroundColor( grayColor )
                         }
-                
+                        
                     }
-                .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .animation(.easeInOut)
-                .background(  LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
+                    .frame(width: 100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center)
+                    .animation(.easeInOut)
+                    .background(  LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
                     .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
-                .padding(EdgeInsets(top: 10, leading: 20, bottom: 5, trailing: 20))
-                Button(action: {
-                    
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 10))
+                    Button(action: {
+                        
                         indexSelected=2
-                    
-                    
-                }){
-                    HStack {
-                        Image(indexSelected == 2 ? "orange photo" : "c2" )
-                        Text("相册")
-                        .frame(width: 40, height: 20, alignment: .center)
-                        .cornerRadius(32)
-                        .foregroundColor( grayColor )
+                        
+                        
+                    }){
+                        HStack {
+                            Image(indexSelected == 2 ? "orange photo" : "c2" )
+                            Text("相册")
+                                .frame(width: 40, height: 20, alignment: .center)
+                                .cornerRadius(32)
+                                .foregroundColor( grayColor )
+                        }
+                        
                     }
-            
-                }
-            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-            .animation(.easeInOut)
-            .background(  LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
-                .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
-            .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 15))
-                
-                Button(action: {
-                  
+                    .frame(width: 100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center)
+                    .animation(.easeInOut)
+                    .background(  LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
+                    .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 15))
+                    
+                    Button(action: {
+                        
                         indexSelected = 3
-                    
-                    
-                }){
-                    HStack {
-                        Image(indexSelected == 3 ? "orange video" : "c4" )
-                        Text("回忆")
-                        .frame(width: 40, height: 20, alignment: .center)
-                        .cornerRadius(32)
-                        .foregroundColor( grayColor )
-                    }
-            
-                }
-            .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-            .animation(.easeInOut)
-            .background(  LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
-                .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
-            .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 15))
-                }
-            
-            ZStack{
-             
-                    
-                        if(indexSelected == 1){
-                            ZStack{
-                            ScrollView(.vertical, showsIndicators: false){
-                                albumUIView(detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected)
-                            }
-                                if(isSelected){
-                                    DetailImageUIView(isSelected: $isSelected, detailImage: $detailImage, detailText: $detailText)
-                                }
+                        
+                        
+                    }){
+                        HStack {
+                            Image(indexSelected == 3 ? "orange video" : "c4" )
+                            Text("回忆")
+                                .frame(width: 40, height: 20, alignment: .center)
+                                .cornerRadius(32)
+                                .foregroundColor( grayColor )
                         }
-                            
+                        
                     }
-                if(indexSelected == 2){
-                    ZStack{
-                    ScrollView(.vertical, showsIndicators: false){
-                        photosUIView(detailAlbum: $detailAlbum, detailText: $detailText,isSelected1: $isSelected1)
-                    }
-                        if(isSelected1){
-                            DetailAlbumUIView(detailAlbum: $detailAlbum, detailText: $detailText, isSelected1: $isSelected1)
-                        }
-                }
-                }
-                if(indexSelected == 3){
-//                    Text("123").font(.system(size: 100))
-                    ScrollView(.vertical, showsIndicators: false){
-                        VideoUIView()
-                    }
-                           
-                }
+                    .frame(width: 100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center)
+                    .animation(.easeInOut)
+                    .background(  LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
+                    .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
+                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 10))
+                }.frame(width:360)
+//                        Spacer()
+            
                 
+                    
+                    
+                       
+                    if(indexSelected == 1){
+                       
+                        ZStack {
+                            ScrollView(.vertical, showsIndicators: false){
+                                    albumUIView(detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected)
+                            }
+                        
+                        if(isSelected){
+                              
+                               
+                                DetailImageUIView(isSelected: $isSelected, detailImage: $detailImage, detailText: $detailText)
+                                
+                            }
+                        }
+                  
+                        }
+                        
+                    
+                    if(indexSelected == 2){
+                        ZStack{
+                            ScrollView(.vertical, showsIndicators: false){
+                                photosUIView(detailAlbum: $detailAlbum, detailText: $detailText,isSelected1: $isSelected1)
+                            }
+                            if(isSelected1){
+                                DetailAlbumUIView(detailAlbum: $detailAlbum, detailText: $detailText, isSelected1: $isSelected1)
+                            }
+                        }
+                    }
+                    if(indexSelected == 3){
+                        //                    Text("123").font(.system(size: 100))
+                        ScrollView(.vertical, showsIndicators: false){
+                            VideoUIView()
+                        }
+                        
+                    }
+                    
                 }
-            
+               
+                }
         }
-    }
-
-    }
+        }
+//    }
 }
 
 struct ImageUIView_Previews: PreviewProvider {

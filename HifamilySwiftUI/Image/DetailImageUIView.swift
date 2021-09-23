@@ -23,8 +23,7 @@ struct DetailImageUIView: View {
 //        = "弟弟，你还记得那天你小学四年级军训的时候要上台表演，在台下紧张的等待，我悄悄给你拍的照片。"
     
     var body: some View {
-//        ZStack{
-//            Rectangle().fill(Color.gray).opacity(0.5)
+//
             ScrollView(.vertical, showsIndicators: false){
                 
                 Image(systemName: "arrowshape.turn.up.left.fill")
@@ -56,6 +55,7 @@ struct DetailImageUIView: View {
                     }.padding(EdgeInsets(top: 10, leading: 20, bottom: 5, trailing: 0))
                     Text(detailText).foregroundColor(Color(red: 115/255, green: 115/255, blue: 115/255))
                         .padding(EdgeInsets(top: 0, leading: 15, bottom: 5, trailing: 15))
+//                        .lineSpacing(12.0)
                     HStack{
                         Spacer()
                         Text("上传时间：2021.7.27 AM10:02").foregroundColor(grayColor).padding(EdgeInsets(top: 5, leading: 0, bottom: 10, trailing: 15))

@@ -15,9 +15,10 @@ struct albumUIView: View {
     @Binding var detailText : String
     @Binding var isSelected : Bool
     var items : [GridItem] = [
-        GridItem(GridItem.Size.flexible(),spacing: 5),
-        GridItem(GridItem.Size.flexible(),spacing: 5),
-        GridItem(GridItem.Size.flexible(),spacing: 5)
+        GridItem(GridItem.Size.flexible(),spacing: 1),
+        GridItem(GridItem.Size.flexible(),spacing: 1),
+        GridItem(GridItem.Size.flexible(),spacing: 1),
+        GridItem(GridItem.Size.flexible(),spacing: 1)
         
     ]
     
@@ -36,14 +37,14 @@ struct albumUIView: View {
                     .frame(width: 200, height: 25, alignment: .topLeading)
                     .font(.system(size: 20))
                     .foregroundColor(Color(red: 115/255, green: 115/255, blue: 115/255))
-                    .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0)
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                     )
                 Text("今日有\(imgTest.date[index]-20)人上传照片").font(.system(size: 14))
                     .frame(width: 200, height: 20, alignment: .leading)
                     .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0))
                 }
                 Spacer()
-            }.padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+            }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
         
             LazyVGrid(columns: items, content: {
                 ForEach(1..<10){
@@ -56,13 +57,13 @@ struct albumUIView: View {
                         Image("\(imgTest.img[index])\(indexsecond)")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 100, height: 100, alignment: .center)
+                            .frame(width: 85, height: 85, alignment: .center)
                             .cornerRadius(20)
                     }
                 }
             })
         }
-        }
+        }.frame(width:360)
     }
 }
 
