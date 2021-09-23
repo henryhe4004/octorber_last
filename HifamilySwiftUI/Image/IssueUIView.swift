@@ -7,16 +7,52 @@
 
 import SwiftUI
 
+import CoreImage
+import CoreImage.CIFilterBuiltins
+
+final class Imagepicker: ObservableObject {
+    @Published  var img: [UIImage]
+//    @Published var date: [Int]
+    @Published var imgd : [Data]
+    init() {
+        img = []
+        imgd = []
+    }
+    func addImage(img1 : UIImage){
+        img.append(img1)
+    }
+    func addImageData(img1 : Data){
+        imgd.append(img1)
+    }
+}
 struct IssueUIView: View {
+//    let context = CIContext()
+//    let currentFilter = CIFilter.sepiaTone()
+    @ObservedObject var imagepick : Imagepicker = Imagepicker()
     @State var people : String = "妍妍"
     @State var content : String = ""
     @State var isPresented : Bool = false
     @State var isIssue : Bool = false
+    @State var inputImage : UIImage = UIImage()
+//    func loadImage() {
+//        guard let inputImage = UIImage(named: "Example") else { return }
+//     // 将UIImage转换为CIImage
+//        var beginImage = CIImage(image: inputImage)
+//        currentFilter.inputImage = beginImage
+//        currentFilter.intensity = 1
+//
+//        // 下面我们可以使用Core Image库进行图像处理
+//        let context = CIContext()
+//        let currentFilter = CIFilter.sepiaTone()
+//    }
     var items : [GridItem] = [
         GridItem(GridItem.Size.flexible(),spacing: 0),
         GridItem(GridItem.Size.flexible(),spacing: 0)
     ]
     
+    func getName() -> Int {
+        return imagepick.img.count
+    }
     var body: some View {
         VStack{
             Divider()
@@ -53,33 +89,43 @@ struct IssueUIView: View {
                         .overlay(RoundedRectangle(cornerRadius: 10.0, style: .continuous).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
                     }
                 }
+//                printf("\(imagepick.img.count)")
                 VStack{
-                LazyVGrid(columns: items, content: {
-                    ForEach(1..<3){ index in
-                        Image("littleYou\(index)")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 170, height: 170, alignment: .center)
-                            .cornerRadius(20)
-                            .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
-                    }
                     
-                    
-                    Button(action:{
-                        self.isPresented = true
-                    }){
-                        Image("ic_add_a_photo_48px")
-                            .resizable()
-                            .frame(width: 100/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center)
+                    LazyVGrid(columns: items, content: {
+                        ForEach(0..<1){ index in
+                            
+//                            Image(uiImage : UIImage(data: imagepick.imgd[index])!)
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                                .frame(width: 170, height: 170, alignment: .center)
+//                                .cornerRadius(20)
+//                                .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
+                            Image("littleYou1")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 170, height: 170, alignment: .center)
+                                .cornerRadius(20)
+                                .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
+                            
+                        }
+                        
+                        
+                        Button(action:{
+                            self.isPresented = true
+                        }){
+                            Image("ic_add_a_photo_48px")
+                                .resizable()
+                                .frame(width: 100/*@END_MENU_TOKEN@*/, height: 100, alignment: /*@START_MENU_TOKEN@*/.center)
+                        }
+                        .frame(width: 170, height: 170, alignment: .center)
+                        .cornerRadius(20)
+                        .background(Color(red: 245/255, green: 245/255, blue: 245/255)).cornerRadius(20)
+                        .fullScreenCover(isPresented: $isPresented, content: {
+                            ImagePickerView(MyImage: imagepick)
+                        })
                     }
-                    .frame(width: 170, height: 170, alignment: .center)
-                    .cornerRadius(20)
-                    .background(Color(red: 245/255, green: 245/255, blue: 245/255)).cornerRadius(20)
-                    .fullScreenCover(isPresented: $isPresented, content: {
-                        ImagePickerView()
-                    })
-                }
-                )
+                    )
                 }.frame(width:360)
             }
             
