@@ -16,16 +16,23 @@ struct EditTimelineView: View {
     var body: some View {
         
         VStack {
-            UpperNavigationBarEdit()
+//            UpperNavigationBarEdit()
             ScrollView(.vertical){
+                Spacer()
                 EventData()
                 DescriptionEvent()
                 EventType(isSelected: $isSelected)
                 EnableReminder()
                 EventMarkers()
-                
             }
-        }.padding(EdgeInsets(top: -50, leading: 0, bottom: 0, trailing: 0))
+        }.padding(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
+        .navigationBarTitle(Text("编辑时间轴").foregroundColor(grayColor2)
+            .font(.system(size: 22)),displayMode: .inline)
+        .navigationBarItems(trailing: Button(action:{} ){
+            Text("确定")
+                .foregroundColor(Color.white)
+                .font(.system(size: 22))
+        })
     }
 }
 
@@ -234,6 +241,8 @@ struct EnableReminder: View {
 //事件图标
 struct EventMarkers: View {
     @State var isPressedMore = false
+    @State var eventIcon = 0
+    @State var IsPressedIcon = 0
     
     var items : [GridItem] = [
         GridItem(GridItem.Size.flexible(),spacing: 5),
@@ -248,23 +257,29 @@ struct EventMarkers: View {
             HStack{
                 Text("事件图标:")
                     .foregroundColor(Color("EventMarkersFont"))
+//                    .offset()
+                Image("eventIcon\(eventIcon)")
+                    .frame(width: 20, height:20 )
             }
-            .offset(x: -127)
-//            let eventMarkersCount = isPressedMore ? 60 : 30
+            .offset(x: -113)
+
             LazyVGrid(columns: items, content: {
                 if(isPressedMore == false){
                     ForEach(0..<30){
-                        
-                        index in Image("eventIcon\(index)")
+                        index in
+                    Image("eventIcon\(index)")
                             .frame(width: 20, height: 20, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             .onTapGesture {
-                                
+                                eventIcon = index
                             }
                     }.padding(10)
                 }else{
                     ForEach(0..<60){
                         index in Image("eventIcon\(index)")
                             .frame(width: 20, height: 20, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .onTapGesture {
+                                eventIcon = index
+                            }
                     }.padding(10)
                 }
                 
