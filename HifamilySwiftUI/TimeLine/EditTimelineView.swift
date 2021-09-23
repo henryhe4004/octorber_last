@@ -212,6 +212,8 @@ struct EnableReminder: View {
 //事件图标
 struct EventMarkers: View {
     @State var isPressedMore = false
+    @State var eventIcon = 0
+    @State var IsPressedIcon = 0
     
     var items : [GridItem] = [
         GridItem(GridItem.Size.flexible(),spacing: 5),
@@ -226,23 +228,28 @@ struct EventMarkers: View {
             HStack{
                 Text("事件图标:")
                     .foregroundColor(Color("EventMarkersFont"))
+                Image("eventIcon\(eventIcon)")
+                    .frame(width: 20, height:20 )
             }
             .offset(x: -127)
-//            let eventMarkersCount = isPressedMore ? 60 : 30
+
             LazyVGrid(columns: items, content: {
                 if(isPressedMore == false){
                     ForEach(0..<30){
-                        
-                        index in Image("eventIcon\(index)")
+                        index in
+                    Image("eventIcon\(index)")
                             .frame(width: 20, height: 20, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             .onTapGesture {
-                                
+                                eventIcon = index
                             }
                     }.padding(10)
                 }else{
                     ForEach(0..<60){
                         index in Image("eventIcon\(index)")
                             .frame(width: 20, height: 20, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .onTapGesture {
+                                eventIcon = index
+                            }
                     }.padding(10)
                 }
                 
