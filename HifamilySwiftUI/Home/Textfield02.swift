@@ -18,6 +18,7 @@ struct Textfield02: View {
     var memberModels: FetchedResults<MemberModel>
     
     @State var isPressed = false //是否按压图片
+    @State var keyboardHight : CGFloat = 0
     
     
     var body: some View {
@@ -31,23 +32,35 @@ struct Textfield02: View {
                   
                     Spacer()
                     VStack {
-                        HStack(alignment: .center, spacing: 10) {
+                        HStack(alignment: .center) {
                             Spacer()
 
-                            Image(systemName: "arrow.left")
-                                .resizable(resizingMode: .tile)
-                                .aspectRatio(contentMode: .fill)
-                                .foregroundColor(Color("AccentColor"))
+
+//                            KeyboardHost{
+                                ScrollView{
+                                AddMemberCardUIView()
+                                    .padding(20)
+                                }
+                                .frame(width: 280, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                
                                 .onTapGesture {
                                     isPressed = false
                                 }
-                                .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                .padding()
-                            KeyboardHost{
-                                ScrollView{
-                                AddMemberCardUIView()
-                                }
-                            }
+                                .onAppear {
+                                        //键盘抬起
+                                         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                                           let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                                               let height = value.height
+                                            self.keyboardHight = height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                                         }
+                                         //键盘收起
+                                      NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                                                 self.keyboardHight = 0
+                                         }
+                                     }
+                                .offset(y : -keyboardHight/3)
+                                
+//                            }
 
                             
                                 //显示Core Data数据库内容的列表
@@ -56,11 +69,29 @@ struct Textfield02: View {
 
                             //改回来
                 ForEach(memberModels, id: \.name) { memberModel in
-                        KeyboardHost {
+//                        KeyboardHost {
                             ScrollView{
-                                CardUIView(image:memberModel.avatar! ,memberName:memberModel.name! ,memberIdentity:memberModel.birthday! ,memberTelephone:memberModel.phone!).padding()
+                                CardUIView(image:memberModel.avatar! ,memberName:memberModel.name! ,memberIdentity:memberModel.birthday! ,memberTelephone:memberModel.phone!).padding(20)
                                             }
-                                    }
+                            .frame(width: 280, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            
+                            .onTapGesture {
+                                isPressed = false
+                            }
+                            .onAppear {
+                                    //键盘抬起
+                                     NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                                       let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                                           let height = value.height
+                                        self.keyboardHight = height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                                     }
+                                     //键盘收起
+                                  NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                                             self.keyboardHight = 0
+                                     }
+                                 }
+                            .offset(y : -keyboardHight/3)
+//                                    }
 
 
                                 }
@@ -69,7 +100,6 @@ struct Textfield02: View {
                         
                         
                     }
-//                    Spacer()
                 }
             }else{
                 VStack {

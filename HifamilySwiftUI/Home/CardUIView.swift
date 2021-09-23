@@ -85,8 +85,9 @@ struct CardUIView: View {
                 
             }
             
+            
         }
-        .frame(width: 300)
+        .frame(width: 260,height: 440)
         .background(Color(white: 0.99))
         .cornerRadius(10)
         .shadow(color: .gray, radius: 10, x: 0, y: 3)
@@ -94,7 +95,8 @@ struct CardUIView: View {
         .onTapGesture {
 //            self.fold.toggle()
         }
-        .frame(minWidth: 0/*@END_MENU_TOKEN@*/,  maxWidth: .infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0,  maxHeight: /*@START_MENU_TOKEN@*/.infinity, alignment: .center)
+        .frame(width: 260,height: 440)
+        .offset(x: 0, y: 16.0)
         
     }
     

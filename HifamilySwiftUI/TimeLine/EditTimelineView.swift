@@ -250,10 +250,11 @@ struct EventMarkers: View {
             HStack{
                 Text("事件图标:")
                     .foregroundColor(Color("EventMarkersFont"))
+//                    .offset()
                 Image("eventIcon\(eventIcon)")
                     .frame(width: 20, height:20 )
             }
-            .offset(x: -127)
+            .offset(x: -113)
 
             LazyVGrid(columns: items, content: {
                 if(isPressedMore == false){

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct IssueUIView: View {
     @State var people : String = "妍妍"
     @State var content : String = ""
@@ -29,7 +31,7 @@ struct IssueUIView: View {
                         
                         Spacer()
                     }
-                    
+                    .dismissKeyboardOnTap()
                 }
                 
                 VStack{
@@ -37,8 +39,11 @@ struct IssueUIView: View {
                         Text("用文字记录美好:")
                             .foregroundColor(grayColor)
                             .padding(EdgeInsets(top: 20, leading: 20, bottom: 5, trailing: 30))
+       
                         Spacer()
+                           
                     }
+                       .dismissKeyboardOnTap()
                     KeyboardHost{
                         TextView(
                             text: $content
@@ -51,7 +56,11 @@ struct IssueUIView: View {
                         .multilineTextAlignment(.leading)
                         .ignoresSafeArea(.keyboard)
                         .overlay(RoundedRectangle(cornerRadius: 10.0, style: .continuous).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
+                        
+                    
                     }
+                    .dismissKeyboardOnTap()
+                    
                 }
                 VStack{
                 LazyVGrid(columns: items, content: {
@@ -94,6 +103,35 @@ struct IssueUIView: View {
                 Alert(title: Text("上传成功"))
             })
         )
+    }
+}
+public extension View {
+    func dismissKeyboardOnTap() -> some View {
+        modifier(DismissKeyboardOnTap())
+    }
+}
+
+public struct DismissKeyboardOnTap: ViewModifier {
+    public func body(content: Content) -> some View {
+        #if os(macOS)
+        return content
+        #else
+        return content.gesture(tapGesture)
+        #endif
+    }
+
+    private var tapGesture: some Gesture {
+        TapGesture().onEnded(endEditing)
+    }
+
+    private func endEditing() {
+        UIApplication.shared.connectedScenes
+            .filter {$0.activationState == .foregroundActive}
+            .map {$0 as? UIWindowScene}
+            .compactMap({$0})
+            .first?.windows
+            .filter {$0.isKeyWindow}
+            .first?.endEditing(true)
     }
 }
 
