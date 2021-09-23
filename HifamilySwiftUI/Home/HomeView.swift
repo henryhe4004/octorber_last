@@ -8,39 +8,17 @@
 import SwiftUI
 import CoreData
 
-//家庭树名字
-class FamilyNameModel: ObservableObject {
-    @Published var FamilyTreeName: String = "相亲相爱一家人"
-}
+
 
 struct HomeView: View {
     
+    
     @State var isPresented = false
     @State var isPersonPresented = false
-    //家庭树名字
-    @ObservedObject var model = FamilyNameModel()
     
     //家庭树的初始值
     let imgsTree = ["tree","second tree","third tree"]
     @State  private var indexTree = 0//默认树
-    
-   //alert弹出框
-    let primaryButton = Alert.Button.default(Text("确认")) {
-                print("Yes")
-            }
-    let secondaryButton = Alert.Button.destructive(Text("取消")) {
-        var isCancleName = true
-        print("No")
-    }
-    
-    var alert: Alert {
-            Alert(title: Text("提示"),
-                 message: Text("确认修改家庭树的名字为“\(self.model.FamilyTreeName)”"),
-                 dismissButton: .default(Text("OK"))
-//                 primaryButton: primaryButton,
-//                 secondaryButton: secondaryButton
-            )
-        }
  
     //coredata
     @Environment(\.managedObjectContext) private var viewContext
@@ -131,40 +109,16 @@ struct HomeView: View {
                             Text("切换")
                                 .fontWeight(.bold)
                         }.padding(8)
-                        .cornerRadius(30.0)
                         .background(Color.white)
-                        .shadow(color: Color("AccentColor"), radius: 4, x: 2.0, y: 2.0)
+                        .cornerRadius(11)
+                        .shadow(color: Color("AccentColor"), radius: 5, x: 2, y: 2.0)
                     }
                     .padding(EdgeInsets(top:240,leading:-100,bottom:0,trailing:0))
                     
                 }
                 .padding(EdgeInsets(top:0,leading:0,bottom:0,trailing:0))
 
-                
-                TextField("FamilyTreeName",
-                        text: $model.FamilyTreeName,
-                        onCommit: {
-                            //给数据库写入数据
-                            
-                            let familyModel = FamilyModel(context: self.viewContext)
-                            familyModel.familyId = UUID()
-                            familyModel.familyName = model.FamilyTreeName
-                            familyModel.familyMemberCount = 1
-                            familyModel.familyTree = Int16(familyTreeWrite)
-                            isPresented = true
-                            familyModel.familyName = model.FamilyTreeName
-                            //保存当前数据
-                            try? self.viewContext.save()
-                            }
-                )
-                .font(.system(size: 16))
-                .foregroundColor(Color("FamliyTreeNameColor"))
-                .frame(width: 90, height: 0)
-                .offset(x: -123, y: 118)
-                .multilineTextAlignment(.center)
-                .alert(isPresented: $isPresented) { () -> Alert in
-                            alert
-                        }
+                FamilyBlackboard()
                 Textfield02()
                 
                 
@@ -173,6 +127,86 @@ struct HomeView: View {
     }
 }
 
+//家庭树名字
+class FamilyNameModel: ObservableObject {
+        @Published var FamilyTreeName: String = "相亲相爱一家人"
+}
+struct FamilyBlackboard: View {
+    //键盘
+    @State var keyboardHight : CGFloat = 0
+    //家庭树名字
+    @ObservedObject var model = FamilyNameModel()
+    @State var isPresented = false
+    @State var familyTreeWrite = 0
+    //alert弹出框
+     let primaryButton = Alert.Button.default(Text("确认")) {
+                 print("Yes")
+             }
+     let secondaryButton = Alert.Button.destructive(Text("取消")) {
+         var isCancleName = true
+         print("No")
+     }
+     
+     var alert: Alert {
+             Alert(title: Text("提示"),
+                  message: Text("确认修改家庭树的名字为“\(self.model.FamilyTreeName)”"),
+                  dismissButton: .default(Text("OK"))
+ //                 primaryButton: primaryButton,
+ //                 secondaryButton: secondaryButton
+             )
+         }
+        
+    //coredata
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(entity: FamilyModel.entity(),
+                  sortDescriptors: [
+                    NSSortDescriptor(keyPath: \FamilyModel.familyId, ascending: true)])
+    var familyModels: FetchedResults<FamilyModel>
+    
+        var body: some View {
+            
+            TextField("FamilyTreeName",
+                    text: $model.FamilyTreeName,
+                    onCommit: {
+                        //给数据库写入数据
+                        
+                        let familyModel = FamilyModel(context: self.viewContext)
+                        familyModel.familyId = UUID()
+                        familyModel.familyName = model.FamilyTreeName
+                        familyModel.familyMemberCount = 1
+                        familyModel.familyTree = Int16(familyTreeWrite)
+                        isPresented = true
+                        familyModel.familyName = model.FamilyTreeName
+                        //保存当前数据
+                        try? self.viewContext.save()
+                        }
+            )
+            .font(.system(size: 16))
+            .foregroundColor(Color("FamliyTreeNameColor"))
+            .frame(width: 90, height: 0)
+            .offset(x: -123, y: 118)
+            .multilineTextAlignment(.center)
+            .alert(isPresented: $isPresented) { () -> Alert in
+                        alert
+                    }
+            .onAppear {
+                    //键盘抬起
+                     NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                       let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                           let height = value.height
+                        self.keyboardHight = height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                     }
+                     //键盘收起
+                  NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                             self.keyboardHight = 0
+                     }
+                 }
+            .offset(y : -keyboardHight/7)
+            .animation(.spring())
+         
+
+        }
+    }
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()

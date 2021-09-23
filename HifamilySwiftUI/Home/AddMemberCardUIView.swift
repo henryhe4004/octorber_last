@@ -99,7 +99,7 @@ struct AddMemberCardUIView: View {
             }
           
         }
-        .frame(width: 280,height: 440)
+        .frame(width: 260,height: 440)
         .background(Color(white: 0.99))
         .cornerRadius(10)
         .shadow(color: .gray, radius: 10, x: 0, y: 3)
@@ -107,7 +107,7 @@ struct AddMemberCardUIView: View {
         .onTapGesture {
 //            self.fold.toggle()
         }
-        .frame(minWidth: 0/*@END_MENU_TOKEN@*/,  maxWidth: .infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0,  maxHeight: /*@START_MENU_TOKEN@*/.infinity, alignment: .center)
+//        .frame(minWidth: 0/*@END_MENU_TOKEN@*/,  maxWidth: .infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0,  maxHeight: /*@START_MENU_TOKEN@*/.infinity, alignment: .center)
         .offset(x: 0, y: 16.0)
     }
     
