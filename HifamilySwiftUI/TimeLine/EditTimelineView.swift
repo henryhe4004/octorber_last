@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+final class TimeLiners: ObservableObject {
+    @Published  var thingContent:String
+    init() {
+        thingContent = ""
+    }
+}
 
 
 struct EditTimelineView: View {
@@ -26,11 +32,10 @@ struct EditTimelineView: View {
                 EventMarkers()
             }
         }.padding(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
-        .navigationBarTitle(Text("编辑时间轴").foregroundColor(grayColor2)
+        .navigationBarTitle(Text("编辑时间轴")
             .font(.system(size: 22)),displayMode: .inline)
         .navigationBarItems(trailing: Button(action:{} ){
             Text("确定")
-                .foregroundColor(Color.white)
                 .font(.system(size: 22))
         })
     }
@@ -92,6 +97,9 @@ struct EventData: View {
 }
 
 struct DescriptionEvent: View {
+    
+    @ObservedObject var timeliner:TimeLiners = TimeLiners()
+    
     @State var descriptionEventName = "妍妍"
     var body: some View {
         VStack{
@@ -103,10 +111,11 @@ struct DescriptionEvent: View {
             
             VStack {
                 TextField("请简单描述一下事件",
-                          text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
-                    .frame(width: 307, height: 162, alignment: .topLeading)
-                    .background(Color("DescriptionEventTextfield"))
-                    .padding()
+                          text: $timeliner.thingContent) {isEditing in
+                    self.timeliner.thingContent = timeliner.thingContent
+                }.frame(width: 307, height: 162, alignment: .topLeading)
+                .background(Color("DescriptionEventTextfield"))
+                .padding()
             }
             .background(Color("DescriptionEventTextfield"))
             .cornerRadius(20)

@@ -10,17 +10,21 @@ import YPImagePicker
 
 struct ImagePickerView: View {
     @State private var showYPImagePickerView = true
-        
-       var body: some View {
+
+    @ObservedObject var MyImage : Imagepicker
+    var body: some View {
            VStack {
             
-                   MediaPicker()
+            MediaPicker( MyImage: MyImage)
                
            }
 
        }
 }
+
 struct MediaPicker: UIViewControllerRepresentable {
+    
+    @ObservedObject var MyImage : Imagepicker
     func makeUIViewController(context: Context) -> YPImagePicker {
         var config = YPImagePickerConfiguration()
         //是否可以滑动
@@ -65,13 +69,22 @@ struct MediaPicker: UIViewControllerRepresentable {
         picker.didFinishPicking { [unowned picker] items,  cancelled in
             if cancelled{
                 print("用户按了取消按钮")
+            }else{
+            for item in items {
+                switch item {
+                case let .photo(photo) :
+                    do {
+             
+                        MyImage.addImage( img1 : photo.modifiedImage ??  photo.originalImage)
+                        MyImage.addImageData(img1: photo.originalImage.pngData()!)
+                        print(photo.image.pngData() as Any)
+                    }
+                case .video(let video) :
+                        print(video)
+                }
             }
-            if let photo = items.singlePhoto {
-                print(photo.fromCamera) // Image source (camera or library)
-                print(photo.image) // Final image selected by the user
-                print(photo.originalImage) // original image selected by the user, unfiltered
-                print(photo.modifiedImage ?? "not modified !") // Transformed image, can be nil
-                print(photo.exifMeta ?? "no exif metadata") // Print exif meta data of original image."
+                
+             
             }
             picker.dismiss(animated: true, completion: nil)
         }
@@ -84,8 +97,8 @@ struct MediaPicker: UIViewControllerRepresentable {
     typealias UIViewControllerType = YPImagePicker
     
 }
-struct ImagePickerView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImagePickerView()
-    }
-}
+//struct ImagePickerView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ImagePickerView()
+//    }
+//}
