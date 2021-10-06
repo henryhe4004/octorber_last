@@ -32,6 +32,7 @@ struct IssueUIView: View {
     @State var people : String = "妍妍"
     @State var content : String = ""
     @State var isPresented : Bool = false
+    @State var isPresented1 : Bool = false
     @State var isIssue : Bool = false
     @State var inputImage : UIImage = UIImage()
 //    func loadImage() {
@@ -83,7 +84,6 @@ struct IssueUIView: View {
                             text: $content
                         )
                         .frame(width:350,height: 300, alignment: .topLeading)
-                        
                         .foregroundColor(grayColor2)
                         .keyboardType(.default)
                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -91,7 +91,7 @@ struct IssueUIView: View {
                         .ignoresSafeArea(.keyboard)
                         .overlay(RoundedRectangle(cornerRadius: 10.0, style: .continuous).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
                         
-                    
+                        
                     }
                     .dismissKeyboardOnTap()
                     
@@ -100,26 +100,30 @@ struct IssueUIView: View {
                 VStack{
                     
                     LazyVGrid(columns: items, content: {
-                        ForEach(0..<1){ index in
-                            
-//                            Image(uiImage : UIImage(data: imagepick.imgd[index])!)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                                .frame(width: 170, height: 170, alignment: .center)
-//                                .cornerRadius(20)
-//                                .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
-                            Image("littleYou1")
+                        if(imagepick.img.count>0){
+                        ForEach(0..<imagepick.img.count){ index in
+                            Image(uiImage : imagepick.img[index])
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 170, height: 170, alignment: .center)
                                 .cornerRadius(20)
                                 .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
+//                            Image("littleYou1")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fill)
+//                                .frame(width: 170, height: 170, alignment: .center)
+//                                .cornerRadius(20)
+//                                .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
                             
                         }
-                        
+                    }
                         
                         Button(action:{
-                            self.isPresented = true
+                            if(imagepick.img.count>0){
+                                self.isPresented1 = true
+                            }else{
+                                self.isPresented = true
+                            }
                         }){
                             Image("ic_add_a_photo_48px")
                                 .resizable()
@@ -128,8 +132,11 @@ struct IssueUIView: View {
                         .frame(width: 170, height: 170, alignment: .center)
                         .cornerRadius(20)
                         .background(Color(red: 245/255, green: 245/255, blue: 245/255)).cornerRadius(20)
+                        .alert(isPresented: $isPresented1, content: {
+                            Alert(title: Text("暂时只支持记录单次美好"))
+                        })
                         .fullScreenCover(isPresented: $isPresented, content: {
-                            ImagePickerView(MyImage: imagepick)
+                            ImagePickerView( MyImage: imagepick)
                         })
                     }
                     )

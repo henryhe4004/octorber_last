@@ -10,11 +10,12 @@ import YPImagePicker
 
 struct ImagePickerView: View {
     @State private var showYPImagePickerView = true
+
     @ObservedObject var MyImage : Imagepicker
     var body: some View {
            VStack {
             
-                   MediaPicker(MyImage: MyImage)
+            MediaPicker( MyImage: MyImage)
                
            }
 
@@ -22,6 +23,7 @@ struct ImagePickerView: View {
 }
 
 struct MediaPicker: UIViewControllerRepresentable {
+    
     @ObservedObject var MyImage : Imagepicker
     func makeUIViewController(context: Context) -> YPImagePicker {
         var config = YPImagePickerConfiguration()
@@ -72,8 +74,9 @@ struct MediaPicker: UIViewControllerRepresentable {
                 switch item {
                 case let .photo(photo) :
                     do {
-                        MyImage.addImage( img1 : photo.image)
-                        MyImage.addImageData(img1: photo.image.pngData()!)
+             
+                        MyImage.addImage( img1 : photo.modifiedImage ??  photo.originalImage)
+                        MyImage.addImageData(img1: photo.originalImage.pngData()!)
                         print(photo.image.pngData() as Any)
                     }
                 case .video(let video) :

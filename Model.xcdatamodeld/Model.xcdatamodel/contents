@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20B50" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20B50" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="FamilyModel" representedClassName="FamilyModel" syncable="YES">
         <attribute name="familyId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="familyMemberCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="familyName" optional="YES" attributeType="String"/>
         <attribute name="familyTree" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="memberModel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MemberModel" inverseName="familyModel" inverseEntity="MemberModel"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -15,14 +16,18 @@
         <attribute name="birthday" optional="YES" attributeType="String"/>
         <attribute name="familyId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="familyStatus" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="missCard" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
         <attribute name="status" optional="YES" attributeType="String"/>
+        <relationship name="familyModel" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FamilyModel" inverseName="memberModel" inverseEntity="FamilyModel"/>
     </entity>
+    <entity name="MissModel" representedClassName="MissModel" syncable="YES" codeGenerationType="class"/>
     <elements>
-        <element name="FamilyModel" positionX="-63" positionY="-9" width="128" height="89"/>
+        <element name="FamilyModel" positionX="-63" positionY="-9" width="128" height="104"/>
         <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-        <element name="MemberModel" positionX="-54" positionY="0" width="128" height="164"/>
+        <element name="MemberModel" positionX="-54" positionY="0" width="128" height="194"/>
+        <element name="MissModel" positionX="-54" positionY="72" width="128" height="29"/>
     </elements>
 </model>

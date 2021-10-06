@@ -56,7 +56,7 @@ struct ImageUIView: View {
        
         NavigationView {
             
-            ZStack{
+//            ZStack{
                 VStack{
                     
                     HStack {
@@ -86,9 +86,8 @@ struct ImageUIView: View {
                         
                         
                     }.padding()
-                       
-                    
-              
+                    ZStack{
+                ScrollView(.vertical, showsIndicators: false){
                 Divider()
                 HStack{
                     
@@ -113,10 +112,7 @@ struct ImageUIView: View {
                     .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 5, trailing: 10))
                     Button(action: {
-                        
                         indexSelected=2
-                        
-                        
                     }){
                         HStack {
                             Image(indexSelected == 2 ? "orange photo" : "c2" )
@@ -159,34 +155,28 @@ struct ImageUIView: View {
                 
                     
                     
+                   
+                    
                        
                     if(indexSelected == 1){
                        
-                        ZStack {
-                            ScrollView(.vertical, showsIndicators: false){
+//                        ZStack {
+//                            ScrollView(.vertical, showsIndicators: false){
                                     albumUIView(detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected)
-                            }
+//                            }
                         
-                        if(isSelected){
-                              
-                               
-                                DetailImageUIView(isSelected: $isSelected, detailImage: $detailImage, detailText: $detailText)
-                                
-                            }
-                        }
+                        
                   
                         }
                         
                     
                     if(indexSelected == 2){
-                        ZStack{
-                            ScrollView(.vertical, showsIndicators: false){
+//                        ZStack{
+//                            ScrollView(.vertical, showsIndicators: false){
                                 photosUIView(detailAlbum: $detailAlbum, detailText: $detailText,isSelected1: $isSelected1)
-                            }
-                            if(isSelected1){
-                                DetailAlbumUIView(detailAlbum: $detailAlbum, detailText: $detailText, isSelected1: $isSelected1)
-                            }
-                        }
+//                            }
+                         
+//                        }
                     }
                     if(indexSelected == 3){
                         //                    Text("123").font(.system(size: 100))
@@ -195,13 +185,31 @@ struct ImageUIView: View {
                         }
                         
                     }
-                    
                 }
+                    if(isSelected){
+                        ZStack{
+                            Rectangle().fill(Color.gray).opacity(0.5)
+                            VStack{
+                        
+                                DetailImageUIView(isSelected: $isSelected, detailImage: $detailImage, detailText: $detailText)
+                                
+//                            }
+                                }
+                            }
+                        }
+                        if(isSelected1){
+                            ZStack{
+                                Rectangle().fill(Color.gray).opacity(0.5)
+                            VStack{
+                            DetailAlbumUIView(detailAlbum: $detailAlbum, detailText: $detailText, isSelected1: $isSelected1)
+                            }
+                        }
+                        }
+                    }
                
-                }
         }
         }
-//    }
+    }
 }
 
 struct ImageUIView_Previews: PreviewProvider {
