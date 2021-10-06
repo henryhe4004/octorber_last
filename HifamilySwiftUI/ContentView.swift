@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import LeanCloud
 //第一个结构体遵循View协议，描述视图的内容和布局
 
 struct ContentView: View {
@@ -16,6 +17,8 @@ struct ContentView: View {
         //VStack 是垂直栈,HStack 是水平栈,Group 是一个容器，它可以把视图内容组织起来，每个子视图会继承自己所处环境的配置
         //可以使用NavigationLink让列表的行实现点击跳转到其他视图页面
         //可以使用foregroundColor(_:)来改变它的颜色，当isFavorite为真时，星标显示
+        
+        
         TabView(selection: $index) {
 //            FamilyTreeView()
             ImageUIView().tabItem { Image(index == 1 ? "Iconly-Bulk-Activity" : "fIconly-Bulk-Activity") }.tag(1)

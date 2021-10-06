@@ -91,17 +91,7 @@ struct HomeView: View {
                         }
                         
                         familyTreeWrite = indexTree
-                        
-//                        //给数据库写入数据
-//                        let familyModel = FamilyModel(context: self.viewContext)
-//                        familyModel.familyId = UUID()
-//                        familyModel.familyName = model.FamilyTreeName
-//                        familyModel.familyMemberCount = 1
-//                        familyModel.familyTree = Int16(familyTreeWrite)
-//                        //保存当前数据
-//                        try? self.viewContext.save()
-                        
-                        
+                                                
                     }) {
                         HStack {
                             Image(systemName: "arrow.triangle.2.circlepath")
@@ -165,47 +155,52 @@ struct FamilyBlackboard: View {
     
         var body: some View {
             
-            TextField("FamilyTreeName",
-                    text: $model.FamilyTreeName,
-                    onCommit: {
-                        //给数据库写入数据
-                        
-                        let familyModel = FamilyModel(context: self.viewContext)
-                        familyModel.familyId = UUID()
-                        familyModel.familyName = model.FamilyTreeName
-                        familyModel.familyMemberCount = 1
-                        familyModel.familyTree = Int16(familyTreeWrite)
-                        isPresented = true
-                        familyModel.familyName = model.FamilyTreeName
-                        //保存当前数据
-                        try? self.viewContext.save()
+            HStack {
+                TextField("FamilyTreeName",
+                        text: $model.FamilyTreeName,
+                        onCommit: {
+                            //给数据库写入数据
+                            
+                            let familyModel = FamilyModel(context: self.viewContext)
+                            familyModel.familyId = UUID()
+                            familyModel.familyName = model.FamilyTreeName
+                            familyModel.familyMemberCount = 1
+                            familyModel.familyTree = Int16(familyTreeWrite)
+                            isPresented = true
+                            familyModel.familyName = model.FamilyTreeName
+                            //保存当前数据
+                            try? self.viewContext.save()
+                            }
+                )
+                .font(.system(size: 16))
+                .foregroundColor(Color("FamliyTreeNameColor"))
+                .frame(width: 90, height: 0)
+                .offset(x: -123, y: 118)
+                .multilineTextAlignment(.center)
+                .alert(isPresented: $isPresented) { () -> Alert in
+                            alert
                         }
-            )
-            .font(.system(size: 16))
-            .foregroundColor(Color("FamliyTreeNameColor"))
-            .frame(width: 90, height: 0)
-            .offset(x: -123, y: 118)
-            .multilineTextAlignment(.center)
-            .alert(isPresented: $isPresented) { () -> Alert in
-                        alert
-                    }
-            .onAppear {
-                    //键盘抬起
-                     NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.current) { (noti) in
-                       let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
-                           let height = value.height
-                        self.keyboardHight = height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                
+                .onAppear {
+                        //键盘抬起
+                         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                           let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                               let height = value.height
+                            self.keyboardHight = height - UIApplication.shared.windows.first!.safeAreaInsets.bottom
+                            
+                         }
+                         //键盘收起
+                      NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.current) { (noti) in
+                                 self.keyboardHight = 0
+                         }
                      }
-                     //键盘收起
-                  NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: OperationQueue.current) { (noti) in
-                             self.keyboardHight = 0
-                     }
-                 }
-            .offset(y : -keyboardHight/7)
-            .animation(.spring())
+                .offset(y : -keyboardHight/7)
+                .animation(.spring())
+            }
          
 
         }
+    
     }
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

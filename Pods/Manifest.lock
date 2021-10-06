@@ -1,24 +1,46 @@
 PODS:
+  - Alamofire (5.4.4)
+  - GRDB.swift (5.12.0):
+    - GRDB.swift/standard (= 5.12.0)
+  - GRDB.swift/standard (5.12.0)
+  - LeanCloud (17.9.2):
+    - LeanCloud/RTM (= 17.9.2)
+  - LeanCloud/Foundation (17.9.2):
+    - Alamofire (~> 5.4)
+  - LeanCloud/RTM (17.9.2):
+    - GRDB.swift (~> 5.8)
+    - LeanCloud/Foundation (= 17.9.2)
+    - SwiftProtobuf (~> 1.17)
   - PryntTrimmerView (4.0.2)
   - SteviaLayout (4.7.3)
-  - YPImagePicker (4.5.0):
-    - PryntTrimmerView (~> 4.0.2)
-    - SteviaLayout (~> 4.7.3)
+  - SwiftProtobuf (1.18.0)
+  - YPImagePicker (5.0.0):
+    - PryntTrimmerView (= 4.0.2)
+    - SteviaLayout (= 4.7.3)
 
 DEPENDENCIES:
+  - LeanCloud
   - YPImagePicker
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - GRDB.swift
+    - LeanCloud
     - PryntTrimmerView
     - SteviaLayout
+    - SwiftProtobuf
     - YPImagePicker
 
 SPEC CHECKSUMS:
+  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  GRDB.swift: f94b00ac11ab22597771b6a47211d1c44284395a
+  LeanCloud: a2b78da1d4a36a89a2af71d345e19cdd9da8e762
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   SteviaLayout: c2ecdcff57d44e38fd2f65e54ad52aeae28ca0c4
-  YPImagePicker: 6f410f475bd22fa8cd430495b54d4b2f15865c2d
+  SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
+  YPImagePicker: 1463a19a36244e209dcb03c30e63559c5afa9602
 
-PODFILE CHECKSUM: 45dfe0151ef0581d24bfbaed035f14dba7156c5f
+PODFILE CHECKSUM: 727be1d52fbfe8ecc51b1940e6ae56a675c74780
 
 COCOAPODS: 1.10.2

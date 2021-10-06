@@ -7,6 +7,6 @@ target 'HifamilySwiftUI' do
  use_frameworks!
 
   # Pods for HifamilySwiftUI
-   pod 'YPImagePicker' 
-
-end
+   pod 'YPImagePicker'
+   pod 'LeanCloud'
+ end

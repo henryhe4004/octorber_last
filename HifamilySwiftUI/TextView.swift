@@ -24,7 +24,7 @@ struct TextView: UIViewRepresentable{
            myTextView.isScrollEnabled = true
            myTextView.isEditable = true
            myTextView.isUserInteractionEnabled = true
-        myTextView.backgroundColor = UIColor(white: 0, alpha: 0.01)
+           myTextView.backgroundColor = UIColor(white: 0, alpha: 0.01)
 
            return myTextView
        }

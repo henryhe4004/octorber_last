@@ -42,6 +42,7 @@
 		898693E726F374F400EA991E /* MissView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898693E626F374F400EA991E /* MissView.swift */; };
 		8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989D13226F4D7A0007B6719 /* AddMemberCardUIView.swift */; };
 		8996E2C026F420E000F122BD /* LoveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8996E2BF26F420E000F122BD /* LoveHistoryView.swift */; };
+		89C1F5A2270D8A6500845D13 /* LoginUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C1F5A1270D8A6500845D13 /* LoginUIView.swift */; };
 		CDE09D0826F79449004DE2AB /* DataTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE09D0726F79449004DE2AB /* DataTest.swift */; };
 		CDED5B0D26F4DF2F00570485 /* LetterVeiw.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDED5B0C26F4DF2F00570485 /* LetterVeiw.swift */; };
 		CDED5B0F26F4E0D300570485 /* WriteLetterVeiw.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDED5B0E26F4E0D300570485 /* WriteLetterVeiw.swift */; };
@@ -87,6 +88,7 @@
 		898693E626F374F400EA991E /* MissView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissView.swift; sourceTree = "<group>"; };
 		8989D13226F4D7A0007B6719 /* AddMemberCardUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberCardUIView.swift; sourceTree = "<group>"; };
 		8996E2BF26F420E000F122BD /* LoveHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveHistoryView.swift; sourceTree = "<group>"; };
+		89C1F5A1270D8A6500845D13 /* LoginUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUIView.swift; sourceTree = "<group>"; };
 		8D8E495DFB5BA16B973644AC /* Pods-HifamilySwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HifamilySwiftUI.release.xcconfig"; path = "Target Support Files/Pods-HifamilySwiftUI/Pods-HifamilySwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		CDE09D0726F79449004DE2AB /* DataTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTest.swift; sourceTree = "<group>"; };
 		CDED5B0C26F4DF2F00570485 /* LetterVeiw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterVeiw.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		890C993126EF3A6700494182 /* HifamilySwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				89C1F5A0270D8A4300845D13 /* Login */,
 				8900C06826FB60B6007E7D4D /* TimeLine */,
 				896128AA26F8341A0048A163 /* Model */,
 				71BF8B7926F6090D0006081B /* Image */,
@@ -220,6 +223,14 @@
 				8996E2BF26F420E000F122BD /* LoveHistoryView.swift */,
 			);
 			path = Love;
+			sourceTree = "<group>";
+		};
+		89C1F5A0270D8A4300845D13 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				89C1F5A1270D8A6500845D13 /* LoginUIView.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 		C3E5AF600284A65580D91E19 /* Pods */ = {
@@ -357,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89C1F5A2270D8A6500845D13 /* LoginUIView.swift in Sources */,
 				890C993C26EF3A6800494182 /* Persistence.swift in Sources */,
 				890C993526EF3A6700494182 /* ContentView.swift in Sources */,
 				8948191C26F5C0C90095E91D /* Model.xcdatamodeld in Sources */,
@@ -540,7 +552,7 @@
 				DEVELOPMENT_TEAM = 2FRA8LZFT9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = HifamilySwiftUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -563,7 +575,7 @@
 				DEVELOPMENT_TEAM = 2FRA8LZFT9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = HifamilySwiftUI/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
