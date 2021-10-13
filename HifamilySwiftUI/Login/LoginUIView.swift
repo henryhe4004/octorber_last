@@ -20,7 +20,7 @@ struct LoginUIView: View {
     @State var isShowAlert = false
     @State var alertTitle = ""
     @State var alertMessage = ""
-    
+    @Binding var isLogin:Bool
     let primaryButton = Alert.Button.default(Text("确认")) {
                 print("确认")
             }
@@ -54,7 +54,7 @@ struct LoginUIView: View {
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.4))
                 
-                LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading)
+                LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading,isLogin: $isLogin)
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.6))
                     
@@ -77,16 +77,12 @@ struct LoginUIView: View {
             if isShowLoading {
                 LoadingView()
             }
-        }
+        } .navigationBarHidden(true)
             
 }
 }
 
-struct LoginUIView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginUIView()
-    }
-}
+
 
 
 struct TopTitleView: View {
@@ -221,6 +217,7 @@ struct LoginView: View {
     @Binding var username : String
     @Binding var password : String
     @Binding var isShowLoading:Bool
+    @Binding var isLogin : Bool
     var body: some View {
         VStack{
             Text("忘记密码?")
@@ -243,8 +240,10 @@ struct LoginView: View {
                     _ = LCSMSClient.requestShortMessage(mobilePhoneNumber: "\(username)", templateName: "template_name", signatureName: "sign_name") { (result) in
                         switch result {
                         case .success:
+                            isShowLoading = false
                             break
                         case .failure(error: let error):
+                            isShowLoading = false
                             print(error)
                         }
                     }
@@ -253,9 +252,11 @@ struct LoginView: View {
                         
                         switch result {
                         case .success:
+                            isShowLoading = false
                             print("注册成功")
                             break
                         case .failure(error: let error):
+                            isShowLoading = false
                              print("注册失败，失败原因：\(error)")
                              
                         }
@@ -266,8 +267,12 @@ struct LoginView: View {
                     _ = LCUser.logIn(username: username, password: password) { result in
                         switch result {
                         case .success(object: let user):
+                            isShowLoading = false
+                            isLogin = true
                             print(user)
+                        
                         case .failure(error: let error):
+                            isShowLoading = false
                             print(error)
                         }
                     }
