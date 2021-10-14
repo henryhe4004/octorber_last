@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		711DD71C2716BFD50055A02E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 711DD71B2716BFD50055A02E /* Launch Screen.storyboard */; };
 		711DD71F2716C7300055A02E /* HomeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD71E2716C7300055A02E /* HomeUIView.swift */; };
+		711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */; };
 		712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */; };
 		7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */; };
 		715C33A026F8B06E00491BF7 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C339F26F8B06E00491BF7 /* TextView.swift */; };
@@ -58,6 +59,7 @@
 		4F6080D8468FFC155461D480 /* Pods_HifamilySwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HifamilySwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		711DD71B2716BFD50055A02E /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		711DD71E2716C7300055A02E /* HomeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUIView.swift; sourceTree = "<group>"; };
+		711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhetherLoginBeforeUIView.swift; sourceTree = "<group>"; };
 		712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumUIView.swift; sourceTree = "<group>"; };
 		7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageUIView.swift; sourceTree = "<group>"; };
 		715C339F26F8B06E00491BF7 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				711DD71E2716C7300055A02E /* HomeUIView.swift */,
 				890C993226EF3A6700494182 /* HifamilySwiftUIApp.swift */,
 				890C993426EF3A6700494182 /* ContentView.swift */,
+				711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */,
 				711DD71B2716BFD50055A02E /* Launch Screen.storyboard */,
 				890C993B26EF3A6800494182 /* Persistence.swift */,
 				890C993626EF3A6800494182 /* Assets.xcassets */,
@@ -429,6 +432,7 @@
 				8900C06126FB4DC8007E7D4D /* MemberModel+CoreDataProperties.swift in Sources */,
 				8979282426F21053008F49AB /* HomeLandUIView.swift in Sources */,
 				CDE09D0826F79449004DE2AB /* DataTest.swift in Sources */,
+				711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */,
 				89C9683C2715C40D00EFBA93 /* FetchLoginModel.swift in Sources */,
 				8947780426FBEEFC0078E735 /* EditTimelineView.swift in Sources */,
 				7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */,

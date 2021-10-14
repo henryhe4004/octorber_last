@@ -21,31 +21,14 @@ extension View {
 
 struct ContentView: View {
     //body 属性只返回单个视图，这时组合多个视图把他们放入一个栈中
-    
-    
-   //默认选中索引
     @State var isLogin : Bool = false
     
     var body: some View {
-       
-
-            
-            LoginUIView(isLogin: $isLogin)
-                .fullScreenCover(isPresented: $isLogin, onDismiss: {
-                                print("Detail View Dismissed")
-                            }) {
-                                HomeUIView()
-                            }
-//
-            
-        
- 
-//        .border(Color.blue)
-//        .navigationBarHidden(true)
-//        .navigationBarTitle(Text("Home"))
-//        .edgesIgnoringSafeArea([.top, .bottom])
-        
-
+        if let user = LCApplication.default.currentUser {
+            HomeUIView().debugPrint(user)
+        } else {
+            WhetherLoginBeforeUIView(isLogin: $isLogin)
+        }
     }
 }
 

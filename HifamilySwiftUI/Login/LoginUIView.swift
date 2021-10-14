@@ -20,6 +20,7 @@ struct LoginUIView: View {
     @State var isShowAlert = false
     @State var alertTitle = ""
     @State var alertMessage = ""
+
     @Binding var isLogin:Bool
     let primaryButton = Alert.Button.default(Text("确认")) {
                 print("确认")
@@ -218,6 +219,9 @@ struct LoginView: View {
     @Binding var password : String
     @Binding var isShowLoading:Bool
     @Binding var isLogin : Bool
+    @State var errorCode = 0
+    @State var isLoginError = false
+    @State var isRegistError = false
     var body: some View {
         VStack{
             Text("忘记密码?")
@@ -243,6 +247,9 @@ struct LoginView: View {
                             isShowLoading = false
                             break
                         case .failure(error: let error):
+                            
+                            errorCode = 1;
+                            isRegistError = true;
                             isShowLoading = false
                             print(error)
                         }
@@ -256,6 +263,8 @@ struct LoginView: View {
                             print("注册成功")
                             break
                         case .failure(error: let error):
+                            errorCode = 2;
+                            isRegistError = true
                             isShowLoading = false
                              print("注册失败，失败原因：\(error)")
                              
@@ -272,6 +281,8 @@ struct LoginView: View {
                             print(user)
                         
                         case .failure(error: let error):
+                            errorCode = 3;
+                            isLoginError = true
                             isShowLoading = false
                             print(error)
                         }
@@ -291,7 +302,42 @@ struct LoginView: View {
             .foregroundColor(.white)
             .cornerRadius(30)
             .padding(.top,30)
-            
+            .alert(isPresented: $isLoginError, content: {
+//                if(errorCode==1)
+//                {Alert(title: Text("出错了"),
+//                                  message: Text("手机号登陆出错"),
+//                                  dismissButton: .default(Text("OK")))
+//                }
+//                if(errorCode==2){
+//                Alert(title: Text("Hello SwiftUI!"),
+//                                  message: Text("注册用户失败"),
+//                                  dismissButton: .default(Text("OK")))
+//                }
+          
+                Alert(title: Text("Hello SwiftUI!"),
+                                  message: Text("登陆失败"),
+                                  dismissButton: .default(Text("OK")))
+                
+                
+            })
+            .alert(isPresented: $isRegistError, content: {
+//                if(errorCode==1)
+//                {Alert(title: Text("出错了"),
+//                                  message: Text("手机号登陆出错"),
+//                                  dismissButton: .default(Text("OK")))
+//                }
+//                if(errorCode==2){
+//                Alert(title: Text("Hello SwiftUI!"),
+//                                  message: Text("注册用户失败"),
+//                                  dismissButton: .default(Text("OK")))
+//                }
+          
+                Alert(title: Text("出错了!"),
+                                  message: Text("注册失败"),
+                                  dismissButton: .default(Text("OK")))
+                
+                
+            })
             VStack{
                 
                 ZStack{

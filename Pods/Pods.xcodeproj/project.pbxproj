@@ -658,7 +658,7 @@
 		29C117F9CE4B10C54131A6213C2CB152 /* YPFilter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = YPFilter.swift; path = Source/Filters/YPFilter.swift; sourceTree = "<group>"; };
 		29F07014DB7438DA3820A1493FF32CA0 /* Stevia+Alignment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Stevia+Alignment.swift"; path = "Source/Stevia+Alignment.swift"; sourceTree = "<group>"; };
 		2A61AAF67465BE31876D3E47CF8EDC4D /* URLRequest+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URLRequest+Alamofire.swift"; path = "Source/URLRequest+Alamofire.swift"; sourceTree = "<group>"; };
-		2A80CB094416CACF9B429E4F99703FCC /* Pods-HifamilySwiftUI */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-HifamilySwiftUI"; path = Pods_HifamilySwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A80CB094416CACF9B429E4F99703FCC /* Pods_HifamilySwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HifamilySwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B14B6C1D8D7F3331A87BE71D3A1F975 /* FileUploader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FileUploader.swift; path = Sources/Foundation/FileUploader.swift; sourceTree = "<group>"; };
 		2B9F5ABD4AAD48D468452D4814E4FC49 /* th.lproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = th.lproj; path = Resources/th.lproj; sourceTree = "<group>"; };
 		2BAD7CB79319A41436E67CB2F28C2EC5 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Alamofire.modulemap; sourceTree = "<group>"; };
@@ -1585,7 +1585,7 @@
 				5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */,
 				17ABD68E920293F080122810A8881638 /* GRDB.framework */,
 				6E1B9D4EF38FBEC918F6D950219F7E0E /* LeanCloud */,
-				2A80CB094416CACF9B429E4F99703FCC /* Pods-HifamilySwiftUI */,
+				2A80CB094416CACF9B429E4F99703FCC /* Pods_HifamilySwiftUI.framework */,
 				D09DB48D8145BFA029AAEA61818EC68B /* PryntTrimmerView */,
 				DE90CE8A0DA0F3A5364FCDD4803AD3EC /* SteviaLayout */,
 				943D347E61A2E181A4FA2CA894307B6E /* SwiftProtobuf */,
@@ -2003,7 +2003,7 @@
 			);
 			name = "Pods-HifamilySwiftUI";
 			productName = Pods_HifamilySwiftUI;
-			productReference = 2A80CB094416CACF9B429E4F99703FCC /* Pods-HifamilySwiftUI */;
+			productReference = 2A80CB094416CACF9B429E4F99703FCC /* Pods_HifamilySwiftUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		A5F702E0DA383BC1479572581615A916 /* SwiftProtobuf */ = {
@@ -3144,7 +3144,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-HifamilySwiftUI/Pods-HifamilySwiftUI-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3417,7 +3417,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "Target Support Files/Pods-HifamilySwiftUI/Pods-HifamilySwiftUI-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
