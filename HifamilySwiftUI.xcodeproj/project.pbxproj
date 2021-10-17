@@ -48,6 +48,7 @@
 		8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989D13226F4D7A0007B6719 /* AddMemberCardUIView.swift */; };
 		8996E2C026F420E000F122BD /* LoveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8996E2BF26F420E000F122BD /* LoveHistoryView.swift */; };
 		89979578271C24B100941FBB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89979577271C24B100941FBB /* Launch Screen.storyboard */; };
+		8997957A271C46DC00941FBB /* IsCreaterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89979579271C46DC00941FBB /* IsCreaterView.swift */; };
 		89C968352715C3DA00EFBA93 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968342715C3DA00EFBA93 /* LoadingView.swift */; };
 		89C968372715C3EE00EFBA93 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968362715C3EE00EFBA93 /* LaunchView.swift */; };
 		89C968392715C40000EFBA93 /* LoginUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968382715C40000EFBA93 /* LoginUIView.swift */; };
@@ -103,6 +104,7 @@
 		8989D13226F4D7A0007B6719 /* AddMemberCardUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberCardUIView.swift; sourceTree = "<group>"; };
 		8996E2BF26F420E000F122BD /* LoveHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveHistoryView.swift; sourceTree = "<group>"; };
 		89979577271C24B100941FBB /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		89979579271C46DC00941FBB /* IsCreaterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsCreaterView.swift; sourceTree = "<group>"; };
 		89C968342715C3DA00EFBA93 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		89C968362715C3EE00EFBA93 /* LaunchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		89C968382715C40000EFBA93 /* LoginUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUIView.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 			children = (
 				89C968362715C3EE00EFBA93 /* LaunchView.swift */,
 				89C968382715C40000EFBA93 /* LoginUIView.swift */,
+				89979579271C46DC00941FBB /* IsCreaterView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				CDED5B0F26F4E0D300570485 /* WriteLetterVeiw.swift in Sources */,
 				8900C06726FB5C94007E7D4D /* InformUIView.swift in Sources */,
 				8900C06026FB4DC8007E7D4D /* MemberModel+CoreDataClass.swift in Sources */,
+				8997957A271C46DC00941FBB /* IsCreaterView.swift in Sources */,
 				8900C06126FB4DC8007E7D4D /* MemberModel+CoreDataProperties.swift in Sources */,
 				CDE09D0826F79449004DE2AB /* DataTest.swift in Sources */,
 				711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */,

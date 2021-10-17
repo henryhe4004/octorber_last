@@ -221,6 +221,8 @@ struct AddFamilyButton: View {
                     familyIDAlert = familyId
                     self.showingAlert = true
                     familyId = ""
+                
+                //发送申请，查看是否有这个家庭树ID
             }) {
                 Text("发送申请")
             }
