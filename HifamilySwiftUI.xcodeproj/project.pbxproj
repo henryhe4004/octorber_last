@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		711DD71C2716BFD50055A02E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 711DD71B2716BFD50055A02E /* Launch Screen.storyboard */; };
 		711DD71F2716C7300055A02E /* HomeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD71E2716C7300055A02E /* HomeUIView.swift */; };
 		711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */; };
 		712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */; };
@@ -48,6 +47,7 @@
 		898693E726F374F400EA991E /* MissView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898693E626F374F400EA991E /* MissView.swift */; };
 		8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8989D13226F4D7A0007B6719 /* AddMemberCardUIView.swift */; };
 		8996E2C026F420E000F122BD /* LoveHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8996E2BF26F420E000F122BD /* LoveHistoryView.swift */; };
+		89979575271C214D00941FBB /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89979574271C214C00941FBB /* Launch Screen.storyboard */; };
 		89C968352715C3DA00EFBA93 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968342715C3DA00EFBA93 /* LoadingView.swift */; };
 		89C968372715C3EE00EFBA93 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968362715C3EE00EFBA93 /* LaunchView.swift */; };
 		89C968392715C40000EFBA93 /* LoginUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968382715C40000EFBA93 /* LoginUIView.swift */; };
@@ -60,7 +60,6 @@
 /* Begin PBXFileReference section */
 		36ED521A51797C2D5C5AE565 /* Pods-HifamilySwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HifamilySwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-HifamilySwiftUI/Pods-HifamilySwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		4F6080D8468FFC155461D480 /* Pods_HifamilySwiftUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HifamilySwiftUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		711DD71B2716BFD50055A02E /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		711DD71E2716C7300055A02E /* HomeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUIView.swift; sourceTree = "<group>"; };
 		711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhetherLoginBeforeUIView.swift; sourceTree = "<group>"; };
 		712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumUIView.swift; sourceTree = "<group>"; };
@@ -103,6 +102,7 @@
 		898693E626F374F400EA991E /* MissView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissView.swift; sourceTree = "<group>"; };
 		8989D13226F4D7A0007B6719 /* AddMemberCardUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMemberCardUIView.swift; sourceTree = "<group>"; };
 		8996E2BF26F420E000F122BD /* LoveHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoveHistoryView.swift; sourceTree = "<group>"; };
+		89979574271C214C00941FBB /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../../us-family/HifamilySwiftUI/Launch Screen.storyboard"; sourceTree = "<group>"; };
 		89C968342715C3DA00EFBA93 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		89C968362715C3EE00EFBA93 /* LaunchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		89C968382715C40000EFBA93 /* LoginUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUIView.swift; sourceTree = "<group>"; };
@@ -194,7 +194,7 @@
 				890C993226EF3A6700494182 /* HifamilySwiftUIApp.swift */,
 				890C993426EF3A6700494182 /* ContentView.swift */,
 				711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */,
-				711DD71B2716BFD50055A02E /* Launch Screen.storyboard */,
+				89979574271C214C00941FBB /* Launch Screen.storyboard */,
 				890C993B26EF3A6800494182 /* Persistence.swift */,
 				890C993626EF3A6800494182 /* Assets.xcassets */,
 				890C994026EF3A6800494182 /* Info.plist */,
@@ -366,7 +366,7 @@
 			files = (
 				890C993A26EF3A6800494182 /* Preview Assets.xcassets in Resources */,
 				718E65DF26F6BC600010165C /* Localizable.strings in Resources */,
-				711DD71C2716BFD50055A02E /* Launch Screen.storyboard in Resources */,
+				89979575271C214D00941FBB /* Launch Screen.storyboard in Resources */,
 				890C993726EF3A6800494182 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
