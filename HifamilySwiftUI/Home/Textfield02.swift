@@ -34,9 +34,6 @@ struct Textfield02: View {
                     VStack {
                         HStack(alignment: .center) {
                             Spacer()
-
-
-//                            KeyboardHost{
                                 ScrollView{
                                 AddMemberCardUIView()
                                     .padding(20)
@@ -69,7 +66,6 @@ struct Textfield02: View {
 
                             //改回来
                 ForEach(memberModels, id: \.name) { memberModel in
-//                        KeyboardHost {
                             ScrollView{
                                 CardUIView(image:memberModel.avatar! ,memberName:memberModel.name! ,memberIdentity:memberModel.birthday! ,memberTelephone:memberModel.phone!).padding(20)
                                             }
@@ -102,49 +98,7 @@ struct Textfield02: View {
                     }
                 }
             }else{
-                VStack {
-                    HStack {
-                        Image("grandFather")
-                            .onTapGesture {
-                                isPressed = true
-                            }
-                            .frame(width: 130, height: 130)
-
-                            .offset(x: 10, y: -20)
-                        Image("grandmother")
-                            .onTapGesture {
-                                isPressed = true
-                            }
-                    }
-                    .frame(width: 300, height: 130)
-                    HStack {
-                        Image("father")
-                            .onTapGesture {
-                                isPressed = true
-                            }
-                            .offset(x: -60, y: -50.0)
-                        Image("mother")
-                            .onTapGesture {
-                                isPressed = true
-                            }.offset(x: 0, y: -30.0)
-                    }
-                    .frame(width: 400, height: 100)
-                 
-                    HStack {
-                        Image("bother")
-                            .onTapGesture {
-                                isPressed = true
-                            }
-                            .offset(x: -80, y: -60)
-                        Image("sister")
-                            .onTapGesture {
-                                isPressed = true
-                            }
-                            .offset(x: 40, y: -40)
-                        
-                    }
-
-                }.offset(x: 10, y: -100)
+                avaterTree(isPressed:$isPressed)
             }
            
         }
@@ -197,3 +151,52 @@ struct KeyboardHost<Content: View>: View {
     }
 }
 
+
+struct avaterTree: View {
+    @Binding var isPressed : Bool;
+    var body: some View {
+        VStack {
+            HStack {
+                Image("grandFather")
+                    .onTapGesture {
+//                        isPressed = true
+                    }
+                    .frame(width: 130, height: 130)
+                    
+                    .offset(x: 10, y: -20)
+                Image("grandmother")
+                    .onTapGesture {
+//                        isPressed = true
+                    }
+            }
+            .frame(width: 300, height: 130)
+            HStack {
+                Image("father")
+                    .onTapGesture {
+//                        isPressed = true
+                    }
+                    .offset(x: -60, y: -50.0)
+                Image("mother")
+                    .onTapGesture {
+//                        isPressed = true
+                    }.offset(x: 0, y: -30.0)
+            }
+            .frame(width: 400, height: 100)
+            
+            HStack {
+                Image("bother")
+                    .onTapGesture {
+//                        isPressed = true
+                    }
+                    .offset(x: -80, y: -60)
+                Image("sister")
+                    .onTapGesture {
+//                        isPressed = true
+                    }
+                    .offset(x: 40, y: -40)
+                
+            }
+            
+        }.offset(x: 10, y: -100)
+    }
+}
