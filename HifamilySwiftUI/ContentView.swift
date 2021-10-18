@@ -22,13 +22,17 @@ extension View {
 struct ContentView: View {
     //body 属性只返回单个视图，这时组合多个视图把他们放入一个栈中
     @State var isLogin : Bool = false
-    
+    @State var isFirstLogin : LCBool = true
+    @State var isPressed = false
+    @State var objectId:LCString = ""
     var body: some View {
-        if let user = LCApplication.default.currentUser {
-            HomeUIView().debugPrint(user)
-        } else {
-            WhetherLoginBeforeUIView(isLogin: $isLogin)
-        }
+//        if let user = LCApplication.default.currentUser {
+//            HomeUIView().debugPrint(user.objectId!)
+//
+//        } else {
+            WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed,objectId: $objectId)
+            
+//        }
     }
 }
 
