@@ -22,6 +22,9 @@ struct LoginUIView: View {
     @State var alertMessage = ""
 
     @Binding var isLogin:Bool
+    @Binding var isFirstLogin:LCBool
+    @Binding var isPressed1:Bool
+    @Binding var objectId:LCString
     let primaryButton = Alert.Button.default(Text("确认")) {
                 print("确认")
             }
@@ -55,9 +58,11 @@ struct LoginUIView: View {
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.4))
                 
-                LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading,isLogin: $isLogin)
+                LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId)
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.6))
+                    .debugPrint(("2\(isPressed1)"))
+                    
                     
                 
                 
@@ -70,7 +75,8 @@ struct LoginUIView: View {
             .padding(.trailing,40)
             .onAppear{
                 self.isAnimating.toggle()
-        }
+            }
+            
             .alert(isPresented: $isShowAlert, content: {
                             alert
                         }).disabled(isShowLoading)
@@ -78,7 +84,7 @@ struct LoginUIView: View {
             if isShowLoading {
                 LoadingView()
             }
-        } .navigationBarHidden(true)
+        }
             
 }
 }
@@ -222,6 +228,9 @@ struct LoginView: View {
     @State var errorCode = 0
     @State var isLoginError = false
     @State var isRegistError = false
+    @Binding var isFirstLogin : LCBool
+    @Binding var isPressed1 : Bool
+    @Binding var objectId : LCString
     var body: some View {
         VStack{
             Text("忘记密码?")
@@ -231,7 +240,6 @@ struct LoginView: View {
                 .padding(.bottom,10)
                 .padding(.leading, UIScreen.main.bounds.width/2+59)
             Button(action: {
-                    print("haha")
                 if pageType == "signup"{
                     isShowLoading = true
                     if username.count == 11{
@@ -276,15 +284,23 @@ struct LoginView: View {
                     _ = LCUser.logIn(username: username, password: password) { result in
                         switch result {
                         case .success(object: let user):
+                            isFirstLogin = user.isFirstLogin as! LCBool
+                            if(isFirstLogin == true){
+                                isPressed1 = true
+                            }else{
+                                isLogin = true
+                            }
+                            objectId = user.objectId!
                             isShowLoading = false
-                            isLogin = true
+                            print("1\(isPressed1)")
                             print(user)
                         
-                        case .failure(error: let error):
+                        case .failure(error: let error):{
                             errorCode = 3;
                             isLoginError = true
                             isShowLoading = false
-                            print(error)
+                            print("登陆失败原因\(error)")
+                            
                         }
                     }
                 }
@@ -303,41 +319,23 @@ struct LoginView: View {
             .cornerRadius(30)
             .padding(.top,30)
             .alert(isPresented: $isLoginError, content: {
-//                if(errorCode==1)
-//                {Alert(title: Text("出错了"),
-//                                  message: Text("手机号登陆出错"),
-//                                  dismissButton: .default(Text("OK")))
-//                }
-//                if(errorCode==2){
-//                Alert(title: Text("Hello SwiftUI!"),
-//                                  message: Text("注册用户失败"),
-//                                  dismissButton: .default(Text("OK")))
-//                }
-          
-                Alert(title: Text("Hello SwiftUI!"),
+                Alert(title: Text("出错了"),
                                   message: Text("登陆失败"),
                                   dismissButton: .default(Text("OK")))
                 
-                
             })
             .alert(isPresented: $isRegistError, content: {
-//                if(errorCode==1)
-//                {Alert(title: Text("出错了"),
-//                                  message: Text("手机号登陆出错"),
-//                                  dismissButton: .default(Text("OK")))
-//                }
-//                if(errorCode==2){
-//                Alert(title: Text("Hello SwiftUI!"),
-//                                  message: Text("注册用户失败"),
-//                                  dismissButton: .default(Text("OK")))
-//                }
-          
                 Alert(title: Text("出错了!"),
                                   message: Text("注册失败"),
                                   dismissButton: .default(Text("OK")))
-                
-                
             })
+            .fullScreenCover(isPresented: $isPressed1, onDismiss: {
+                            print("3\(isPressed1)")
+                        }) {
+                            IsCreaterView(objectId: $objectId,isLogin: $isLogin)
+                        }
+            
+            
             VStack{
                 
                 ZStack{
