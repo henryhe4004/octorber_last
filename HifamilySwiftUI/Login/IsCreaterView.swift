@@ -16,6 +16,7 @@ struct IsCreaterView: View {
     @State var error1 = false
     @State var error2 = false
     @Binding var isLogin : Bool
+    @State var error3 : String = ""
     var body: some View {
         GeometryReader { geo in
         ZStack {
@@ -80,8 +81,8 @@ struct IsCreaterView: View {
     //                                  dismissButton: .default(Text("OK")))
     //                }
               
-                    Alert(title: Text("Hello SwiftUI!"),
-                                      message: Text("出错了"),
+                    Alert(title: Text("error!"),
+                          message: Text("\(error3)"),
                                       dismissButton: .default(Text("OK")))
                     
                     
@@ -108,6 +109,7 @@ struct IsCreaterView: View {
                     break
                 case .failure(error: let error):
                     error1 = true
+                    error3 = error.reason!
                     print(error)
                 }
             }

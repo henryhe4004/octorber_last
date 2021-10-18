@@ -225,8 +225,8 @@ struct LoginView: View {
     @Binding var password : String
     @Binding var isShowLoading:Bool
     @Binding var isLogin : Bool
-    @State var errorCode = 0
-    @State var isLoginError = false
+    @State var errorReason :String = ""
+    @State var isLoginError = true
     @State var isRegistError = false
     @Binding var isFirstLogin : LCBool
     @Binding var isPressed1 : Bool
@@ -256,8 +256,8 @@ struct LoginView: View {
                             break
                         case .failure(error: let error):
                             
-                            errorCode = 1;
-                            isRegistError = true;
+                            errorReason = error.reason!;
+                            isLoginError = true;
                             isShowLoading = false
                             print(error)
                         }
@@ -271,8 +271,8 @@ struct LoginView: View {
                             print("注册成功")
                             break
                         case .failure(error: let error):
-                            errorCode = 2;
-                            isRegistError = true
+                            errorReason = error.reason!;
+                            isLoginError = true
                             isShowLoading = false
                              print("注册失败，失败原因：\(error)")
                              
@@ -296,7 +296,7 @@ struct LoginView: View {
                             print(user)
                         
                         case .failure(error: let error):
-                            errorCode = 3;
+                            errorReason = error.reason!;
                             isLoginError = true
                             isShowLoading = false
                             print("登陆失败原因\(error)")
@@ -320,15 +320,15 @@ struct LoginView: View {
             .padding(.top,30)
             .alert(isPresented: $isLoginError, content: {
                 Alert(title: Text("出错了"),
-                                  message: Text("登陆失败"),
+                                  message: Text("\(errorReason)"),
                                   dismissButton: .default(Text("OK")))
                 
             })
-            .alert(isPresented: $isRegistError, content: {
-                Alert(title: Text("出错了!"),
-                                  message: Text("注册失败"),
-                                  dismissButton: .default(Text("OK")))
-            })
+//            .alert(isPresented: $isRegistError, content: {
+//                Alert(title: Text("出错了!"),
+//                                  message: Text("注册失败"),
+//                                  dismissButton: .default(Text("OK")))
+//            })
             .fullScreenCover(isPresented: $isPressed1, onDismiss: {
                             print("3\(isPressed1)")
                         }) {
