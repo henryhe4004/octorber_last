@@ -25,20 +25,7 @@ struct LoginUIView: View {
     @Binding var isFirstLogin:LCBool
     @Binding var isPressed1:Bool
     @Binding var objectId:LCString
-    let primaryButton = Alert.Button.default(Text("确认")) {
-                print("确认")
-            }
-        
-            let secondaryButton = Alert.Button.destructive(Text("取消")) {
-                print("取消")
-            }
-            
-            var alert: Alert {
-                Alert(title: Text(alertTitle),
-                      message: Text(alertMessage),
-                      primaryButton: primaryButton,
-                      secondaryButton: secondaryButton)
-            }
+
 
     var body: some View {
         
@@ -77,9 +64,7 @@ struct LoginUIView: View {
                 self.isAnimating.toggle()
             }
             
-            .alert(isPresented: $isShowAlert, content: {
-                            alert
-                        }).disabled(isShowLoading)
+
             
             if isShowLoading {
                 LoadingView()
@@ -225,9 +210,12 @@ struct LoginView: View {
     @Binding var password : String
     @Binding var isShowLoading:Bool
     @Binding var isLogin : Bool
+    
     @State var errorReason :String = ""
-    @State var isLoginError = true
-    @State var isRegistError = false
+    
+    @State var isLoginError = false
+    
+//    @State var isRegistError = true
     @Binding var isFirstLogin : LCBool
     @Binding var isPressed1 : Bool
     @Binding var objectId : LCString
@@ -300,7 +288,6 @@ struct LoginView: View {
                             isLoginError = true
                             isShowLoading = false
                             print("登陆失败原因\(error)")
-                            
                         
                     }
                 }
@@ -318,17 +305,14 @@ struct LoginView: View {
             .foregroundColor(.white)
             .cornerRadius(30)
             .padding(.top,30)
+            
             .alert(isPresented: $isLoginError, content: {
                 Alert(title: Text("出错了"),
-                                  message: Text("\(errorReason)"),
+//                                  message: Text("\(errorReason)"),
+                                    message: Text(pageType == "signin" ? "登录失败":"注册失败"),
                                   dismissButton: .default(Text("OK")))
                 
             })
-//            .alert(isPresented: $isRegistError, content: {
-//                Alert(title: Text("出错了!"),
-//                                  message: Text("注册失败"),
-//                                  dismissButton: .default(Text("OK")))
-//            })
             .fullScreenCover(isPresented: $isPressed1, onDismiss: {
                             print("3\(isPressed1)")
                         }) {
