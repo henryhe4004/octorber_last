@@ -41,22 +41,9 @@ struct IsCreaterView: View {
                     
                 }
                 .alert(isPresented: $error2, content: {
-    //                if(errorCode==1)
-    //                {Alert(title: Text("出错了"),
-    //                                  message: Text("手机号登陆出错"),
-    //                                  dismissButton: .default(Text("OK")))
-    //                }
-    //                if(errorCode==2){
-    //                Alert(title: Text("Hello SwiftUI!"),
-    //                                  message: Text("注册用户失败"),
-    //                                  dismissButton: .default(Text("OK")))
-    //                }
-              
                     Alert(title: Text("Hello SwiftUI!"),
                                       message: Text("出错了"),
                                       dismissButton: .default(Text("OK")))
-                    
-                    
                 })
                 .frame(width: 308, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .background(Color(red: 0.952, green: 0.523, blue: 0.008))
@@ -130,9 +117,9 @@ struct IsCreaterView: View {
             return false
         }
         if (error1 == true){
-            return false
-        }else{
             return true
+        }else{
+            return false
         }
     }
 }
