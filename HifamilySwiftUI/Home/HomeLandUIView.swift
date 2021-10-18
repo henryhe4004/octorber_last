@@ -26,7 +26,6 @@ struct HomeLandUIView: View {
             RoundedRectangle(cornerRadius: 27)
                 .fill(LinearGradient(gradient: .init(colors: [Color("LandColorBefore"), Color("LandColorAfter")]), startPoint:  .leading/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/ .trailing))
                 .frame(minWidth: 300, idealWidth: 400, maxWidth: 600, minHeight: 200, idealHeight: 200, maxHeight: 200, alignment: .top)
-//                frame(width: 200, height: 200, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .offset(y: 360)
                 .opacity(0.8)
         }

@@ -7,8 +7,15 @@
 
 import SwiftUI
 import CoreData
+import LeanCloud
 
 
+//首先通过扩展 UIApplication隐藏键盘
+extension UIApplication{
+    func endEditing(){
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 
 struct HomeView: View {
     //isHaveTree true 为创建者，false为加入者
@@ -51,6 +58,7 @@ struct HomeView: View {
                 //title 下面部分
                 TitleDown(familyIdWrite: $familyIdWrite, familyMemberCountWrite: $familyMemberCountWrite,familyTreeWrite:$familyTreeWrite,isHaveTree :$isHaveTree,indexTree:$indexTree)
                 
+                
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .offset(x: self.showLeftMenu  ? 4*geometry.size.width/5: 0)
@@ -77,6 +85,7 @@ struct HomeView: View {
         @Binding var indexTree : Int
         var imgsTree = ["tree","second tree","third tree"]
         var body: some View {
+            GeometryReader { geo in
             VStack {
                 
                 HStack() {
@@ -92,6 +101,7 @@ struct HomeView: View {
                 ZStack {
                     
                     HomeLandUIView()
+                        .offset(x:-3)
                     HStack {
                         HStack {
                             Image(imgsTree[familyTreeWrite])
@@ -130,14 +140,13 @@ struct HomeView: View {
                     .padding(EdgeInsets(top:0,leading:0,bottom:0,trailing:0))
                     
                     FamilyBlackboard()
-                       
-                        
                     Textfield02()
 
                     
                 }
-            }.frame(minWidth: 0/*@END_MENU_TOKEN@*/,  maxWidth: .infinity/*@END_MENU_TOKEN@*/, minHeight: /*@START_MENU_TOKEN@*/0,  maxHeight: /*@START_MENU_TOKEN@*/.infinity, alignment: .topLeading)
+            }
             .animation(.interpolatingSpring(stiffness: 20, damping: 5))
+            }
         }
     }
 
@@ -201,46 +210,70 @@ struct AddFamilyButton: View {
     @State private var showingAlert = false
   
     var modalView: some View {
-        VStack {
-            Text("输入想加入的家庭ID")
-                .font(.title3)
-                .foregroundColor(Color.gray)
-                .padding(.bottom,10)
-            CustomTextField(text: $familyId,isFirstResponder: true)
-                .padding(.horizontal,20)
-                .padding(.top,8)
-                .padding(.bottom,8)
-                .background(Color("EventMarkersBackground"))
-                       .cornerRadius(20)
-                       .shadow(color: .gray, radius: 2)
-                .frame(width: 300, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .font(/*@START_MENU_TOKEN@*/.title3/*@END_MENU_TOKEN@*/)
-            
-            //这个是发生申请的button，在这里写链接，发送申请的请求！！！
-            Button(action: {
-                    familyIDAlert = familyId
-                    self.showingAlert = true
-                    familyId = ""
+        GeometryReader { geo in
+            ZStack {
+                VStack {
+                Text("输入想加入的家庭ID")
+                    .font(.title3)
+                    .foregroundColor(Color.gray)
+                    .padding(.bottom,10)
+                CustomTextField(text: $familyId,isFirstResponder: true)
+                    .padding(.horizontal,20)
+                    .padding(.top,8)
+                    .padding(.bottom,8)
+                    .background(Color("EventMarkersBackground"))
+                           .cornerRadius(20)
+                           .shadow(color: .gray, radius: 2)
+                    .frame(width: 300, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .font(/*@START_MENU_TOKEN@*/.title3/*@END_MENU_TOKEN@*/)
                 
-                //发送申请，查看是否有这个家庭树ID
-            }) {
-                Text("发送申请")
-            }
-            .background(Color("AccentColor"))
-            .frame(width:UIScreen.main.bounds.width/2 - 80,height:40)
-            .background(Color.orange)
-            .foregroundColor(.white)
-            .cornerRadius(30)
-            .alert(isPresented:$showingAlert) {
-                familyIDAlert != "" ? Alert(title: Text("发送申请成功"), message: Text("已向\(familyIDAlert)家庭发送申请")) : Alert(title: Text("发送申请失败"), message: Text("请输入家庭ID"))
+                //这个是发生申请的button，在这里写链接，发送申请的请求！！！
+                Button(action: {
+                        familyIDAlert = familyId
+                        self.showingAlert = true
+                    //发送申请，查看是否有这个家庭树ID
+                    if(familyId != ""){
+                        let query = LCQuery(className: "familyTree")
+                        query.whereKey("familyId", .equalTo(Int(familyId)!))
+                        _ = query.find { result in
+                            switch result {
+                            case .success(objects: _):
+                                print("right")
+                                break
+                            case .failure(error: let error):
+                                familyIDAlert = ""
+                                print(error)
+                            }
+                        }
                     }
-            .padding(.top,20)
-            
-            Spacer()
-            
+                    
+                    familyId = ""
+                }) {
+                    Text("发送申请")
+                }
+                .background(Color("AccentColor"))
+                .frame(width:UIScreen.main.bounds.width/2 - 80,height:40)
+                .background(Color.orange)
+                .foregroundColor(.white)
+                .cornerRadius(30)
+                .alert(isPresented:$showingAlert) {
+                    familyIDAlert != "" ? Alert(title: Text("发送申请成功"), message: Text("已向\(familyIDAlert)家庭发送申请")) : Alert(title: Text("发送申请失败"), message: Text("请输入正确的家庭ID"))
+                        }
+                .padding(.top,20)
+                
+                Spacer()
+            }
+            .padding(.top,45)
+            .frame(width: geo.size.width, height: geo.size.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .onTapGesture {
+                        print("收回键盘")
+                        UIApplication.shared.endEditing()
         }
-        .padding(.top,45)
+            }
         }
+        
+    }
+    
     var body: some View {
         Button(action: {
             self.isPresented = true
@@ -262,6 +295,7 @@ struct AddFamilyButton: View {
         .sheet(isPresented: $isPresented, content: {
                     self.modalView
                 })
+        
     }
 }
 
