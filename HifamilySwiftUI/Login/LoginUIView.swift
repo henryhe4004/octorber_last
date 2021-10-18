@@ -295,17 +295,17 @@ struct LoginView: View {
                             print("1\(isPressed1)")
                             print(user)
                         
-                        case .failure(error: let error):{
+                        case .failure(error: let error):
                             errorCode = 3;
                             isLoginError = true
                             isShowLoading = false
                             print("登陆失败原因\(error)")
                             
-                        }
+                        
                     }
                 }
                 
-                
+                }
             }) {
                 HStack{
                     Text(pageType == "signin" ? "登录":"确认注册")
