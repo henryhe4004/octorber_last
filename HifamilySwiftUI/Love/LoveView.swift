@@ -36,7 +36,7 @@ struct MyButtonStyle : ButtonStyle{
     final class Family: ObservableObject {
         @Published  var person: [String]
         @Published var num: [Int]
-    
+        
         init() {
             person = ["爸爸","妈妈","爷爷","奶奶"]
             num = [1,4,5,7]

@@ -12,7 +12,7 @@ struct IsCreaterView: View {
     @Binding var objectId:LCString
     @State var status:Int = 0
     @State var isLoginBefore = false
-    @State var isPressed = false
+    @Binding var isPressed : Bool
     @State var error1 = false
     @State var error2 = false
     @Binding var isLogin : Bool
@@ -28,7 +28,7 @@ struct IsCreaterView: View {
                 Button(action: {
                     status = 1
                     isLoginBefore = true
-                    isPressed = true
+                    isPressed = false
                     isLogin = true
                     error2 = updateUser(objectId1: objectId, status1: status)
                 }) {
@@ -53,7 +53,7 @@ struct IsCreaterView: View {
                 
                 Button(action: {
                     status = 0
-                    isPressed = true
+                    isPressed = false
                     isLogin = true
                     error2 = updateUser(objectId1: objectId, status1: status)
                 }) {
