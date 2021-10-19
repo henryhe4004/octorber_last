@@ -11,9 +11,11 @@ import LeanCloud
 @main
 
 struct HifamilySwiftUIApp: App {
-    
+   
     init(){
         LCApplication.logLevel = .all
+        var config = LCApplication.Configuration()
+        config.isObjectRawDataAtomic = true
         let appid = "2fFgnH5uGXYktafjWdAWSoUt-gzGzoHsz"
         let appkey = "jUHdNSwloytcJyHtgKH3jg7T"
         let url = "https://2ffgnh5u.lc-cn-n1-shared.com"

@@ -25,6 +25,7 @@ struct ContentView: View {
     @State var isFirstLogin : LCBool = true
     @State var isPressed = false
     @State var objectId:LCString = ""
+    
     var body: some View {
 //        if let user = LCApplication.default.currentUser {
 //            HomeUIView().debugPrint(user.objectId!)

@@ -8,6 +8,27 @@
 import SwiftUI
 import LeanCloud
 
+final class User : ObservableObject {
+    @Published var objectId : String
+    @Published var familyPosition : Int
+    @Published var familyTreeId : Int
+    @Published var id : Int
+    @Published var isFirstLogin : Bool
+    @Published var missNum : Int
+    @Published var status : Int
+    @Published var username : String
+    init(){
+        objectId = ""
+        familyPosition = 0
+        familyTreeId = 0
+        id = 0
+        isFirstLogin = true
+        missNum = 0
+        status = 0
+        username = ""
+    }
+}
+
 
 struct LoginUIView: View {
     
