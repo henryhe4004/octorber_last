@@ -16,16 +16,13 @@ struct TextView: UIViewRepresentable{
        }
 
        func makeUIView(context: Context) -> UITextView {
-
            let myTextView = UITextView()
            myTextView.delegate = context.coordinator
-
            myTextView.font = UIFont(name: "HelveticaNeue", size: 15)
            myTextView.isScrollEnabled = true
            myTextView.isEditable = true
            myTextView.isUserInteractionEnabled = true
            myTextView.backgroundColor = UIColor(white: 0, alpha: 0.01)
-
            return myTextView
        }
 

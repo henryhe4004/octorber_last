@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import LeanCloud
+
 struct myTextFieldStyle : TextFieldStyle{
     func _body(configuration:TextField<Self._Label>)->some View{
         HStack{
@@ -76,6 +78,7 @@ struct MissView: View {
     @State  var context : String = " "
     @State private var isUpdate = false
     @Binding var missSetting : Bool
+    @ObservedObject var familyTree:FamilyTree
     var body: some View {
         
         VStack {
@@ -113,8 +116,22 @@ struct MissView: View {
                 Button(action: {
                     self.isUpdate = true
                     self.missSetting = false
+                    do {
+                        let objectId = LCApplication.default.currentUser?.objectId?.value
+                        let todo = LCObject(className: "_User",objectId: objectId!)
+                        try todo.set("missContent", value: context)
+                        todo.save { (result) in
+                            switch result {
+                            case .success:
+                                break
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
+                    } catch {
+                        print(error)
+                    }
                 }) {
-                    
                     Text("提交")
                         .frame(width: 40, height: 20, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                         .padding(10)
@@ -169,6 +186,6 @@ struct MissView: View {
 
 struct MissView_Previews: PreviewProvider {
     static var previews: some View {
-        MissView(missSetting: .constant(true))
+        MissView(missSetting: .constant(true),familyTree:FamilyTree())
     }
 }
