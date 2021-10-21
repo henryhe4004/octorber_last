@@ -9,8 +9,10 @@ import SwiftUI
 
 struct LoveHistoryView: View {
     @ObservedObject var family:Family = Family()
+    @ObservedObject var miss:Miss 
     @Binding var loveHistory : Bool
     var body: some View {
+        GeometryReader { geometry in
         ZStack{
             Rectangle().fill(Color.gray).opacity(0.5)
             ScrollView(.vertical, showsIndicators: false){
@@ -23,10 +25,10 @@ struct LoveHistoryView: View {
                         Text("我收到的思念").font(.system(size: 28)).frame(width: 200, height: 50, alignment: .center).padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 0)
                         )
                         Spacer()
-                    }
-                    ForEach(0 ..< family.person.count){ i in
+                    }.debugPrint(miss.missByCount.count)
+                    ForEach(0 ..< miss.MissByHistory.count,id: \.self){ i in
                         HStack{
-                            Text("\(family.person[i])今年共思念了你\(family.num[i])次")
+                            Text("\(miss.MissByHistory[i])今年共思念了你\(miss.missByCount[i])次")
                                 .tracking(3)
                                 .padding(EdgeInsets(top: 2, leading: 20, bottom: 0, trailing:10 ))
                                 .foregroundColor(grayColor)
@@ -38,9 +40,9 @@ struct LoveHistoryView: View {
                         )
                         Spacer()
                     }
-                    ForEach(0 ..< family.person.count){ i in
+                    ForEach(0 ..< miss.MissHistory.count,id: \.self){ i in
                         HStack{
-                            Text("我今年共思念\(family.person[i])了\(family.num[i])次")
+                            Text("我今年共思念\(miss.MissHistory[i])了\(miss.missByCount[i])次")
                                 .tracking(3)
                                 .padding(EdgeInsets(top: 2, leading: 20, bottom: 0, trailing:10 ))
                                 .foregroundColor(grayColor)
@@ -70,12 +72,14 @@ struct LoveHistoryView: View {
                 .shadow(color: .gray, radius: 10, x: 0, y: 3)
                 .animation(.easeInOut)
             }.frame(width: 300, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            .offset( y: geometry.size.width/3)
+        }
         }
     }
 }
 
 struct LoveHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        LoveHistoryView(loveHistory: .constant(true))
+        LoveHistoryView(miss:Miss(), loveHistory: .constant(true))
     }
 }

@@ -79,16 +79,16 @@ struct MissView: View {
     @State private var isUpdate = false
     @Binding var missSetting : Bool
     @ObservedObject var familyTree:FamilyTree
+    
     var body: some View {
-        
+        GeometryReader { geometry in
         VStack {
            
             HStack{
               Text("输出你的个性思恋语句吧～")
                 Spacer()
             }.padding(EdgeInsets(top: 30, leading: 10, bottom: 10, trailing: 10))
-              
-           
+
 //                Text("妍妍")
 //                    .foregroundColor(.gray)
 //                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
@@ -141,8 +141,7 @@ struct MissView: View {
                 .padding(EdgeInsets(top:20,leading:10,bottom:20,trailing: 15))
                 .buttonStyle(DefaultButtonStyle())
             }
-            
-            
+
 //            if(isChangeInformantion){
 //                Button(action: {
 //                    self.isChangeInformantion = false
@@ -178,7 +177,7 @@ struct MissView: View {
 //            self.fold.toggle()
         }
         .overlay(RoundedRectangle(cornerRadius: 20.0, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
-        
+        }
     }
     
 }

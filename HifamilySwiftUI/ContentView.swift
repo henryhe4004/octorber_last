@@ -27,13 +27,13 @@ struct ContentView: View {
     @State var objectId:LCString = ""
     
     var body: some View {
-//        if let user = LCApplication.default.currentUser {
-//            HomeUIView().debugPrint(user.objectId!)
-//
-//        } else {
+        if let user = LCApplication.default.currentUser {
+            HomeUIView().debugPrint(user.objectId!)
+
+        } else {
             WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed,objectId: $objectId)
             
-//        }
+        }
     }
 }
 

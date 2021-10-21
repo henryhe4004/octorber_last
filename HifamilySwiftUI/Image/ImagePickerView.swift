@@ -74,7 +74,6 @@ struct MediaPicker: UIViewControllerRepresentable {
                 switch item {
                 case let .photo(photo) :
                     do {
-             
                         MyImage.addImage( img1 : photo.modifiedImage ??  photo.originalImage)
                         MyImage.addImageData(img1: photo.originalImage.pngData()!)
                         print(photo.image.pngData() as Any)

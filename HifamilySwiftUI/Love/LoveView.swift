@@ -34,6 +34,11 @@ struct MyButtonStyle : ButtonStyle{
 
     }
 }
+func checkDay(date:Date)->String{
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeStyle = .short
+    return dateFormatter.string(from: date)
+}
 func checkDiff(date:Date) -> Int {
   // 计算两个日期差，返回相差天数
   let formatter = DateFormatter()
@@ -71,19 +76,35 @@ final class Miss : ObservableObject{
     @Published var MissMember : [LCObject]
     @Published var MissToday : [String]
     @Published var MissHistory : [String]
-    @Published var dateTime : [Date]
+    @Published var MissByHistory : [String]
+    @Published var missCount : [Int]
+    @Published var missByCount : [Int]
+    @Published var dateTime : [String]
     @Published var Content : [String]
+    @Published var member : [String]
     init(){
         MissMember = []
         MissToday  = []
         MissHistory = []
+        MissByHistory = []
         dateTime = []
         Content = []
+        missCount = []
+        missByCount = []
+        member = ["我","爸爸","妈妈","爷爷","奶奶","外婆","外公","孙子","孙女","舅舅"]
+    }
+    func setempty(){
+        missCount = []
+        missByCount = []
+        MissHistory = []
+        MissByHistory = []
     }
     func queryMiss(){
         let objectId = LCApplication.default.currentUser?.objectId?.value
         let missQuery = LCQuery(className: "Miss")
         missQuery.whereKey("receiver",.equalTo(objectId!))
+        missQuery.whereKey("createdAt",.descending)
+        missQuery.limit = 10
         print("哈哈")
         _ = missQuery.find(){ (result) in
             switch result {
@@ -91,19 +112,22 @@ final class Miss : ObservableObject{
                 case .success(objects: let miss):
                     self.MissMember = miss
                     for item in miss{
+                        print("miss\((item.updatedAt?.dateValue!)!)")
                         if(checkDiff(date: (item.updatedAt?.dateValue!)!)<=1){
-                            self.MissToday.append((item.objectId?.stringValue!)!)
+                          
+                            self.MissToday.append((item.receiver?.stringValue!)!)
                             let contentQuery = LCQuery(className: "_User")
-                            contentQuery.whereKey("objectId",.equalTo((item.objectId?.stringValue!)!))
+                            contentQuery.whereKey("objectId",.equalTo((item.receiver?.stringValue!)!))
                             _ = contentQuery.getFirst(){ (result) in
                             switch result {
                                 case .success(object: let todo):
+                                    print("miss\((todo.missContent?.stringValue!)!)")
                                     self.Content.append((todo.missContent?.stringValue!)!)
                                 case .failure(error: let error):
                                     print(error)
                                 }
                             }
-                            self.dateTime.append((item.updatedAt?.dateValue!)!)
+                            self.dateTime.append(checkDay(date: (item.updatedAt?.dateValue!)!))
                         }
                         
                     }
@@ -117,10 +141,106 @@ final class Miss : ObservableObject{
     func queryToday(){
         
     }
+    func queryMissByHistory(){
+        let serial = DispatchQueue(label: "serial",attributes: .init(rawValue:0))
+        serial.sync {
+        
+        let objectId = LCApplication.default.currentUser?.objectId?.value
+        let missQuery = LCQuery(className: "Miss")
+        print("123")
+        var set = Set<String>()
+        missQuery.whereKey("receiver",.equalTo(objectId!))
+        _ = missQuery.find(){ (result) in
+            switch result {
+                case .success(objects: let miss):
+                    do{
+                    for item in miss{
+                        set.insert((item.sender?.stringValue)!)
+                    }
+                    for i in set{
+                        let selectCount1 = LCQuery(className:"Miss")
+                        selectCount1.whereKey("receiver",.equalTo(objectId!))
+                        selectCount1.whereKey("sender", .equalTo("\(i)"))
+                        let count = selectCount1.count().intValue
+                        self.missByCount.append(count)
+                        let selectQuery1 = LCQuery(className: "_User")
+                        print("\(i)")
+                        selectQuery1.whereKey("objectId", .equalTo("\(i)"))
+                    
+                        _ = selectQuery1.getFirst { result in
+                            switch result {
+                            case .success(object: let todo):
+                                print("hj")
+                                let title = todo.familyPosition?.intValue!
+                                self.MissByHistory.append(self.member[title!])
+                                print("\(self.member[title!])")
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    }
+                    break
+                case .failure(error: let error):
+                    print(error)
+                }
+        }
+        }
+    }
     func queryMissHistory(){
+//        let serial = DispatchQueue(label: "serial",attributes: .init(rawValue:0))
+//
+        let objectId = LCApplication.default.currentUser?.objectId?.value
+        let missQuery = LCQuery(className: "Miss")
+        var set = Set<String>()
+        missQuery.whereKey("sender",.equalTo(objectId!))
+        _ = missQuery.find(){ (result) in
+            switch result {
+                case .success(objects: let miss):
+                    do{
+                    for item in miss{
+                        if(set.contains((item.receiver?.stringValue)!)){
+                            break
+                        }
+                        else{
+                            let selectCount = LCQuery(className:"Miss")
+                            selectCount.whereKey("sender",.equalTo(objectId!))
+                            selectCount.whereKey("receiver", .equalTo("\(( item.receiver?.stringValue)!)"))
+                            let count = selectCount.count().intValue
+                            self.missCount.append(count)
+                            let selectQuery1 = LCQuery(className: "_User")
+                            selectQuery1.whereKey("objectId",  .equalTo("\(( item.receiver?.stringValue)!)"))
+                            _ = selectQuery1.getFirst { result in
+                                switch result {
+                                case .success(object: let todo):
+                                    print("hj")
+                                    let title = todo.familyPosition?.intValue!
+                                    self.MissHistory.append(self.member[title!])
+                                    print("\(self.member[title!])")
+                                case .failure(error: let error):
+                                    print(error)
+                                }
+                            }
+                            set.insert((item.receiver?.stringValue)!)
+                        }
+                        for se in set {
+                            print("这时个\(se)")
+                        }
+                    }
+                    }
+                    break
+                case .failure(error: let error):
+                    print(error)
+                }
+            
+        }
         
     }
 }
+
+
+
+
 
 
     final class FamilyTree: ObservableObject {
@@ -390,7 +510,7 @@ struct LoveView: View {
                                      k = checkDiff(date: updateT!)
                                     }
                                     if(k>=1||(updateT)==nil){
-                                        familyTree.missNum = familyTree.missNum + 5
+                                        familyTree.missNum = familyTree.missNum + 3
                                         do {
                                             let objectId = LCApplication.default.currentUser?.objectId?.value
                                             let todo = LCObject(className: "_User",objectId: objectId!)
@@ -407,7 +527,7 @@ struct LoveView: View {
                                         } catch {
                                             print(error)
                                         }
-                                        content = "今日领取5张思念券成功"
+                                        content = "今日领取3张思念券成功"
                                     }else{
                                         content = "请明天再领取思念卷"
                                     }
@@ -520,7 +640,7 @@ struct LoveView: View {
                                            }
                                            Divider().padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 20))
                     }else{
-                        ForEach(0..<miss.Content.count){ index in
+                        ForEach(0..<miss.Content.count,id: \.self){ index in
                             HStack{
                                 Text(miss.Content[index])
                                                         .foregroundColor(.gray)
@@ -563,6 +683,7 @@ struct LoveView: View {
                     VStack{
                         Button(action: {
                             self.loveHistory=true
+                            
                         })
                         {
                             HStack{
@@ -621,7 +742,11 @@ struct LoveView: View {
                     ZStack{
                         Rectangle().fill(Color.gray).opacity(0.5)
                     VStack{
-                        LoveHistoryView( loveHistory : $loveHistory)
+                        LoveHistoryView( miss: miss, loveHistory : $loveHistory).onAppear(perform: {
+                            miss.setempty()
+                            miss.queryMissHistory()
+                            miss.queryMissByHistory()
+                        })
                     }
                     }
                 }
