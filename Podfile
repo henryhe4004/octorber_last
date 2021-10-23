@@ -9,4 +9,5 @@ target 'HifamilySwiftUI' do
   # Pods for HifamilySwiftUI
    pod 'YPImagePicker','5.0.0'
    pod 'LeanCloud'
+   pod 'Kingfisher', '~> 7.0'
  end

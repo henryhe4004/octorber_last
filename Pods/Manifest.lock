@@ -3,6 +3,7 @@ PODS:
   - GRDB.swift (5.12.0):
     - GRDB.swift/standard (= 5.12.0)
   - GRDB.swift/standard (5.12.0)
+  - Kingfisher (7.1.1)
   - LeanCloud (17.10.0):
     - LeanCloud/RTM (= 17.10.0)
   - LeanCloud/Foundation (17.10.0):
@@ -19,6 +20,7 @@ PODS:
     - SteviaLayout (= 4.7.3)
 
 DEPENDENCIES:
+  - Kingfisher (~> 7.0)
   - LeanCloud
   - YPImagePicker (= 5.0.0)
 
@@ -26,6 +28,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - GRDB.swift
+    - Kingfisher
     - LeanCloud
     - PryntTrimmerView
     - SteviaLayout
@@ -35,12 +38,13 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   GRDB.swift: f94b00ac11ab22597771b6a47211d1c44284395a
+  Kingfisher: f738f9c4a3415823b8e2985d10aa2d6a9f37bc4d
   LeanCloud: a40bbecf9dc8077252bd1bff980ce32c47ea0690
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   SteviaLayout: c2ecdcff57d44e38fd2f65e54ad52aeae28ca0c4
   SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
   YPImagePicker: 1463a19a36244e209dcb03c30e63559c5afa9602
 
-PODFILE CHECKSUM: 1d428c4e7acf735906a98329778069ae99363ff9
+PODFILE CHECKSUM: 1acaec77def6a3a0f8736a7d1597e889b5fc474e
 
 COCOAPODS: 1.11.2
