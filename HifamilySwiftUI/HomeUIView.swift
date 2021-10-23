@@ -21,7 +21,7 @@ struct HomeUIView: View {
                 familyTree.queryUser()
                 miss.queryMiss()
             })
-        
+
             MyTimeLineView().tabItem { Image(index == 5 ? "fIconly-Bulk-Chart" : "Iconly-Bulk-Chart") }.tag(5)
         
         }

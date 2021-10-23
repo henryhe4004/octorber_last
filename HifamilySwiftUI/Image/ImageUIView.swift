@@ -150,14 +150,7 @@ struct ImageUIView: View {
                     .shadow(color: Color.init("AccentColor"), radius: 3, x: 0.5, y: 1)
                     .padding(EdgeInsets(top: 10, leading: 0, bottom: 5, trailing: 10))
                 }.frame(width:360)
-//                        Spacer()
-            
-                
-                    
-                    
-                   
-                    
-                       
+//                        Spacer()       
                     if(indexSelected == 1){
                        
 //                        ZStack {

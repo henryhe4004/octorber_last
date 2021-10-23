@@ -24,6 +24,7 @@ struct DetailImageUIView: View {
     
     var body: some View {
 //
+        GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false){
                 
                 Image(systemName: "arrowshape.turn.up.left.fill")
@@ -69,9 +70,11 @@ struct DetailImageUIView: View {
                 .cornerRadius(15)
                 .shadow(color: .gray, radius: 10, x: 0, y: 3)
                 .animation(.easeInOut)
-    }.frame(width: 300, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+            }.frame(width: 300, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+           
             .padding(EdgeInsets(top: 0, leading: 15, bottom: 20, trailing: 15))
         }
+    }
 //    }
 }
 

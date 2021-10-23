@@ -31,9 +31,7 @@ struct TextView: UIViewRepresentable{
        }
 
        class Coordinator : NSObject, UITextViewDelegate {
-
            var parent: TextView
-
            init(_ uiTextView: TextView) {
                self.parent = uiTextView
            }

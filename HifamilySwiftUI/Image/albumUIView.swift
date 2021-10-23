@@ -6,8 +6,59 @@
 //
 
 import SwiftUI
-
-
+import LeanCloud
+struct DateImg{
+    var datesort:Date
+    var Img : [ImageContent]
+}
+struct ImageContent{
+    var Content : String
+    var person : String
+    var url : String
+    var createdAt : Date
+    var UserObjectId : String
+}
+final class album : ObservableObject{
+    @Published var dateNeed : [DateImg]
+    @Published var skip = 0
+    @Published var treeId : Int
+    init(){
+        dateNeed = []
+        skip = 0
+        treeId = 0
+    }
+    func update(){
+        let user = LCApplication.default.currentUser?.objectId?.stringValue!
+        let query = LCQuery(className: "_User")
+        query.whereKey("objectId", .equalTo(user!))
+        _ = query.getFirst() { result in
+            switch result {
+            case .success(object: let person):
+                self.treeId = (person.familyTreeId?.intValue!)!
+                break
+            case .failure(error: let error):
+                print(error)
+            }
+        }
+    }
+    func updateDateNeed(){
+        let query = LCQuery(className: "familyAlbum")
+        query.whereKey("familyId",.equalTo(self.treeId))
+        var set = Set<Date>()
+        _ = query.find() { result in
+            switch result {
+            case .success(objects: let person):
+                for item in person{
+                    
+                    
+                }
+                break
+            case .failure(error: let error):
+                print(error)
+            }
+    }
+    }
+}
 
 struct albumUIView: View {
     @ObservedObject var imgTest : Image1 = Image1()
@@ -19,7 +70,6 @@ struct albumUIView: View {
         GridItem(GridItem.Size.flexible(),spacing: 1),
         GridItem(GridItem.Size.flexible(),spacing: 1),
         GridItem(GridItem.Size.flexible(),spacing: 1)
-        
     ]
     
     var body: some View {

@@ -11,6 +11,8 @@
 		711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */; };
 		712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */; };
 		7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */; };
+		715927EA2722AEFB00041D75 /* TextFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927E92722AEFB00041D75 /* TextFile.swift */; };
+		715927EC2723A0CF00041D75 /* SwiftTestUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927EB2723A0CF00041D75 /* SwiftTestUIView.swift */; };
 		715C33A026F8B06E00491BF7 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C339F26F8B06E00491BF7 /* TextView.swift */; };
 		718E65DF26F6BC600010165C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 718E65E126F6BC600010165C /* Localizable.strings */; };
 		718E65E626F6D1BA0010165C /* ImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718E65E526F6D1BA0010165C /* ImageUIView.swift */; };
@@ -65,6 +67,8 @@
 		711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhetherLoginBeforeUIView.swift; sourceTree = "<group>"; };
 		712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumUIView.swift; sourceTree = "<group>"; };
 		7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageUIView.swift; sourceTree = "<group>"; };
+		715927E92722AEFB00041D75 /* TextFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFile.swift; sourceTree = "<group>"; };
+		715927EB2723A0CF00041D75 /* SwiftTestUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTestUIView.swift; sourceTree = "<group>"; };
 		715C339F26F8B06E00491BF7 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		718E65E026F6BC600010165C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		718E65E326F6BC790010165C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -201,6 +205,8 @@
 				890C993626EF3A6800494182 /* Assets.xcassets */,
 				890C994026EF3A6800494182 /* Info.plist */,
 				890C993826EF3A6800494182 /* Preview Content */,
+				715927E92722AEFB00041D75 /* TextFile.swift */,
+				715927EB2723A0CF00041D75 /* SwiftTestUIView.swift */,
 			);
 			path = HifamilySwiftUI;
 			sourceTree = "<group>";
@@ -437,6 +443,7 @@
 				89489A272718683B006FDDEC /* LeftMenuView.swift in Sources */,
 				8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */,
 				89489A2B27186859006FDDEC /* HomeView.swift in Sources */,
+				715927EC2723A0CF00041D75 /* SwiftTestUIView.swift in Sources */,
 				718E65EC26F71A250010165C /* albumUIView.swift in Sources */,
 				7199557B26FB1EE1003ABE28 /* VideoUIView.swift in Sources */,
 				715C33A026F8B06E00491BF7 /* TextView.swift in Sources */,
@@ -459,6 +466,7 @@
 				7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */,
 				89489A25271867F6006FDDEC /* HomeLandUIView.swift in Sources */,
 				890C993326EF3A6700494182 /* HifamilySwiftUIApp.swift in Sources */,
+				715927EA2722AEFB00041D75 /* TextFile.swift in Sources */,
 				718E65EF26F74E430010165C /* IssueUIView.swift in Sources */,
 				CDED5B0D26F4DF2F00570485 /* LetterVeiw.swift in Sources */,
 				89489A2E271868A1006FDDEC /* Card.swift in Sources */,

@@ -7,32 +7,45 @@
 
 import SwiftUI
 import YPImagePicker
+import LeanCloud
+import AVFoundation
 
 struct ImagePickerView: View {
     @State private var showYPImagePickerView = true
-
+    @Binding var url : String
     @ObservedObject var MyImage : Imagepicker
     var body: some View {
            VStack {
-            
-            MediaPicker( MyImage: MyImage)
-               
+            MediaPicker( url1 : $url, MyImage: MyImage)
            }
-
        }
 }
 
+func resizedImage(image : UIImage) -> UIImage? {
+    let boundingRect = CGRect(x: 0, y: 0, width: 150, height:CGFloat.greatestFiniteMagnitude)
+
+
+    let aspectRect = AVMakeRect(aspectRatio: image.size, insideRect: boundingRect)
+
+    let renderer = UIGraphicsImageRenderer(size: aspectRect.size)
+
+    let img = renderer.image { (context) in
+        image.draw(in: CGRect(origin: .zero, size: aspectRect.size))
+    }
+   return img
+}
+
 struct MediaPicker: UIViewControllerRepresentable {
-    
+    @Binding var url1 : String
     @ObservedObject var MyImage : Imagepicker
     func makeUIViewController(context: Context) -> YPImagePicker {
         var config = YPImagePickerConfiguration()
         //是否可以滑动
-        config.isScrollToChangeModesEnabled = true
+        config.isScrollToChangeModesEnabled = false
         //是否只能拍摄正方形
         config.onlySquareImagesFromCamera = false
         //默认打开前置摄像头
-        config.usesFrontCamera = true
+        config.usesFrontCamera = false
         //相册名
         config.albumName = "Hi family"
         //默认打开为相册
@@ -74,9 +87,21 @@ struct MediaPicker: UIViewControllerRepresentable {
                 switch item {
                 case let .photo(photo) :
                     do {
+                        let image123 = resizedImage(image: photo.modifiedImage!)
+                        let file = LCFile(payload: .data(data: (image123?.pngData()!)!))
+                        _ = file.save { result in
+                            switch result {
+                            case .success:
+                                if let value = file.url?.value {
+                                    url1 = value
+                                    print("文件保存完成。URL: \(value)")
+                                }
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
                         MyImage.addImage( img1 : photo.modifiedImage ??  photo.originalImage)
-                        MyImage.addImageData(img1: photo.originalImage.pngData()!)
-                        print(photo.image.pngData() as Any)
+                        
                     }
                 case .video(let video) :
                         print(video)

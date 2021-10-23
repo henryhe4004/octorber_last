@@ -29,9 +29,6 @@ struct MyButtonStyle : ButtonStyle{
             .cornerRadius(32.0)
 //            .shadow(color: .gray, radius: 3, x: 0, y: 3)
             .overlay(RoundedRectangle(cornerRadius: 32.0, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
-        
-
-
     }
 }
 func checkDay(date:Date)->String{
@@ -129,9 +126,8 @@ final class Miss : ObservableObject{
                             }
                             self.dateTime.append(checkDay(date: (item.updatedAt?.dateValue!)!))
                         }
-                        
+
                     }
-                    
                     break
                 case .failure(error: let error):
                     print(error)
@@ -222,9 +218,6 @@ final class Miss : ObservableObject{
                                 }
                             }
                             set.insert((item.receiver?.stringValue)!)
-                        }
-                        for se in set {
-                            print("这时个\(se)")
                         }
                     }
                     }
