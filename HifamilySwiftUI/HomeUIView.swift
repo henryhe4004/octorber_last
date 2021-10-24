@@ -10,11 +10,15 @@ import SwiftUI
 struct HomeUIView: View {
     @State private var index = 3
     @ObservedObject var familyTree:FamilyTree = FamilyTree()
+    @ObservedObject var album:Album = Album()
     @ObservedObject var miss:Miss = Miss()
     var body: some View {
         TabView(selection: $index) {
 //            FamilyTreeView()
-            ImageUIView().tabItem { Image(index == 1 ? "Iconly-Bulk-Activity" : "fIconly-Bulk-Activity") }.tag(1)
+            ImageUIView(album:album).tabItem { Image(index == 1 ? "Iconly-Bulk-Activity" : "fIconly-Bulk-Activity") }.tag(1).onAppear(perform: {
+                    album.update()
+                    
+            })
             LetterView().tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2)
             HomeView().tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3)
             LoveView(familyTree: familyTree,miss:miss).tabItem { Image( index == 4 ? "Iconly-Bulk-Heart" : "fIconly-Bulk-Heart") }.tag(4).onAppear(perform: {
@@ -33,6 +37,6 @@ struct HomeUIView: View {
 
 struct HomeUIView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeUIView()
+        HomeUIView(album:Album())
     }
 }

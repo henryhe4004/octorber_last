@@ -24,7 +24,7 @@ struct WhetherLoginBeforeUIView: View {
             .fullScreenCover(isPresented: $isLogin, onDismiss: {
                             print("Detail View Dismissed")
                         }) {
-                            HomeUIView()
+                    HomeUIView()
                         }
     }
 }

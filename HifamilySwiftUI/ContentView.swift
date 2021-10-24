@@ -25,10 +25,13 @@ struct ContentView: View {
     @State var isFirstLogin : LCBool = true
     @State var isPressed = false
     @State var objectId:LCString = ""
+    @ObservedObject var album : Album = Album()
     
     var body: some View {
         if let user = LCApplication.default.currentUser {
-            HomeUIView().debugPrint(user.objectId!)
+            HomeUIView(album:album).debugPrint(user.objectId!).onAppear(perform: {
+                    album.update()
+            })
 
         } else {
             WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed,objectId: $objectId)

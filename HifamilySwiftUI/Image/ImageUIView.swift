@@ -52,6 +52,8 @@ struct ImageUIView: View {
     @State var detailText : String = " "
     @State var isSelected : Bool = false
     @State var isSelected1 : Bool = false
+    @State var SelectWho : Int = 1
+    @ObservedObject var album:Album
     var body: some View {
        
         NavigationView {
@@ -155,7 +157,11 @@ struct ImageUIView: View {
                        
 //                        ZStack {
 //                            ScrollView(.vertical, showsIndicators: false){
-                                    albumUIView(detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected)
+                        albumUIView(album: album, detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected,
+                                    selectWho:$SelectWho
+                                    ).onAppear(perform: {
+//                            album.updateDateNeed()
+                        })
 //                            }
                         
                         
@@ -184,8 +190,8 @@ struct ImageUIView: View {
                             Rectangle().fill(Color.gray).opacity(0.5)
                             VStack{
                         
-                                DetailImageUIView(isSelected: $isSelected, detailImage: $detailImage, detailText: $detailText)
-                                
+//                                DetailImageUIView(isSelected: $isSelected, detailImage: $detailImage, detailText: $detailText)
+                                FlippingView(isSelected: $isSelected, album: album,selectWho: $SelectWho)
 //                            }
                                 }
                             }
@@ -207,6 +213,6 @@ struct ImageUIView: View {
 
 struct ImageUIView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageUIView()
+        ImageUIView(album:Album())
     }
 }

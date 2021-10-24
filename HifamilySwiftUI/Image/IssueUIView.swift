@@ -81,7 +81,7 @@ struct IssueUIView: View {
                         Spacer()
                            
                     }
-                       .dismissKeyboardOnTap()
+                    .dismissKeyboardOnTap()
                     KeyboardHost{
                         TextEditor(text: $content)
                         .frame(width:350,height: 300, alignment: .topLeading)
