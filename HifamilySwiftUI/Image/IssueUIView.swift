@@ -29,7 +29,7 @@ final class Imagepicker: ObservableObject {
 struct IssueUIView: View {
 //    let context = CIContext()
 //    let currentFilter = CIFilter.sepiaTone()
-    @ObservedObject var imagepick : Imagepicker = Imagepicker()
+    @ObservedObject var imagepick : Imagepicker
     @State var url : String = ""
     @State var people : String = "妍妍"
     @State var content : String = ""
@@ -108,7 +108,6 @@ struct IssueUIView: View {
                                 .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
                         }
                     }
-                        
                         Button(action:{
                             if(imagepick.img.count>0){
                                 self.isPresented1 = true
@@ -219,6 +218,6 @@ public struct DismissKeyboardOnTap: ViewModifier {
 
 struct IssueUIView_Previews: PreviewProvider {
     static var previews: some View {
-        IssueUIView()
+        IssueUIView(imagepick: Imagepicker())
     }
 }

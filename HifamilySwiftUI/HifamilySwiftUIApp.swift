@@ -21,6 +21,7 @@ struct HifamilySwiftUIApp: App {
         let url = "https://2ffgnh5u.lc-cn-n1-shared.com"
         do { try LCApplication.default.set(id: appid, key: appkey, serverURL: url) }
         catch { print(error) }
+        UITabBar.appearance().backgroundColor = UIColor(Color.white)
     }
     
     let persistenceController = PersistenceController.shared

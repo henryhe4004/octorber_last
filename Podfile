@@ -10,4 +10,5 @@ target 'HifamilySwiftUI' do
    pod 'YPImagePicker','5.0.0'
    pod 'LeanCloud'
    pod 'Kingfisher', '~> 7.0'
+   pod 'SwiftFormat/CLI'
  end

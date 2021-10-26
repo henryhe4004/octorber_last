@@ -14,6 +14,7 @@ PODS:
     - SwiftProtobuf (~> 1.18)
   - PryntTrimmerView (4.0.2)
   - SteviaLayout (4.7.3)
+  - SwiftFormat/CLI (0.48.17)
   - SwiftProtobuf (1.18.0)
   - YPImagePicker (5.0.0):
     - PryntTrimmerView (= 4.0.2)
@@ -22,6 +23,7 @@ PODS:
 DEPENDENCIES:
   - Kingfisher (~> 7.0)
   - LeanCloud
+  - SwiftFormat/CLI
   - YPImagePicker (= 5.0.0)
 
 SPEC REPOS:
@@ -32,6 +34,7 @@ SPEC REPOS:
     - LeanCloud
     - PryntTrimmerView
     - SteviaLayout
+    - SwiftFormat
     - SwiftProtobuf
     - YPImagePicker
 
@@ -42,9 +45,10 @@ SPEC CHECKSUMS:
   LeanCloud: a40bbecf9dc8077252bd1bff980ce32c47ea0690
   PryntTrimmerView: 6a43cc90df5d99addeabd33d4ba09b1365322130
   SteviaLayout: c2ecdcff57d44e38fd2f65e54ad52aeae28ca0c4
+  SwiftFormat: 0a9044eb365d74d4a0a2cefa5fe44a4cbef382a7
   SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
   YPImagePicker: 1463a19a36244e209dcb03c30e63559c5afa9602
 
-PODFILE CHECKSUM: 1acaec77def6a3a0f8736a7d1597e889b5fc474e
+PODFILE CHECKSUM: 119f1f4aca93daf9987b582cd26e171d100cf4d6
 
 COCOAPODS: 1.11.2

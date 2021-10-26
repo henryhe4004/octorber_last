@@ -12,6 +12,7 @@ struct WhetherLoginBeforeUIView: View {
     @Binding var isFirstLogin : LCBool
     @Binding var isPressed1 : Bool
     @Binding var objectId:LCString
+    @ObservedObject var album : Album
     var body: some View {
         
         LoginUIView(isLogin: $isLogin, isFirstLogin: $isFirstLogin, isPressed1: $isPressed1, objectId: $objectId)
@@ -24,7 +25,7 @@ struct WhetherLoginBeforeUIView: View {
             .fullScreenCover(isPresented: $isLogin, onDismiss: {
                             print("Detail View Dismissed")
                         }) {
-                    HomeUIView()
+                            HomeUIView().onAppear(perform:{album.update()})
                         }
     }
 }

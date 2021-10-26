@@ -17,10 +17,19 @@ struct HomeUIView: View {
 //            FamilyTreeView()
             ImageUIView(album:album).tabItem { Image(index == 1 ? "Iconly-Bulk-Activity" : "fIconly-Bulk-Activity") }.tag(1).onAppear(perform: {
                     album.update()
+                if #available(iOS 15.0, *) {
+                    let appearance = UITabBarAppearance()
+                    UITabBar.appearance().scrollEdgeAppearance = appearance
+                }
                     
             })
             LetterView().tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2)
-            HomeView().tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3)
+            HomeView().tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
+                if #available(iOS 15.0, *) {
+                    let appearance = UITabBarAppearance()
+                    UITabBar.appearance().scrollEdgeAppearance = appearance
+                }
+            }
             LoveView(familyTree: familyTree,miss:miss).tabItem { Image( index == 4 ? "Iconly-Bulk-Heart" : "fIconly-Bulk-Heart") }.tag(4).onAppear(perform: {
                 familyTree.queryUser()
                 miss.queryMiss()

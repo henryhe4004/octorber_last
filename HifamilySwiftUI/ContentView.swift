@@ -34,8 +34,7 @@ struct ContentView: View {
             })
 
         } else {
-            WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed,objectId: $objectId)
-            
+            WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed,objectId: $objectId,album:album)
         }
     }
 }

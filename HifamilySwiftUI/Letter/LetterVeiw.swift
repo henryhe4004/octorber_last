@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LeanCloud
 
 let orangeColor = Color(UIColor(red: 1, green: 0.66, blue: 0.21, alpha: 1))
 
@@ -16,6 +17,124 @@ let grayColor = Color(UIColor(red: 0.45, green: 0.45, blue: 0.45,alpha: 1))
 let grayColor2 = Color(UIColor(red: 0.55, green: 0.55, blue: 0.55,alpha:1))
 
 
+struct everyLetter {
+    var letterContent:String
+    var sendName:String
+    var receiveName:String
+    var sendTime:Date
+}
+
+final class MyLetter:ObservableObject {
+    @Published var letterNum:Int
+    @Published var letters:[everyLetter]
+    
+    init() {
+        letterNum = 0
+        letters = []
+    }
+    
+    func queryAllMyLetter() {
+        // 获取当前用户的Id
+        let myLetterId = LCApplication.default.currentUser?.objectId?.value
+        
+        let query = LCQuery(className: "Letter")
+        query.whereKey("receiveLetterId", .equalTo(myLetterId!))
+        _ = query.find { result in
+            switch result {
+            case .success(objects: let l):
+                for Item in l {
+                    // 查出来每封信的Id
+                    var mis:everyLetter = everyLetter(letterContent: "", sendName: "", receiveName: "", sendTime: Date())
+                    mis.letterContent = (Item.letterContent?.stringValue!)!
+                    let letterId = (Item.objectId?.stringValue!)!
+                    let query = LCQuery(className: "LetterM")
+                    query.whereKey("letterObjectId", .equalTo(letterId))
+                    _ = query.getFirst { result in
+                        switch result {
+                        case .success(object: let todo):
+                            mis.sendName = (todo.sendName?.stringValue!)!
+                            mis.receiveName = (todo.receiveName?.stringValue!)!
+                            mis.sendTime = (todo.createdAt?.dateValue!)!
+                            print("**********")
+                            print(mis)
+                            self.letters.append(mis)
+                            print("123123123123ssssss\(self.letters.count)")
+                        case .failure(error: let error):
+                            print(error)
+                        }
+                    }
+                }
+                break
+            case .failure(error: let error):
+                print(error)
+            }
+        }
+        
+        let query2 = LCQuery(className: "Letter")
+        query2.whereKey("receiveLetterId", .equalTo(myLetterId!))
+        let count = query2.count()
+        self.letterNum = count.intValue
+
+    }
+}
+
+
+final class LLMumber:ObservableObject {
+    
+    @Published var mumbersObjectId : [String]
+    @Published var mumbersName: [String]
+    @Published var familyMumber: [String]
+    @Published var mumbersLetterNum: [Int]
+    
+    init() {
+        mumbersObjectId = []
+        mumbersName = []
+        familyMumber = ["我","爸爸","妈妈","爷爷","奶奶","外婆","外公","孙子","孙女","舅舅"]
+        mumbersLetterNum = []
+    }
+    
+    func queryFamilyMumber() {
+        // 获取当前用户的Id
+        let sendLetterId = LCApplication.default.currentUser?.objectId?.value
+        let query = LCQuery(className: "_User")
+        var familyTreeId = 0
+        // 先查出 当前用户的家庭树ID
+        query.whereKey("objectId", .equalTo(sendLetterId!))
+        _ = query.getFirst { result in
+            switch result {
+            case .success(object: let todo):
+                // 获取到了
+                familyTreeId = (todo.familyTreeId?.intValue)!
+//                print(todo)
+                // 查询家庭树下的所有成员objectId
+                let query = LCQuery(className: "_User")
+                query.whereKey("familyTreeId", .equalTo(familyTreeId))
+                _ = query.find { result in
+                    switch result {
+                    case .success(objects: let mumbers):
+//                        print(mumbers)
+                        for Item in mumbers {
+                            // 如果是自己，不加入
+                            if((Item.objectId?.stringValue!)! != sendLetterId) {
+                                self.mumbersObjectId.append((Item.objectId?.stringValue!)!)
+                                self.mumbersName.append(self.familyMumber[(Item.familyPosition?.intValue!)!])
+                            }
+                        }
+                        print(self.mumbersName)
+                        break
+                    case .failure(error: let error):
+                        print(error)
+                    }
+                }
+            case .failure(error: let error):
+                print(error)
+            }
+        }
+    }
+}
+
+
+
 struct LetterView: View {
     @State var name : String = " "
     @State var content : String = " "
@@ -24,7 +143,13 @@ struct LetterView: View {
     @State var namefirst : String=""
     @State var nameSecond : String=""
     @State  var isLetterSelected : Bool = false
+    
+    @ObservedObject var llmumber:LLMumber = LLMumber()
+    
+    @ObservedObject var myLetter:MyLetter = MyLetter()
+    
     var body: some View{
+
         NavigationView {
             ZStack {
         VStack {
@@ -33,11 +158,15 @@ struct LetterView: View {
             Divider()
             // 滚动视图
             ScrollView(.vertical) {
-               
-                
                     VStack{
                         VStack{
-                        
+                            Button(action: {
+                                myLetter.queryAllMyLetter()
+                                print(self.myLetter.letterNum)
+                                print(self.myLetter.letters)
+                            }) {
+                                Text("test")
+                            }
                         HStack {
                             Rectangle()
                                 .foregroundColor(orangeColor)
@@ -52,7 +181,6 @@ struct LetterView: View {
                                 .foregroundColor(Color(UIColor(red: 0.75, green: 0.75, blue: 0.75,alpha:1)))
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 15))
                         }.padding(EdgeInsets(top: 18, leading: 25, bottom: 0, trailing: 30))
-                        
                         VStack {
                             HStack {
                                 VStack {
@@ -101,6 +229,7 @@ struct LetterView: View {
                                             namefirst = "智妍"
                                             nameSecond = "艳丽"
                                             date = "2021.07.05"
+                                            llmumber.queryFamilyMumber()
                                         }
                                     }
                                 }.frame(width: 152.0, height: 190.0)
@@ -750,11 +879,13 @@ struct LetterView: View {
 
 // Spacer().frame(height:10).background(Color.gray)
 
-struct LetterView_Previews: PreviewProvider {
-    static var previews: some View {
-        LetterView()
-    }
-}
+    
+    // 这段代码用于调出Xcode右侧的视图
+//struct LetterView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LetterView()
+//    }
+//}
 
 struct UpperNavigationBar: View {
     var body: some View {
