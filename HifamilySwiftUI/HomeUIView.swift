@@ -12,6 +12,9 @@ struct HomeUIView: View {
     @ObservedObject var familyTree:FamilyTree = FamilyTree()
     @ObservedObject var album:Album = Album()
     @ObservedObject var miss:Miss = Miss()
+    
+    @ObservedObject var myLetter:MyLetter = MyLetter()
+    
     var body: some View {
         TabView(selection: $index) {
 //            FamilyTreeView()
@@ -23,7 +26,9 @@ struct HomeUIView: View {
                 }
                     
             })
-            LetterView().tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2)
+            LetterView(myLetter: myLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
+                myLetter.queryAllMyLetter()
+            })
             HomeView().tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
                 if #available(iOS 15.0, *) {
                     let appearance = UITabBarAppearance()
