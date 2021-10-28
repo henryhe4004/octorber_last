@@ -132,7 +132,6 @@ struct IssueUIView: View {
                     )
                 }.frame(width:360)
             }
-            
 //            TextField
         }.navigationBarTitle(Text("新照片"),displayMode: .inline)
         .navigationBarItems(trailing: Button(action:{
