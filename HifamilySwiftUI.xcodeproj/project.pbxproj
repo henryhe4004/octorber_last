@@ -69,6 +69,8 @@
 		89C968372715C3EE00EFBA93 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968362715C3EE00EFBA93 /* LaunchView.swift */; };
 		89C968392715C40000EFBA93 /* LoginUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C968382715C40000EFBA93 /* LoginUIView.swift */; };
 		89C9683C2715C40D00EFBA93 /* FetchLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89C9683B2715C40D00EFBA93 /* FetchLoginModel.swift */; };
+		CDD223D5272AB3E200EEABBB /* ThreeBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD223D4272AB3E200EEABBB /* ThreeBlockView.swift */; };
+		CDD223D7272AB51A00EEABBB /* OneBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD223D6272AB51A00EEABBB /* OneBlockView.swift */; };
 		CDED5B0D26F4DF2F00570485 /* LetterVeiw.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDED5B0C26F4DF2F00570485 /* LetterVeiw.swift */; };
 		CDED5B0F26F4E0D300570485 /* WriteLetterVeiw.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDED5B0E26F4E0D300570485 /* WriteLetterVeiw.swift */; };
 /* End PBXBuildFile section */
@@ -140,6 +142,8 @@
 		89C968382715C40000EFBA93 /* LoginUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUIView.swift; sourceTree = "<group>"; };
 		89C9683B2715C40D00EFBA93 /* FetchLoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchLoginModel.swift; sourceTree = "<group>"; };
 		8D8E495DFB5BA16B973644AC /* Pods-HifamilySwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HifamilySwiftUI.release.xcconfig"; path = "Target Support Files/Pods-HifamilySwiftUI/Pods-HifamilySwiftUI.release.xcconfig"; sourceTree = "<group>"; };
+		CDD223D4272AB3E200EEABBB /* ThreeBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeBlockView.swift; sourceTree = "<group>"; };
+		CDD223D6272AB51A00EEABBB /* OneBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneBlockView.swift; sourceTree = "<group>"; };
 		CDED5B0C26F4DF2F00570485 /* LetterVeiw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterVeiw.swift; sourceTree = "<group>"; };
 		CDED5B0E26F4E0D300570485 /* WriteLetterVeiw.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteLetterVeiw.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -355,6 +359,8 @@
 				CDED5B0E26F4E0D300570485 /* WriteLetterVeiw.swift */,
 				71A3A4B826FC0908004B9D53 /* DetailLetterView.swift */,
 				7196606627269F5500C4AD00 /* ContentVeiw.swift */,
+				CDD223D4272AB3E200EEABBB /* ThreeBlockView.swift */,
+				CDD223D6272AB51A00EEABBB /* OneBlockView.swift */,
 			);
 			path = Letter;
 			sourceTree = "<group>";
@@ -484,6 +490,7 @@
 				71EDEE1E272598D700DFD7D8 /* LynnPullToRefreshModifier.swift in Sources */,
 				890C993C26EF3A6800494182 /* Persistence.swift in Sources */,
 				71FBB621273017E30062684A /* SelectImageToAlbumDetailView.swift in Sources */,
+				CDD223D7272AB51A00EEABBB /* OneBlockView.swift in Sources */,
 				890C993526EF3A6700494182 /* ContentView.swift in Sources */,
 				8948191C26F5C0C90095E91D /* Model.xcdatamodeld in Sources */,
 				712901BA27313E6C003B8AC0 /* FlippingUIIView.swift in Sources */,
@@ -498,6 +505,7 @@
 				8900C06C26FB60B6007E7D4D /* MyTimeLineView.swift in Sources */,
 				89C968372715C3EE00EFBA93 /* LaunchView.swift in Sources */,
 				712901B827313C27003B8AC0 /* SwiftTestUIView.swift in Sources */,
+				CDD223D5272AB3E200EEABBB /* ThreeBlockView.swift in Sources */,
 				7196606727269F5500C4AD00 /* ContentVeiw.swift in Sources */,
 				89489A272718683B006FDDEC /* LeftMenuView.swift in Sources */,
 				8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */,

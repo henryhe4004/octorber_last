@@ -34,6 +34,7 @@ final class MyLetter:ObservableObject {
     }
     
     func queryAllMyLetter() {
+        print("wsnd")
         // 获取当前用户的Id
         let myLetterId = LCApplication.default.currentUser?.objectId?.value
         
@@ -55,10 +56,8 @@ final class MyLetter:ObservableObject {
                             mis.sendName = (todo.sendName?.stringValue!)!
                             mis.receiveName = (todo.receiveName?.stringValue!)!
                             mis.sendTime = (todo.createdAt?.dateValue!)!
-                            print("**********")
-                            print(mis)
                             self.letters.append(mis)
-                            print("123123123123ssssss\(self.letters.count)")
+//                            print("123123123123ssssss\(self.letters.count)")
                         case .failure(error: let error):
                             print(error)
                         }
@@ -105,14 +104,12 @@ final class LLMumber:ObservableObject {
             case .success(object: let todo):
                 // 获取到了
                 familyTreeId = (todo.familyTreeId?.intValue)!
-//                print(todo)
                 // 查询家庭树下的所有成员objectId
                 let query = LCQuery(className: "_User")
                 query.whereKey("familyTreeId", .equalTo(familyTreeId))
                 _ = query.find { result in
                     switch result {
                     case .success(objects: let mumbers):
-//                        print(mumbers)
                         for Item in mumbers {
                             // 如果是自己，不加入
                             if((Item.objectId?.stringValue!)! != sendLetterId) {
@@ -142,11 +139,11 @@ struct LetterView: View {
     @State var date : String = " "
     @State var namefirst : String=""
     @State var nameSecond : String=""
-    @State  var isLetterSelected : Bool = false
+    @State var isLetterSelected : Bool = false
     
     @ObservedObject var llmumber:LLMumber = LLMumber()
     
-    @ObservedObject var myLetter:MyLetter = MyLetter()
+    @ObservedObject var myLetter:MyLetter
     
     var body: some View{
 
@@ -161,11 +158,15 @@ struct LetterView: View {
                     VStack{
                         VStack{
                             Button(action: {
-                                myLetter.queryAllMyLetter()
-                                print(self.myLetter.letterNum)
-                                print(self.myLetter.letters)
+                                print("myLetter123num\(self.myLetter.letterNum)")
                             }) {
                                 Text("test")
+                            }
+                            
+                            Button(action: {
+                                print("myLetter123content\(self.myLetter.letters)")
+                            }) {
+                                Text("test2")
                             }
                         HStack {
                             Rectangle()
