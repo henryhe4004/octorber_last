@@ -58,6 +58,7 @@ struct ImageUIView: View {
     @State private var headerRefreshing: Bool = false
     @State private var footerRefreshing: Bool = false
     @State private var listState = ListState()
+    @ObservedObject var imageTogether : ImageTogether = ImageTogether()
     @ObservedObject var album:Album
     var body: some View {
         
@@ -185,6 +186,19 @@ struct ImageUIView: View {
                         }))
                     {
                         Image("Iconly-Bulk-Plus")
+                            .resizable()
+                            .frame(width:23,
+                                   height:23,
+                                   alignment:.center)
+
+                    })
+                
+                .navigationBarItems(leading:  NavigationLink(
+                    destination: photosTogetherUIView(imageTogether: imageTogether,album:album).onAppear(perform: {
+                        imageTogether.loadFamilyTreeId()
+                        }))
+                    {
+                        Image("orange photo")
                             .resizable()
                             .frame(width:23,
                                    height:23,

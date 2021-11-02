@@ -37,6 +37,8 @@ struct ImageContent{
     var image : String
     var createdAt : String
     var UserObjectId : String
+    var objectId : String
+    var isSelected : Bool = false
 }
 
 final class Album : ObservableObject{
@@ -86,7 +88,7 @@ final class Album : ObservableObject{
                 self.skip=self.skip+20
                 for item in person{
                    
-                    let imageContent = ImageContent(Content: (item.Content?.stringValue!)!, person: (item.person?.stringValue!)!, image: (item.url?.stringValue!)!, createdAt: formattedDate(date1: (item.createdAt?.dateValue!)!), UserObjectId: (item.UserObjectId?.stringValue!)!)
+                    let imageContent = ImageContent(Content: (item.Content?.stringValue!)!, person: (item.person?.stringValue!)!, image: (item.url?.stringValue!)!, createdAt: formattedDate(date1: (item.createdAt?.dateValue!)!), UserObjectId: (item.UserObjectId?.stringValue!)!,objectId: (item.objectId?.stringValue!)!)
                     self.dateNeed.append(imageContent)
                 }
                 break
@@ -138,7 +140,7 @@ struct albumUIView: View {
                         print("1231231231\(index)")
                     }){
                     KFImage.url(URL(string:album.dateNeed[index].image))
-                       
+                            .placeholder{  Image("cat_walk")}
 //                              .placeholder(UIImage("AppIcon"))
 //                              .setProcessor(processor)
                               .loadDiskFileSynchronously()
