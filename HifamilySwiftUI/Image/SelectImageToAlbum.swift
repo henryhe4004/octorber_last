@@ -36,7 +36,6 @@ struct SelectImageToAlbum: View {
         .addPullToRefresh(isHeaderRefreshing: $headerRefreshing, onHeaderRefresh: reloadData,
                                  isFooterRefreshing: $footerRefreshing, onFooterRefresh: loadMoreData)
         .navigationBarTitle("选择照片",displayMode: .inline)
-        .
         }
 
     

@@ -23,18 +23,18 @@ struct ContentView: View {
     //body 属性只返回单个视图，这时组合多个视图把他们放入一个栈中
     @State var isLogin : Bool = false
     @State var isFirstLogin : LCBool = true
-    @State var isPressed = false
+    @State var isPressed1 = false
     @State var objectId:LCString = ""
     @ObservedObject var album : Album = Album()
     
     var body: some View {
         if let user = LCApplication.default.currentUser {
-            HomeUIView(album:album).debugPrint(user.objectId!).onAppear(perform: {
+            HomeUIView(album:album,isLogin: $isLogin, isFirstLogin: $isFirstLogin, isPressed1: $isPressed1, objectId: $objectId).debugPrint(user.objectId!).onAppear(perform: {
                     album.update()
             })
 
         } else {
-            WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed,objectId: $objectId,album:album)
+            WhetherLoginBeforeUIView(isLogin: $isLogin,isFirstLogin:$isFirstLogin,isPressed1: $isPressed1,objectId: $objectId,album:album)
         }
     }
 }

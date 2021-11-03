@@ -17,6 +17,8 @@ extension UIApplication{
     }
 }
 
+
+
 struct HomeView: View {
     //isHaveTree true 为创建者，false为加入者
     @State var isHaveTree = false
@@ -26,63 +28,164 @@ struct HomeView: View {
     //家庭树的初始值
     var imgsTree = ["tree","second tree","third tree"]
     @State  private var indexTree = 0//默认树
-    @State var familyIdWrite = "5526"
-    @State var familyMemberCountWrite = "1"
+    @State var familyIdWrite = 0
+    @State var familyMemberCountWrite = 1
     @State var familyTreeWrite = 0
+    @State var familyTreeName = ""
+    @State var treeObjectId = ""
     
     //左边菜单栏
     @State var showLeftMenu = false
+    @State var username = ""
+    @State var status = 0
    
+    
+    @Binding var isLogin : Bool
+    @Binding var isFirstLogin : LCBool
+    @Binding var isPressed1 : Bool
+    @Binding var objectId:LCString
+    
     var body: some View {
         
         let drag = DragGesture()
             .onEnded {
-                    if $0.translation.width < -100 {
+                    if $0.translation.width < -100 && status == 1{
                         withAnimation {
                                     self.showLeftMenu = false
                                 }
                             }
-                    else if $0.translation.width > 100 {
+                    else if $0.translation.width > 100 && status == 1{
                         withAnimation {
                                     self.showLeftMenu = true
                         }
                     }
             }
         return GeometryReader { geometry in
-        
+    
         ZStack(alignment: .leading) {
             VStack{
                 //title
-                Title(showLeftMenu : $showLeftMenu)
+                Title(isPersonPresented: $isPersonPresented, showLeftMenu : $showLeftMenu,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, familyTreeName: $familyTreeName, status: $status)
                 Divider()
                 //title 下面部分
-                TitleDown(familyIdWrite: $familyIdWrite, familyMemberCountWrite: $familyMemberCountWrite,familyTreeWrite:$familyTreeWrite,isHaveTree :$isHaveTree,indexTree:$indexTree)
+                TitleDown(familyTreeName: $familyTreeName, familyIdWrite: $familyIdWrite, familyMemberCountWrite: $familyMemberCountWrite,familyTreeWrite:$familyTreeWrite,isHaveTree :$isHaveTree,indexTree:$indexTree, treeObjectId: $treeObjectId, username: $username)
                 
                 
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
-            .offset(x: self.showLeftMenu  ? 4*geometry.size.width/5: 0)
+            .offset(x: self.showLeftMenu  ? 1 * geometry.size.width/2: 0)
             .disabled(self.showLeftMenu  ? true : false)
             .transition(.move(edge: .leading))
             
             
             if self.showLeftMenu{
                 LeftMenuView()
-                    .frame(width: 4*geometry.size.width/5)
+                    .offset(y: 30)
+                    .frame(width: 1 * geometry.size.width/2)
                     .transition(.move(edge: .leading))
             }
         }
         .gesture(drag)
-        
+        .onAppear(){
+            let objectId = LCApplication.default.currentUser?.objectId
+            self.objectId = objectId!
+            let query = LCQuery(className: "_User")
+            
+            let _ = query.get(objectId!) { (result) in
+                switch result {
+                case .success(object: let todo):
+                    let createrId = todo.id?.intValue
+                    let status = todo.status?.intValue
+                    self.status = status!
+                    self.username = (todo.username?.stringValue)!
+                    if(status == 1){
+                        //创建者
+                        isHaveTree = true
+                        let familyTree = LCQuery(className: "familyTree")
+                        familyTree.whereKey("createrId", .equalTo(createrId!))
+                        _ = familyTree.find { result in
+                            switch result {
+                            case .success(objects: let tree):
+                                for item in tree{
+                                let treeName = item.familyName?.stringValue
+                                let treeId = item.familyId?.intValue
+                                let familyNum = item.familyNum?.intValue
+                                self.familyMemberCountWrite = familyNum!
+                                self.familyIdWrite = treeId!
+                                self.treeObjectId = (item.objectId?.stringValue)!
+                                familyTreeName = treeName!
+                                    //更新
+                                    do {
+                                        let todo = LCObject(className: "_User", objectId: objectId!)
+                                        try todo.set("familyTreeId", value: treeId)
+                                        todo.save { (result) in
+                                            switch result {
+                                            case .success:
+                                                break
+                                            case .failure(error: let error):
+                                                print(error)
+                                            }
+                                        }
+                                    } catch {
+                                        print(error)
+                                    }
+                                }
+                                break
+                                    
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
+                    }else{
+                        //加入者
+                        isHaveTree = false
+                        let treeId = todo.familyTreeId?.intValue
+                        if(treeId == nil){
+                            self.familyIdWrite = 0
+                        }else{
+                            self.familyIdWrite = treeId!
+                            let familyTree = LCQuery(className: "familyTree")
+                            familyTree.whereKey("familyId", .equalTo(treeId!))
+                            _ = familyTree.find { result in
+                                switch result {
+                                case .success(objects: let tree):
+                                    for item in tree{
+                                    let treeName = item.familyName?.stringValue
+                                    let familyNum = item.familyNum?.intValue
+                                    self.familyMemberCountWrite = familyNum!
+                                    self.treeObjectId = (item.objectId?.stringValue)!
+                                    familyTreeName = treeName!
+                                    }
+                                    break
+                                        
+                                case .failure(error: let error):
+                                    print(error)
+                                }
+                            }
+                        }
+                     
+                        
+                    }
+                  
+
+                case .failure(error: let error1):
+                    print(error1)
+                }
+      
+            }
+
     }
 }
 
     struct TitleDown: View {
-        @Binding var familyIdWrite : String
-        @Binding var familyMemberCountWrite : String
+        @Binding var familyTreeName:String
+        @Binding var familyIdWrite : Int
+        @Binding var familyMemberCountWrite : Int
         @Binding var familyTreeWrite : Int
         @Binding var isHaveTree : Bool
         @Binding var indexTree : Int
+        @Binding var treeObjectId : String
+        @Binding var username : String
         var imgsTree = ["tree","second tree","third tree"]
         var body: some View {
             GeometryReader { geo in
@@ -125,6 +228,22 @@ struct HomeView: View {
                                 
                             }
                             familyTreeWrite = indexTree
+                            if(treeObjectId != ""){
+                            do {
+                                let familyTree = LCObject(className: "familyTree", objectId: treeObjectId)
+                                try familyTree.set("indexTree", value: familyTreeWrite)
+                                familyTree.save { (result) in
+                                    switch result {
+                                    case .success:
+                                        break
+                                    case .failure(error: let error):
+                                        print(error)
+                                    }
+                                }
+                            } catch {
+                                print(error)
+                            }
+                            }
                         }) {
                             VStack {
                                 CutButton()
@@ -133,13 +252,13 @@ struct HomeView: View {
                         }
                         .padding(EdgeInsets(top:280,leading:-80,bottom:0,trailing:0))
                         if(!isHaveTree){
-                            AddFamilyButton()
+                            AddFamilyButton(username: $username)
                         }
                         
                     }
                     .padding(EdgeInsets(top:0,leading:0,bottom:0,trailing:0))
                     
-                    FamilyBlackboard()
+                    FamilyBlackboard(familyTreeName: $familyTreeName)
                     Textfield02()
 
                     
@@ -151,20 +270,18 @@ struct HomeView: View {
     }
 
 //家庭树名字
-//家庭树改名字在个人中心处改！！！
-class FamilyNameModel: ObservableObject {
-        @Published var FamilyTreeName: String = "相亲相爱一家人"
-}
+//家庭树改名字在个人中心处改
+
     
 struct FamilyBlackboard: View {
     //家庭树名字
-    @ObservedObject var model = FamilyNameModel()
+    @Binding var familyTreeName:String
     @State var isPresented = false
     
         var body: some View {
             
             HStack {
-                Text("\(model.FamilyTreeName)")
+                Text("\(familyTreeName)")
                 .font(.system(size: 16))
                 .foregroundColor(Color("FamliyTreeNameColor"))
                 .frame(width: 90, height: 0)
@@ -177,12 +294,12 @@ struct FamilyBlackboard: View {
         }
     
     }
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-            
-    }
-}
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+//
+//    }
+//}
 }
 
 
@@ -208,6 +325,7 @@ struct AddFamilyButton: View {
     @State private var familyId = ""
     @State private var familyIDAlert = ""
     @State private var showingAlert = false
+    @Binding var username : String
   
     var modalView: some View {
         GeometryReader { geo in
@@ -227,7 +345,7 @@ struct AddFamilyButton: View {
                     .frame(width: 300, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                     .font(/*@START_MENU_TOKEN@*/.title3/*@END_MENU_TOKEN@*/)
                 
-                //这个是发生申请的button，在这里写链接，发送申请的请求！！！
+           
                 Button(action: {
                         familyIDAlert = familyId
                         self.showingAlert = true
@@ -238,6 +356,21 @@ struct AddFamilyButton: View {
                         _ = query.find { result in
                             switch result {
                             case .success(objects: _):
+                                let InvitationUser = LCObject(className: "InvitationUser")
+                                InvitationUser.treeId = Int(familyIDAlert)
+                                InvitationUser.userId = LCApplication.default.currentUser?.id
+                                InvitationUser.username = username
+                                
+                                _ =  InvitationUser.save { result in
+                                      switch result {
+                                      case .success:
+                                          // 成功保存之后，执行其他逻辑
+                                          break
+                                      case .failure(error: let error):
+                                          // 异常处理
+                                          print(error)
+                                      }
+                                  }
                                 print("right")
                                 break
                             case .failure(error: let error):
@@ -340,7 +473,18 @@ struct CustomTextField: UIViewRepresentable {
 }
 
 struct Title: View {
+    @Binding var isPersonPresented: Bool
     @Binding var showLeftMenu : Bool
+    
+    @Binding var isLogin : Bool
+    @Binding var isFirstLogin : LCBool
+    @Binding var isPressed1 : Bool
+    @Binding var objectId:LCString
+    @Binding var familyTreeName:String
+    @Binding var status : Int
+    
+    
+    
     var body: some View {
         HStack {
             Image("three line")
@@ -348,9 +492,12 @@ struct Title: View {
                 .frame(width:23,
                        height:23,
                        alignment:.center)
+            
                 .onTapGesture {
-                    withAnimation {
+                    if(status == 1){
+                        withAnimation {
                         self.showLeftMenu  = true
+                        }
                     }
                     
                 }
@@ -360,16 +507,18 @@ struct Title: View {
             
             Spacer()
             Button(action: {
-//                    self.isPersonPresented = true
+                    self.isPersonPresented = true
                 
             }) {
                 Image("person")
             }
-//            .fullScreenCover(isPresented: $isPersonPresented, content: {
-//                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Placeholder")/*@END_MENU_TOKEN@*/
-//            })
+            .fullScreenCover(isPresented: $isPersonPresented, content: {
+                InformUIView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, treeName: $familyTreeName)
+            })
             
         }.padding(15)
+        
     }
 }
 
+}

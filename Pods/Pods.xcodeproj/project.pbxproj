@@ -242,6 +242,8 @@
 		6F3CD9579E2DF68297CD4963F6C501C4 /* BinaryEncodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9460F8C8B2190E02F9387154637857F0 /* BinaryEncodingError.swift */; };
 		7038E11DDA8B1D1DA6213243D4CB150A /* DatabasePromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7801B4B38FF62E8AE52A775280B55B /* DatabasePromise.swift */; };
 		70FEC06F54286257E1BA1ECA0C99198D /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29C56EAAF718A3FBAB5353CE8394CA2 /* Image.swift */; };
+		712901C12732743A003B8AC0 /* HalfModal in Frameworks */ = {isa = PBXBuildFile; productRef = 712901C02732743A003B8AC0 /* HalfModal */; };
+		712901C4273274B8003B8AC0 /* HalfASheet in Frameworks */ = {isa = PBXBuildFile; productRef = 712901C3273274B8003B8AC0 /* HalfASheet */; };
 		7143658ED4C610590FDE589F45567880 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4207BEE6DFA63E5CF69828DD467E9674 /* Foundation.framework */; };
 		71E4C4323C8C0C72300ED68BEA494F14 /* Google_Protobuf_Any+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0DB72DD4FA9122E974B0A35D550ABD /* Google_Protobuf_Any+Extensions.swift */; };
 		71FB5C831A9D6AB432B04FDB37F8F769 /* Google_Protobuf_Timestamp+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD61CD10CBCB195E51FE4B5E1370E0B9 /* Google_Protobuf_Timestamp+Extensions.swift */; };
@@ -1245,8 +1247,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				712901C12732743A003B8AC0 /* HalfModal in Frameworks */,
 				33F86FAB918B148A63A1575667F9B570 /* CFNetwork.framework in Frameworks */,
 				9C0BE8FA0030B2BC1DF7C159FA059389 /* Foundation.framework in Frameworks */,
+				712901C4273274B8003B8AC0 /* HalfASheet in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2392,6 +2396,10 @@
 			dependencies = (
 			);
 			name = Alamofire;
+			packageProductDependencies = (
+				712901C02732743A003B8AC0 /* HalfModal */,
+				712901C3273274B8003B8AC0 /* HalfASheet */,
+			);
 			productName = Alamofire;
 			productReference = 5D797E9A5C5782CE845840781FA1CC81 /* Alamofire */;
 			productType = "com.apple.product-type.framework";
@@ -2441,6 +2449,10 @@
 				"zh-Hant",
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			packageReferences = (
+				712901BF2732743A003B8AC0 /* XCRemoteSwiftPackageReference "HalfModal" */,
+				712901C2273274B8003B8AC0 /* XCRemoteSwiftPackageReference "HalfASheet" */,
+			);
 			productRefGroup = FD4B5CBBB7CEDA3B8273BB944776A491 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -4090,6 +4102,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		712901BF2732743A003B8AC0 /* XCRemoteSwiftPackageReference "HalfModal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ViktorMaric/HalfModal";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		712901C2273274B8003B8AC0 /* XCRemoteSwiftPackageReference "HalfASheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/franklynw/HalfASheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		712901C02732743A003B8AC0 /* HalfModal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 712901BF2732743A003B8AC0 /* XCRemoteSwiftPackageReference "HalfModal" */;
+			productName = HalfModal;
+		};
+		712901C3273274B8003B8AC0 /* HalfASheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 712901C2273274B8003B8AC0 /* XCRemoteSwiftPackageReference "HalfASheet" */;
+			productName = HalfASheet;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 }

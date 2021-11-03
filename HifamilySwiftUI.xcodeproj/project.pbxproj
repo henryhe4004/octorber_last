@@ -11,8 +11,8 @@
 		711DD71F2716C7300055A02E /* HomeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD71E2716C7300055A02E /* HomeUIView.swift */; };
 		711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */; };
 		712901B827313C27003B8AC0 /* SwiftTestUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901B727313C27003B8AC0 /* SwiftTestUIView.swift */; };
-		712901BA27313E6C003B8AC0 /* FlippingUIIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901B927313E6C003B8AC0 /* FlippingUIIView.swift */; };
 		712901BC27314082003B8AC0 /* Test123View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901BB27314082003B8AC0 /* Test123View.swift */; };
+		712901BE27326D5C003B8AC0 /* AvatarPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901BD27326D5C003B8AC0 /* AvatarPicker.swift */; };
 		712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */; };
 		7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */; };
 		715927EA2722AEFB00041D75 /* TextFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927E92722AEFB00041D75 /* TextFile.swift */; };
@@ -82,8 +82,8 @@
 		711DD71E2716C7300055A02E /* HomeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUIView.swift; sourceTree = "<group>"; };
 		711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhetherLoginBeforeUIView.swift; sourceTree = "<group>"; };
 		712901B727313C27003B8AC0 /* SwiftTestUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTestUIView.swift; sourceTree = "<group>"; };
-		712901B927313E6C003B8AC0 /* FlippingUIIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippingUIIView.swift; sourceTree = "<group>"; };
 		712901BB27314082003B8AC0 /* Test123View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test123View.swift; sourceTree = "<group>"; };
+		712901BD27326D5C003B8AC0 /* AvatarPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvatarPicker.swift; path = ../../../../Downloads/Home/AvatarPicker.swift; sourceTree = "<group>"; };
 		712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumUIView.swift; sourceTree = "<group>"; };
 		7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageUIView.swift; sourceTree = "<group>"; };
 		715927E92722AEFB00041D75 /* TextFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFile.swift; sourceTree = "<group>"; };
@@ -172,7 +172,6 @@
 		71BF8B7926F6090D0006081B /* Image */ = {
 			isa = PBXGroup;
 			children = (
-				712901B927313E6C003B8AC0 /* FlippingUIIView.swift */,
 				71BF8B7A26F609260006081B /* ImagePickerView.swift */,
 				718E65E526F6D1BA0010165C /* ImageUIView.swift */,
 				718E65E826F71A0D0010165C /* photosUIView.swift */,
@@ -295,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				89489A2C27186883006FDDEC /* diecard */,
+				712901BD27326D5C003B8AC0 /* AvatarPicker.swift */,
 				89489A2A27186859006FDDEC /* HomeView.swift */,
 				8900C06626FB5C93007E7D4D /* InformUIView.swift */,
 				89489A2827186848006FDDEC /* Textfield02.swift */,
@@ -493,7 +493,6 @@
 				CDD223D7272AB51A00EEABBB /* OneBlockView.swift in Sources */,
 				890C993526EF3A6700494182 /* ContentView.swift in Sources */,
 				8948191C26F5C0C90095E91D /* Model.xcdatamodeld in Sources */,
-				712901BA27313E6C003B8AC0 /* FlippingUIIView.swift in Sources */,
 				896F3A9226FB45DD005ED305 /* CoreData.swift in Sources */,
 				898693E726F374F400EA991E /* MissView.swift in Sources */,
 				89489A2927186849006FDDEC /* Textfield02.swift in Sources */,
@@ -534,6 +533,7 @@
 				89489A25271867F6006FDDEC /* HomeLandUIView.swift in Sources */,
 				71EDEE1C272598B800DFD7D8 /* LynnPullToRefresh.swift in Sources */,
 				890C993326EF3A6700494182 /* HifamilySwiftUIApp.swift in Sources */,
+				712901BE27326D5C003B8AC0 /* AvatarPicker.swift in Sources */,
 				715927EA2722AEFB00041D75 /* TextFile.swift in Sources */,
 				718E65EF26F74E430010165C /* IssueUIView.swift in Sources */,
 				CDED5B0D26F4DF2F00570485 /* LetterVeiw.swift in Sources */,

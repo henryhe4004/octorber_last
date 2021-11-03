@@ -29,6 +29,32 @@ final class User : ObservableObject {
     }
 }
 
+//验证手机号
+func isPhoneNumber(phoneNumber:String) -> Bool {
+       if phoneNumber.count == 0 {
+           return false
+       }
+       let mobile = "^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$"
+       let regexMobile = NSPredicate(format: "SELF MATCHES %@",mobile)
+       if regexMobile.evaluate(with: phoneNumber) == true {
+           return true
+       }else
+       {
+           return false
+       }
+   }
+//密码正则  6-8位字母和数字组合
+func isPasswordRuler(password:String) -> Bool {
+      let passwordRule = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,8}$"
+      let regexPassword = NSPredicate(format: "SELF MATCHES %@",passwordRule)
+      if regexPassword.evaluate(with: password) == true {
+          return true
+      }else
+      {
+          return false
+      }
+  }
+
 
 struct LoginUIView: View {
     
@@ -36,6 +62,7 @@ struct LoginUIView: View {
     @State var isAnimating = false
     @State var username = ""
     @State var password = ""
+    @State var againPassword = ""
     
     @State var isShowLoading = false
     @State var isShowAlert = false
@@ -62,11 +89,11 @@ struct LoginUIView: View {
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.2))
                 
-                FormView(username: $username, password: $password, pageType: $pageType)
+                FormView(username: $username, password: $password,againPassword: $againPassword, pageType: $pageType)
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.4))
                 
-                LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId)
+                LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading,isLogin: $isLogin, againPassword: $againPassword,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId)
                     .opacity(isAnimating ? 1 : 0)
                     .animation(Animation.spring().delay(0.6))
                     .debugPrint(("2\(isPressed1)"))
@@ -152,19 +179,44 @@ struct FormView: View {
     private let distance : CGFloat = 40
     @Binding var username : String
     @Binding var password : String
-
+    @Binding var againPassword : String
     
     @Binding var pageType : String
 //    @ObservedObject var user:User
     @State var isDisplayPassword = true
-    @State var passwordAgain = ""
+//    @State var passwordAgain = ""
+    @State var isNameFocused = false
+    @State var isPhoneAlert = false
+    @State var isPassFocused = false
+    @State var isPassAgainFocused = false
+    @State var alertReason = ""
     
+    @State var isPassFocused2 = 0
     var body: some View {
         VStack(alignment:.leading){
             Text("手机号")
             HStack{
-                TextField("请输入您的手机号",text:$username)
+                TextField("请输入您的手机号",text:$username, onEditingChanged: { (isNameFocused) in
+                    if pageType == "signup"{
+                        if isNameFocused {
+                            print("TextField focused")
+                        } else {
+                            print("TextField focus removed")
+                          if isPhoneNumber(phoneNumber: username){
+                              print("输入的是手机号")
+                          }else{
+                            alertReason = "请输入正确的手机号"
+                            isPhoneAlert = true
+                          }
+                        }
+                    }
+                                   
+                                  }
+                )
+                    .keyboardType(.namePhonePad)
+
             }
+            
             
             Rectangle()
                 .fill(Color("LoginLine"))
@@ -174,11 +226,13 @@ struct FormView: View {
                 .padding(.top,20)
             HStack{
                 if(isDisplayPassword){
+                    //没想到解决方案！！！！
                     SecureField("请输入您的密码",text:$password)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
+
                 }else{
                     TextField("请输入您的密码",text:$password)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+
                 }
                 Image(systemName: isDisplayPassword ? "eye.slash":"eye")
                     .foregroundColor(isDisplayPassword ? .gray : .orange)
@@ -196,17 +250,18 @@ struct FormView: View {
                 Text("确认密码")
                     .padding(.top,20)
                 HStack{
+                    //没想到解决方案！！！！
                     if(isDisplayPassword){
-                        SecureField("请再次输入您的密码",text:$passwordAgain)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        SecureField("请再次输入您的密码",text:$againPassword)
+
                     }else{
-                        TextField("请再次输入您的密码",text:$passwordAgain)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        TextField("请再次输入您的密码",text:$againPassword
+
+                        )
+
                     }
                     
-                    if(passwordAgain != password){
-                        
-                    }
+
                     
                     Image(systemName: isDisplayPassword ? "eye.slash":"eye")
                         .foregroundColor(isDisplayPassword ? .gray : .orange)
@@ -220,8 +275,15 @@ struct FormView: View {
                 
             }
         }
-        .padding(.top,30)
+        .padding(.top,20)
+        .alert(isPresented: $isPhoneAlert, content: {
+            Alert(title:Text("错误！！！"),
+                  message: Text("\(alertReason)"),
+                dismissButton: .default(Text("OK")))
+            
+        })
     }
+    
    
 }
 
@@ -231,10 +293,12 @@ struct LoginView: View {
     @Binding var password : String
     @Binding var isShowLoading:Bool
     @Binding var isLogin : Bool
+    @Binding var againPassword : String
     
     @State var errorReason :String = ""
-    
+    @State var successReason:String = ""
     @State var isLoginError = false
+    @State var isLoginTrue = false
     
 //    @State var isRegistError = true
     @Binding var isFirstLogin : LCBool
@@ -253,48 +317,57 @@ struct LoginView: View {
             Button(action: {
                 if pageType == "signup"{
                     isShowLoading = true
-                    if username.count == 11{
-                        
+                    if(!isPasswordRuler(password:password) || password != againPassword){
+                        isShowLoading = false
+                        errorReason = password == againPassword ? "请输入6-8位字母和数字组合的密码":"两次密码输入不一样"
+                        isLoginError = true
                     }
-                    let user = LCUser()
-                    user.username = LCString(username)
-                    user.password = LCString(password)
-                    
-                    _ = LCSMSClient.requestShortMessage(mobilePhoneNumber: "\(username)", templateName: "template_name", signatureName: "sign_name") { (result) in
-                        switch result {
-                        case .success:
-                            isShowLoading = false
-                            break
-                        case .failure(error: let error):
+                    if isPasswordRuler(password:password) && password == againPassword{
+                        let user = LCUser()
+                        user.username = LCString(username)
+                        user.password = LCString(password)
+                        
+                        _ = LCSMSClient.requestShortMessage(mobilePhoneNumber: "\(username)", templateName: "template_name", signatureName: "sign_name") { (result) in
+                            switch result {
+                            case .success:
+                                isShowLoading = false
+                                break
+                            case .failure(error: let error):
+                                
+                                isShowLoading = false
+                                print(error)
+                            }
+                        }
+                        
+                        _ = user.signUp { (result) in
                             
-                    
-        
-                            isShowLoading = false
-                            print(error)
+                            switch result {
+                            case .success:
+                                isShowLoading = false
+                                successReason = "注册成功"
+                                isLoginError = true
+                                isLoginTrue = true
+                                pageType = "signin"
+                                print("注册成功")
+                                break
+                            case .failure(error: let error):
+                                isShowLoading = false
+                                errorReason = error.reason!;
+                                isLoginError = true
+                                isLoginTrue = false
+                                 print("注册失败，失败原因：\(error)")
+                                 
+                            }
+                        
                         }
                     }
                     
-                    _ = user.signUp { (result) in
-                        
-                        switch result {
-                        case .success:
-                            isShowLoading = false
-                            print("注册成功")
-                            break
-                        case .failure(error: let error):
-                            errorReason = error.reason!;
-                            isLoginError = true
-                            isShowLoading = false
-                             print("注册失败，失败原因：\(error)")
-                             
-                        }
-                    
-                }
-                }
+                    }
                 if pageType == "signin"{
                     _ = LCUser.logIn(username: username, password: password) { result in
                         switch result {
                         case .success(object: let user):
+                            isShowLoading = false
                             isFirstLogin = user.isFirstLogin as! LCBool
                             if(isFirstLogin == true){
                                 isPressed1 = true
@@ -302,14 +375,17 @@ struct LoginView: View {
                                 isLogin = true
                             }
                             objectId = user.objectId!
-                            isShowLoading = false
+                            
                             print("1\(isPressed1)")
-                            print(user)
+                            print("2\(isLogin)")
+                            isLoginTrue = true
                         
                         case .failure(error: let error):
+                            isShowLoading = false
                             errorReason = error.reason!;
                             isLoginError = true
-                            isShowLoading = false
+                            isLoginTrue = false
+                            
                             print("登陆失败原因\(error)")
                         
                     }
@@ -328,24 +404,14 @@ struct LoginView: View {
             .foregroundColor(.white)
             .cornerRadius(30)
             .padding(.top,30)
-            
             .alert(isPresented: $isLoginError, content: {
-                Alert(title: Text("出错了"),
-                                  message: Text("\(errorReason)"),
-//                                    message: Text(pageType == "signin" ? "登录失败":"注册失败"),
-                                  dismissButton: .default(Text("OK")))
+                Alert(title:Text( isLoginTrue ?"成功了":"出错了"),
+                      message: Text(isLoginTrue ?"\(successReason)":"\(errorReason)"),
+                    dismissButton: .default(Text("OK")))
                 
             })
     
-//            if(isLogin == true){
-//                NavigationLink(destination: HomeUIView()){
-//
-//                }
-//            }else if(isPressed1){
-//                NavigationLink(destination:IsCreaterView(objectId: $objectId, isLogin: $isLogin)){
-//
-//                }
-//            }
+
             VStack{
                 
                 ZStack{
@@ -380,7 +446,7 @@ struct LoginView: View {
                 }
                 .padding(.top,20)
             }
-            .padding(.top,60)
+            .padding(.top,40)
         }
         .padding(.top,15)
     }

@@ -6,101 +6,160 @@
 //
 
 import SwiftUI
+import LeanCloud
+import HalfModal
+import HalfASheet
 
-final class TimeLiners: ObservableObject {
-    @Published  var thingContent:String
-    init() {
-        thingContent = ""
-    }
-}
+
 
 
 struct EditTimelineView: View {
+//    @EnvironmentObject var action: NavigationAction
     
+   
     @State var isSelected = -1;
-//    @State var isAdd = false
+    @State var isPresented = false
+    @State var showingAlert = false
+
+
+    @State private var date = Date()
+    @State var descriptionEventName = "妍妍"
+    @State var thingContent = "未知"
+    @State var thingType = "未知"
+    @State var isReminder = true
+    @State var thingIcon = 0
+    
+    @Binding var isPushed : Bool
+
+    
+
     var body: some View {
         
-        VStack {
-//            UpperNavigationBarEdit()
-            ScrollView(.vertical){
-                Spacer()
-                EventData()
-                DescriptionEvent()
-                EventType(isSelected: $isSelected)
-                EnableReminder()
-                EventMarkers()
-            }
-        }.padding(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
-        .navigationBarTitle(Text("编辑时间轴")
-            .font(.system(size: 22)),displayMode: .inline)
-        .navigationBarItems(trailing: Button(action:{} ){
-            Text("确定")
-                .font(.system(size: 22))
-        })
-    }
-}
+        ZStack {
+            VStack {
 
+                ScrollView(.vertical){
+                    Spacer()
+                    HStack {
+                        HStack {
+                            Text("事件日期：")
+                                .font(.system(size: 20))
+                                .foregroundColor(Color("EditTimerColor"))
+                            DatePicker(selection: $date, displayedComponents: .date) {
+                            }
 
-struct UpperNavigationBarEdit: View {
-    var body: some View {
-        HStack {
-            HStack {
-                Image(systemName: "chevron.left")
-                    .resizable()
-                    .foregroundColor(Color.white)
-                    .frame(width:13,
-                           height:21,
-                           alignment:.center)
-                Spacer()
-                Text("编辑时间轴")
-                    .foregroundColor(Color.white)
+                        }
+                        .padding(EdgeInsets(top: 20, leading: 33, bottom: 0, trailing: 33))
+                    }
+                    Divider().frame(width:320)
+                    DescriptionEvent(descriptionEventName: $descriptionEventName, thingContent: $thingContent)
+                    EventType(isSelected: $isSelected, selectedType: $thingType, isPresented: $isPresented)
+                    EnableReminder(isReminder: $isReminder)
+                    EventMarkers(eventIcon: $thingIcon)
+                }
+            }.padding(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
+            .onTapGesture {
+                let keyWindow = UIApplication.shared.connectedScenes
+                                        .filter({$0.activationState == .foregroundActive})
+                                        .map({$0 as? UIWindowScene})
+                                        .compactMap({$0})
+                                        .first?.windows
+                                        .filter({$0.isKeyWindow}).first
+                                    keyWindow!.endEditing(true)
+                }
+            .navigationBarTitle(Text("编辑时间轴"),displayMode: .inline)
+            .navigationBarItems(trailing: Button(action:{
+
+                do {
+                    // 构建对象
+                    let timer = LCObject(className: "TimeLine")
+
+                    // 为属性赋值
+                    try timer.set("eventTime", value: date)
+                    try timer.set("eventContent", value: thingContent)
+                    try timer.set("eventPerson", value: descriptionEventName)
+                    try timer.set("eventType", value: thingType)
+                    try timer.set("isWarn", value: isReminder)
+                    try timer.set("eventIcon", value: thingIcon)
+                    // 将对象保存到云端
+                    _ = timer.save { result in
+                        switch result {
+                        case .success:
+                            // 成功保存之后，执行其他逻辑
+                            print("事件保存成功")
+//                            self.action.backToRoot = false
+                            break
+                        case .failure(error: let error):
+                            // 异常处理
+                            print(error)
+                        }
+                    }
+                } catch {
+                    print(error)
+                }
+                isPushed = false
+            } ){
+                Text("确定")
                     .font(.system(size: 22))
-                Spacer()
-                Button(action: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Action@*/{}/*@END_MENU_TOKEN@*/) {
+            })
+            
+            .onAppear(){
+                let objectId = LCApplication.default.currentUser?.objectId
+                let query = LCQuery(className: "_User")
+                let _ = query.get(objectId!) { (result) in
+                    switch result {
+                    case .success(object: let todo):
+                        let username = todo.username?.stringValue
+                        self.descriptionEventName = username!
+                    case .failure(error: let error):
+                        print(error)
+                    }
+                }
+        }
+            
+        HalfASheet(isPresented: $isPresented, title: "事件类型") {
+            VStack {
+                CustomTextField(text: $thingType,isFirstResponder: true)
+                        .padding(.horizontal,20)
+                        .padding(.top,8)
+                        .padding(.bottom,8)
+                        .background(Color("EventMarkersBackground"))
+                               .cornerRadius(20)
+                               .shadow(color: .gray, radius: 2)
+                        .frame(width: 300, height: 45, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .font(/*@START_MENU_TOKEN@*/.title3/*@END_MENU_TOKEN@*/)
+                Button(action: {
+                    isPresented = false
+                    showingAlert = true
+                }) {
                     Text("确定")
-                        .foregroundColor(Color.white)
-                        .font(.system(size: 22))
                 }
-                    .frame(width:45,
-                           height:30,
-                           alignment:.center)
-
+                .background(Color("AccentColor"))
+                .frame(width:UIScreen.main.bounds.width/2 - 100,height:40)
+                .background(Color.orange)
+                .foregroundColor(.white)
+                .cornerRadius(30)
+                
             }
-            .padding(EdgeInsets(top: 50, leading: 15, bottom: 16, trailing: 15))
-            .background(Color("TimeLineColor"))
-
+                Spacer()
+            }
+            .height(.proportional(0.5))
+            .alert(isPresented:$showingAlert) {
+            Alert(title: Text("成功!!"), message: Text("事件类型添加成功"))
+                }
+            
         }
-
     }
 }
 
 
-struct EventData: View {
-    @State private var date = Date()
-    
-    var body: some View {
-        HStack {
-            HStack {
-                Text("事件日期：")
-                    .font(.system(size: 20))
-                    .foregroundColor(Color("EditTimerColor"))
-                DatePicker(selection: $date, displayedComponents: .date) {
-                }
 
-            }
-            .padding(EdgeInsets(top: 20, leading: 33, bottom: 0, trailing: 33))
-        }
-        Divider().frame(width:320)
-
-    }
-}
 
 struct DescriptionEvent: View {
     
-    @ObservedObject var timeliner:TimeLiners = TimeLiners()
+    @Binding var descriptionEventName : String
+    @Binding var thingContent : String
     
-    @State var descriptionEventName = "妍妍"
     var body: some View {
         VStack{
             Text("简单描述事件：")
@@ -110,22 +169,24 @@ struct DescriptionEvent: View {
                 .padding(EdgeInsets(top: 0, leading: 33, bottom: 8, trailing: 40))
             
             VStack {
-                TextField("请简单描述一下事件",
-                          text: $timeliner.thingContent) {isEditing in
-                    self.timeliner.thingContent = timeliner.thingContent
-                }.frame(width: 307, height: 162, alignment: .topLeading)
+                TextEditor(text: $thingContent)
+
+                .frame(width: 307, height: 162, alignment: .topLeading)
                 .background(Color("DescriptionEventTextfield"))
                 .padding()
+                .colorMultiply(Color("DescriptionEventTextfield"))
             }
             .background(Color("DescriptionEventTextfield"))
             .cornerRadius(20)
             Text("描述人：\(descriptionEventName)")
                 .foregroundColor(Color("AccentColor"))
-                .offset(x: 100)
+                .offset(x: 80)
         }
         .padding(EdgeInsets(top: 20, leading: 33, bottom: 0, trailing: 33))
         Divider().frame(width:320)
+       
     }
+    
     
 }
 
@@ -137,15 +198,17 @@ struct EventType: View {
     ]
     @State var eventTypes = ["生日","纪念日","学业","生活","事业"]
     @Binding var isSelected : Int
-//    @Binding var isAdd : Bool
+    @Binding var selectedType : String
+    @Binding var isPresented : Bool
+    
     var body: some View {
         VStack{
             HStack{
-                Text("事件类型:")
+                Text("事件类型:\(selectedType)")
                     .font(.system(size: 20))
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 8, trailing: 40))
                     .foregroundColor(Color("EditTimerColor"))
-//                    .foregroundColor(grayColor2)
+
                 Spacer()
             }
             LazyVGrid(columns: EventItems, content: {
@@ -153,6 +216,7 @@ struct EventType: View {
                 index in
                 Button(action:{
                     isSelected = index
+                    selectedType = eventTypes[isSelected]
                 })
                 {
                     Text(eventTypes[index])
@@ -170,16 +234,21 @@ struct EventType: View {
                 
                 Button(action:{
                     isSelected = eventTypes.count
+                    withAnimation(){
+                        isPresented = true
+                    }
+                    
+
+                    
                 })
                 {
                     Image("plusSign")
                 }
                 .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                 .animation(.easeInOut)
-                .background( isSelected == eventTypes.count ? LinearGradient(gradient: Gradient(colors: [Color.init(red : 255/255,green: 144/255,blue: 13/255), Color.init(red: 255/255, green: 169/255, blue: 54/255)]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
-                    .shadow(color: Color("AccentColor"), radius: 3, x: 0.5, y: 0.5)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
+                .shadow(color: Color("AccentColor"), radius: 3, x: 0.5, y: 0.5)
                 .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-
             })
             
         }.frame(width:360)
@@ -190,7 +259,9 @@ struct EventType: View {
 
 //开启提醒
 struct EnableReminder: View {
-    @State var isPressed = false
+    @State  var isPressed  = false
+    @Binding var isReminder : Bool
+    
     
     var body: some View {
         HStack {
@@ -199,6 +270,7 @@ struct EnableReminder: View {
                     .foregroundColor(Color("fontColor"))
                 Button(action: {
                    isPressed = false
+                    isReminder = true
                 }) {
                     if(isPressed ==  false){
                         HStack {
@@ -220,6 +292,7 @@ struct EnableReminder: View {
                 }
                 Button(action: {
                     isPressed = true
+                    isReminder = false
                 }) {
                     if(isPressed ==  true){
                         HStack {
@@ -250,7 +323,7 @@ struct EnableReminder: View {
 //事件图标
 struct EventMarkers: View {
     @State var isPressedMore = false
-    @State var eventIcon = 0
+    @Binding var eventIcon : Int
     @State var IsPressedIcon = 0
     
     var items : [GridItem] = [
@@ -325,8 +398,50 @@ struct EventMarkers: View {
 
     }
 }
-struct EditTimelineView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditTimelineView()
+//struct EditTimelineView_Previews: PreviewProvider {
+//    @Binding var isPushed
+//    static var previews: some View {
+//        EditTimelineView(isPushed: $isPushed)
+//    }
+//}
+
+//让textfield 成为第一响应者，即进入就聚焦
+struct CustomTextField: UIViewRepresentable {
+
+    class Coordinator: NSObject, UITextFieldDelegate {
+
+        @Binding var text: String
+        var didBecomeFirstResponder = false
+
+        init(text: Binding<String>) {
+            _text = text
+        }
+
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            text = textField.text ?? ""
+        }
+
+    }
+
+    @Binding var text: String
+    var isFirstResponder: Bool = false
+
+    func makeUIView(context: UIViewRepresentableContext<CustomTextField>) -> UITextField {
+        let textField = UITextField(frame: .zero)
+        textField.delegate = context.coordinator
+        return textField
+    }
+
+    func makeCoordinator() -> CustomTextField.Coordinator {
+        return Coordinator(text: $text)
+    }
+
+    func updateUIView(_ uiView: UITextField, context: UIViewRepresentableContext<CustomTextField>) {
+        uiView.text = text
+        if isFirstResponder && !context.coordinator.didBecomeFirstResponder  {
+            uiView.becomeFirstResponder()
+            context.coordinator.didBecomeFirstResponder = true
+        }
     }
 }
+

@@ -2,7 +2,6 @@ import SwiftUI
 import Kingfisher
 
 struct FlippingView: View {
-        
       @State private var flipped = false
       @State private var animate3d = false
       @Binding var isSelected : Bool

@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
+import LeanCloud
 
 struct HomeUIView: View {
     @State private var index = 3
     @ObservedObject var familyTree:FamilyTree = FamilyTree()
-    @ObservedObject var album:Album = Album()
+    @ObservedObject var album:Album 
     @ObservedObject var miss:Miss = Miss()
-    
     @ObservedObject var myLetter:MyLetter = MyLetter()
+    
+    @Binding var isLogin : Bool
+//    @State var isFirstLogin = true
+    @Binding var isFirstLogin : LCBool
+    @Binding var isPressed1 : Bool
+    @Binding var objectId:LCString
     
     var body: some View {
         TabView(selection: $index) {
@@ -29,7 +35,7 @@ struct HomeUIView: View {
             LetterView(myLetter: myLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
                 myLetter.queryAllMyLetter()
             })
-            HomeView().tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
+            HomeView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId).tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
                 if #available(iOS 15.0, *) {
                     let appearance = UITabBarAppearance()
                     UITabBar.appearance().scrollEdgeAppearance = appearance
@@ -49,8 +55,8 @@ struct HomeUIView: View {
     }
 }
 
-struct HomeUIView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeUIView(album:Album())
-    }
-}
+//struct HomeUIView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeUIView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId,album:Album())
+//    }
+//}
