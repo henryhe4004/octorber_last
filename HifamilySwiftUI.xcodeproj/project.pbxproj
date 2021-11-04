@@ -12,7 +12,7 @@
 		711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */; };
 		712901B827313C27003B8AC0 /* SwiftTestUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901B727313C27003B8AC0 /* SwiftTestUIView.swift */; };
 		712901BC27314082003B8AC0 /* Test123View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901BB27314082003B8AC0 /* Test123View.swift */; };
-		712901BE27326D5C003B8AC0 /* AvatarPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901BD27326D5C003B8AC0 /* AvatarPicker.swift */; };
+		712901C6273371F6003B8AC0 /* AvatarPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901C5273371F6003B8AC0 /* AvatarPicker.swift */; };
 		712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */; };
 		7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */; };
 		715927EA2722AEFB00041D75 /* TextFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927E92722AEFB00041D75 /* TextFile.swift */; };
@@ -83,7 +83,7 @@
 		711DD72F271853EC0055A02E /* WhetherLoginBeforeUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhetherLoginBeforeUIView.swift; sourceTree = "<group>"; };
 		712901B727313C27003B8AC0 /* SwiftTestUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTestUIView.swift; sourceTree = "<group>"; };
 		712901BB27314082003B8AC0 /* Test123View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test123View.swift; sourceTree = "<group>"; };
-		712901BD27326D5C003B8AC0 /* AvatarPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AvatarPicker.swift; path = ../../../../Downloads/Home/AvatarPicker.swift; sourceTree = "<group>"; };
+		712901C5273371F6003B8AC0 /* AvatarPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPicker.swift; sourceTree = "<group>"; };
 		712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumUIView.swift; sourceTree = "<group>"; };
 		7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageUIView.swift; sourceTree = "<group>"; };
 		715927E92722AEFB00041D75 /* TextFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFile.swift; sourceTree = "<group>"; };
@@ -294,12 +294,12 @@
 			isa = PBXGroup;
 			children = (
 				89489A2C27186883006FDDEC /* diecard */,
-				712901BD27326D5C003B8AC0 /* AvatarPicker.swift */,
 				89489A2A27186859006FDDEC /* HomeView.swift */,
 				8900C06626FB5C93007E7D4D /* InformUIView.swift */,
 				89489A2827186848006FDDEC /* Textfield02.swift */,
 				89489A24271867F5006FDDEC /* HomeLandUIView.swift */,
 				89489A262718683B006FDDEC /* LeftMenuView.swift */,
+				712901C5273371F6003B8AC0 /* AvatarPicker.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -521,6 +521,7 @@
 				712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */,
 				CDED5B0F26F4E0D300570485 /* WriteLetterVeiw.swift in Sources */,
 				8900C06726FB5C94007E7D4D /* InformUIView.swift in Sources */,
+				712901C6273371F6003B8AC0 /* AvatarPicker.swift in Sources */,
 				8900C06026FB4DC8007E7D4D /* MemberModel+CoreDataClass.swift in Sources */,
 				8997957A271C46DC00941FBB /* IsCreaterView.swift in Sources */,
 				716676AB2725843000555510 /* SwiftRefreshUIView.swift in Sources */,
@@ -533,7 +534,6 @@
 				89489A25271867F6006FDDEC /* HomeLandUIView.swift in Sources */,
 				71EDEE1C272598B800DFD7D8 /* LynnPullToRefresh.swift in Sources */,
 				890C993326EF3A6700494182 /* HifamilySwiftUIApp.swift in Sources */,
-				712901BE27326D5C003B8AC0 /* AvatarPicker.swift in Sources */,
 				715927EA2722AEFB00041D75 /* TextFile.swift in Sources */,
 				718E65EF26F74E430010165C /* IssueUIView.swift in Sources */,
 				CDED5B0D26F4DF2F00570485 /* LetterVeiw.swift in Sources */,
