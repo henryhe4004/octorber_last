@@ -22,6 +22,7 @@ struct SelectImageToAlbum: View {
     @State var isSelected : Bool = false
     @State var isSelected1 : Bool = false
     @State var SelectWho : Int = 1
+    @State var isIssue : Bool = false
     var body: some View {
             VStack{
                ScrollView(.vertical, showsIndicators: false){
@@ -36,7 +37,13 @@ struct SelectImageToAlbum: View {
         .addPullToRefresh(isHeaderRefreshing: $headerRefreshing, onHeaderRefresh: reloadData,
                                  isFooterRefreshing: $footerRefreshing, onFooterRefresh: loadMoreData)
         .navigationBarTitle("选择照片",displayMode: .inline)
-        }
+        .navigationBarItems(trailing: Button(action:{
+            
+            })
+            {
+                Text("发布")
+            })
+    }
 
     
                             

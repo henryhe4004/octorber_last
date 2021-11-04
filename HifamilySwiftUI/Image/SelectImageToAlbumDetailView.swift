@@ -17,7 +17,7 @@ final class ImageTogether1 : ObservableObject{
     init(){
         familyId = 0
         selectedObjectId = []
-        albumName = ""
+        albumName = "默认相册名"
         frontPhoto = ""
     }
     func loadFamilyTreeId(){
