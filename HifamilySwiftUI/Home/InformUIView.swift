@@ -161,7 +161,6 @@ struct InformUIView: View {
                                 TextField("请选择您的家庭身份", text: $rolesArray[selectedIndex])
                             }
                             else{
-
                                 TextField("请选择您的家庭身份", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
                             }
                             

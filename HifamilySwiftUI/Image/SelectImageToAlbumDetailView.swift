@@ -14,11 +14,13 @@ final class ImageTogether1 : ObservableObject{
     @Published var selectedObjectId : Set<String>
     @Published var albumName : String
     @Published var frontPhoto : String
+    @Published var albumIndex : Set<Int>
     init(){
         familyId = 0
         selectedObjectId = []
         albumName = "默认相册名"
         frontPhoto = ""
+        albumIndex = []
     }
     func loadFamilyTreeId(){
         let user = LCApplication.default.currentUser?.objectId?.stringValue!
@@ -118,9 +120,11 @@ struct SelectImageToAlbumDetailView: View {
                         print("1231231231\(index)")
                         if(imageTogether1.selectedObjectId.contains(album.dateNeed[index].objectId)){
                             imageTogether1.selectedObjectId.remove(album.dateNeed[index].objectId)
+                            imageTogether1.albumIndex.remove(index)
 //                            album.dateNeed[index].isSelected = false
                         }else{
 //                            album.dateNeed[index].isSelected = true
+                            imageTogether1.albumIndex.insert(index)
                             imageTogether1.selectedObjectId.insert(album.dateNeed[index].objectId)
                         }
                     }){

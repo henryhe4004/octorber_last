@@ -52,7 +52,6 @@ struct FlipEffect: GeometryEffect {
             DispatchQueue.main.async {
                   self.flipped = self.angle >= 90 && self.angle < 270
             }
-
             let tweakedAngle = flipped ? -180 + angle : angle
             let a = CGFloat(Angle(degrees: tweakedAngle).radians)
 

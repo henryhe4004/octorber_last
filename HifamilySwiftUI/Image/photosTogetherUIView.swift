@@ -30,6 +30,7 @@ final class ImageTogether : ObservableObject{
         frontPhoto = ""
     }
     func loadFamilyTreeId(){
+        
         let user = LCApplication.default.currentUser?.objectId?.stringValue!
         let query = LCQuery(className: "_User")
         query.whereKey("objectId", .equalTo(user!))
@@ -38,6 +39,7 @@ final class ImageTogether : ObservableObject{
             case .success(object: let person):
                 self.familyId = (person.familyTreeId?.intValue!)!
                 print("树名\((person.familyTreeId?.intValue!)!)")
+                self.ImageTo = []
                 self.loadFamilyContent()
                 break
             case .failure(error: let error):
@@ -54,7 +56,7 @@ final class ImageTogether : ObservableObject{
             case .success(objects: let person):
                 for item in person{
                    
-                    let imageT = ImageT(albumName: (item.albumName?.stringValue!)!, objectId: (item.objectId?.stringValue!)!, familyId: (item.familyId?.intValue!)!,frontPhoto: (item.frontPhoto?.stringValue!)!,createAt: (item.createAt?.dateValue!)!)
+                    let imageT = ImageT(albumName: (item.albumName?.stringValue!)!, objectId: (item.objectId?.stringValue!)!, familyId: (item.familyId?.intValue!)!,frontPhoto: (item.frontPhoto?.stringValue!)!,createAt: (item.createdAt?.dateValue!)!)
                     self.ImageTo.append(imageT)
                 }
                 break
@@ -75,6 +77,7 @@ struct photosTogetherUIView: View {
     @State var isPresented = false
     @ObservedObject  var imageTogether : ImageTogether
     @ObservedObject var album : Album
+    @State var text123:[String]=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
     var body: some View {
         ScrollView(.vertical){
         VStack{
@@ -121,23 +124,43 @@ struct photosTogetherUIView: View {
 //                                .border(Color.lack)
                 }
                     HStack{
-                        Text("\(imageTogether.ImageTo[index].frontPhoto)").foregroundColor(grayColor)
-                        Spacer()
-                    }.padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                        TextField("\(imageTogether.ImageTo[index].albumName)", text: $text123[index],onCommit: {
+                            do {
+                                let todo = LCObject(className: "familyImage", objectId: imageTogether.ImageTo[index].objectId)
+                                try todo.set("albumName", value: text123[index])
+                                todo.save { (result) in
+                                    switch result {
+                                    case .success:
+                                        break
+                                    case .failure(error: let error):
+                                        print(error)
+                                    }
+                                }
+                            } catch {
+                                print(error)
+                            }
+
+                        }).multilineTextAlignment(.center)
+                            .foregroundColor(grayColor).frame(width: 110, alignment: .center)
+                    }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 }
             }
             NavigationLink(
                 destination: SelectImageToAlbum(album: album, imageTogether:imageTogether, detailImage: "", detailAlbum: "", detailText: "", isSelected: false, isSelected1: false, SelectWho: 0))
                 {
                     VStack{
+                    VStack{
                     Image("paper plus")
                         .resizable()
-                        .frame(width: 100/*@END_MENU_TOKEN@*/, height: 100, alignment: /*@START_MENU_TOKEN@*/.center)
+                        .frame(width: 95/*@END_MENU_TOKEN@*/, height: 95, alignment: /*@START_MENU_TOKEN@*/.center)
                         
-                    } .frame(width: 120, height: 120, alignment: .center)
+                    } .frame(width: 110, height: 110, alignment: .center)
                         .cornerRadius(20)
                         .background(Color(red: 245/255, green: 245/255, blue: 245/255)).cornerRadius(20)
-
+                    HStack{
+                        Text("新建相册").foregroundColor(grayColor).frame(width: 110, alignment: .center)
+                    }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    }
                 }
 //            Button(action:{
 //                isPresented = true
