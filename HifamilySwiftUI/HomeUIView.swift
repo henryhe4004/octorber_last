@@ -14,6 +14,7 @@ struct HomeUIView: View {
     @ObservedObject var album:Album 
     @ObservedObject var miss:Miss = Miss()
     @ObservedObject var myLetter:MyLetter = MyLetter()
+    @ObservedObject var familyLetterMumber:LLMumber = LLMumber()
     
     @Binding var isLogin : Bool
 //    @State var isFirstLogin = true
@@ -32,8 +33,13 @@ struct HomeUIView: View {
                 }
                     
             })
-            LetterView(myLetter: myLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
-                myLetter.queryAllMyLetter()
+            LetterView(familyLetterMumber:familyLetterMumber, myLetter: myLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
+                if(familyLetterMumber.mumbersObjectId.isEmpty) {
+                    familyLetterMumber.queryFamilyMumber()
+                }
+                if(myLetter.letters.isEmpty) {
+                    myLetter.queryAllMyLetter()
+                }
             })
             HomeView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId).tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
                 if #available(iOS 15.0, *) {
