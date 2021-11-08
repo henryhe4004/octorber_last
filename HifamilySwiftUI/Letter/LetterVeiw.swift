@@ -34,12 +34,13 @@ final class MyLetter:ObservableObject {
     }
     
     func queryAllMyLetter() {
-        print("wsnd")
         // 获取当前用户的Id
         let myLetterId = LCApplication.default.currentUser?.objectId?.value
         
         let query = LCQuery(className: "Letter")
+        
         query.whereKey("receiveLetterId", .equalTo(myLetterId!))
+        query.whereKey("createdAt", .descending)
         _ = query.find { result in
             switch result {
             case .success(objects: let l):
@@ -57,7 +58,6 @@ final class MyLetter:ObservableObject {
                             mis.receiveName = (todo.receiveName?.stringValue!)!
                             mis.sendTime = (todo.createdAt?.dateValue!)!
                             self.letters.append(mis)
-//                            print("123123123123ssssss\(self.letters.count)")
                         case .failure(error: let error):
                             print(error)
                         }
@@ -77,6 +77,13 @@ final class MyLetter:ObservableObject {
     }
 }
 
+struct peopleLetter {
+    var personObjectId:String
+    var personName: String
+    var personLetterNum: Int
+    var thisLetter:[everyLetter]
+}
+
 
 final class LLMumber:ObservableObject {
     
@@ -84,12 +91,14 @@ final class LLMumber:ObservableObject {
     @Published var mumbersName: [String]
     @Published var familyMumber: [String]
     @Published var mumbersLetterNum: [Int]
+    @Published var pLetter:[peopleLetter]
     
     init() {
         mumbersObjectId = []
         mumbersName = []
         familyMumber = ["我","爸爸","妈妈","爷爷","奶奶","外婆","外公","孙子","孙女","舅舅"]
         mumbersLetterNum = []
+        pLetter = []
     }
     
     func queryFamilyMumber() {
@@ -115,8 +124,13 @@ final class LLMumber:ObservableObject {
                             if((Item.objectId?.stringValue!)! != sendLetterId) {
                                 self.mumbersObjectId.append((Item.objectId?.stringValue!)!)
                                 self.mumbersName.append(self.familyMumber[(Item.familyPosition?.intValue!)!])
+                                let query2 = LCQuery(className: "Letter")
+                                query2.whereKey("receiveLetterId", .equalTo((Item.objectId?.stringValue!)!))
+                                let count = query2.count()
+                                self.mumbersLetterNum.append(count.intValue)
                             }
                         }
+                        self.queryFamilyMumberLetter()
                         print(self.mumbersName)
                         break
                     case .failure(error: let error):
@@ -128,9 +142,50 @@ final class LLMumber:ObservableObject {
             }
         }
     }
+    
+    // 查每个家庭成员的所有书信
+    func queryFamilyMumberLetter(){
+        for i in 0..<mumbersObjectId.count {
+            let peLetter = peopleLetter(personObjectId: self.mumbersObjectId[i], personName: self.mumbersName[i], personLetterNum: self.mumbersLetterNum[i], thisLetter: [])
+            pLetter.append(peLetter)
+        }
+        for j in 0..<pLetter.count {
+            let myLetterId = pLetter[j].personObjectId
+            let query = LCQuery(className: "Letter")
+            query.whereKey("receiveLetterId", .equalTo(myLetterId))
+            query.whereKey("createdAt", .descending)
+            _ = query.find { result in
+                switch result {
+                case .success(objects: let l):
+                    for i in 0..<l.count {
+                        // 查出来每封信的Id
+                        var mis:everyLetter = everyLetter(letterContent: "", sendName: "", receiveName: "", sendTime: Date())
+                        mis.letterContent = (l[i].letterContent?.stringValue!)!
+                        let letterId = (l[i].objectId?.stringValue!)!
+                        let query = LCQuery(className: "LetterM")
+                        query.whereKey("letterObjectId", .equalTo(letterId))
+                        _ = query.getFirst { result in
+                            switch result {
+                            case .success(object: let todo):
+                                mis.sendName = (todo.sendName?.stringValue!)!
+                                mis.receiveName = (todo.receiveName?.stringValue!)!
+                                mis.sendTime = (todo.createdAt?.dateValue!)!
+                                self.pLetter[j].thisLetter.append(mis)
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
+                    }
+                    break
+                case .failure(error: let error):
+                    print(error)
+                }
+            }
+        }
+        print(self.pLetter)
+    }
+
 }
-
-
 
 struct LetterView: View {
     @State var name : String = " "
@@ -141,7 +196,7 @@ struct LetterView: View {
     @State var nameSecond : String=""
     @State var isLetterSelected : Bool = false
     
-    @ObservedObject var llmumber:LLMumber = LLMumber()
+    @ObservedObject var familyLetterMumber:LLMumber
     
     @ObservedObject var myLetter:MyLetter
     
@@ -164,9 +219,24 @@ struct LetterView: View {
                             }
                             
                             Button(action: {
-                                print("myLetter123content\(self.myLetter.letters)")
+                                print("myLetter Content1\(self.myLetter.letters[0])")
+                                print("myLetter Content2\(self.myLetter.letters[1])")
+                                print("myLetter Content3\(self.myLetter.letters[2])")
                             }) {
                                 Text("test2")
+                            }
+                            Button(action: {
+                                print("########################################")
+                                print("myFamily mumberId\(self.familyLetterMumber.mumbersObjectId)")
+                                print("myFamily mumberName\(self.familyLetterMumber.mumbersName)")
+                                print("myFamily mumberLetterNumber\(self.familyLetterMumber.mumbersLetterNum)")
+                                print("****************************************")
+                                for i in 0..<self.familyLetterMumber.pLetter.count {
+                                    print(i)
+                                    print("\(self.familyLetterMumber.pLetter[i])")
+                                }
+                            }) {
+                                Text("测试返回家庭成员信息")
                             }
                         HStack {
                             Rectangle()
@@ -230,7 +300,7 @@ struct LetterView: View {
                                             namefirst = "智妍"
                                             nameSecond = "艳丽"
                                             date = "2021.07.05"
-                                            llmumber.queryFamilyMumber()
+                                            familyLetterMumber.queryFamilyMumber()
                                         }
                                     }
                                 }.frame(width: 152.0, height: 190.0)

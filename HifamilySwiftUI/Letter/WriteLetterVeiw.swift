@@ -168,7 +168,6 @@ struct WriteLetterView: View {
     @State var txt:String = "选择你的家人"
     
     
-    
     var body: some View {
 
         VStack {
