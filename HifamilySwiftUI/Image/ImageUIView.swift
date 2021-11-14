@@ -50,6 +50,7 @@ struct ImageUIView: View {
     @ObservedObject var imagepick : Imagepicker = Imagepicker()
     //默认为照片
     @State var detailImage : String = " "
+//    @ObservedObject var imageOfAlbum : ImageOfAlbum = imageOfAlbum()
     @State var detailAlbum : String = " "
     @State var detailText : String = " "
     @State var isSelected : Bool = false

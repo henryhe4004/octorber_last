@@ -112,6 +112,7 @@ struct SelectImageToAlbumDetailView: View {
 //                }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
 //            .debugPrint(album.dateNeed.count)
             LazyVGrid(columns: items, content: {
+                
                 ForEach(0..<album.dateNeed.count,id: \.self){
                     index in
                     Button(action:{

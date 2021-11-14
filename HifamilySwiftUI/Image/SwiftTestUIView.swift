@@ -8,7 +8,6 @@ struct FlippingView: View {
       @ObservedObject var album:Album
       @Binding var selectWho:Int
       var body: some View {
-
             return VStack {
                 Image(systemName: "arrowshape.turn.up.left.fill")
                     .resizable(resizingMode: .tile)

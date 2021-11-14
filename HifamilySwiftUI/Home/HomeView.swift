@@ -289,10 +289,7 @@ struct FamilyBlackboard: View {
                 .multilineTextAlignment(.center)
               
             }
-         
-
         }
-    
     }
 //struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {

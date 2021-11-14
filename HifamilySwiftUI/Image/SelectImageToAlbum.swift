@@ -65,22 +65,29 @@ struct SelectImageToAlbum: View {
                         switch result{
                         case .success:
                             let query = LCQuery(className: "familyImage")
+                            print("123123123123123123123123123我是人2")
                             query.whereKey("uuid", .equalTo(uuid))
                             _ = query.getFirst() { result in
                                 switch result {
                                 case .success(object: let students):
                                     let objectId = students.objectId;
+                                    print("😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯\((objectId?.stringValue!)!)")
                                     var objects: [LCObject] = []
                                     do{
+                                        print("😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯\(imageTogether1.selectedObjectId.count)")
                                         for object1 in imageTogether1.selectedObjectId{
+                                            print("123123123123123123123123123我是人3")
                                             let object2 = LCObject(className: "AlbumAndImage")
                                             try object2.set("imageObjectId", value: objectId?.stringValue!)
                                             try object2.set("albumObjectId",value: object1.stringValue!)
                                             objects.append(object2)
+                                            print("😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯\(objects.count)")
                                         }
                                         _ = LCObject.save(objects, completion: { (result) in
                                             switch result {
                                             case .success:
+                                                imageTogether1.selectedObjectId.removeAll()
+                                                imageTogether1.albumIndex.removeAll()
                                                 break
                                             case .failure(error: let error):
                                                 print(error)
@@ -104,8 +111,7 @@ struct SelectImageToAlbum: View {
                 } catch {
                     print(error)
                 }
-                imageTogether1.selectedObjectId.removeAll()
-                imageTogether1.albumIndex.removeAll()
+               
             }
         })
             {

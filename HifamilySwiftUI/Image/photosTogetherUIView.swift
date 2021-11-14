@@ -77,8 +77,12 @@ struct photosTogetherUIView: View {
     @State var isPresented = false
     @ObservedObject  var imageTogether : ImageTogether
     @ObservedObject var album : Album
+    @ObservedObject var imageOfAlbum : ImageOfAlbum = ImageOfAlbum()
+    @State var albumIndex = -1
     @State var text123:[String]=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
+    @State var isSelected1 : Bool = false
     var body: some View {
+        ZStack{
         ScrollView(.vertical){
         VStack{
             HStack{
@@ -100,9 +104,10 @@ struct photosTogetherUIView: View {
                 index in
                 VStack{
                 Button(action:{
-//                    isSelected1 = true
-//                    detailText = "弟弟，你还记得那天你小学四年级军训的时候要上台表演，在台下紧张的等待，我悄悄给你拍的照片。"
-//                    detailAlbum = albumTest.imga[index1]
+                    isSelected1 = true
+                    imageOfAlbum.updateImageOfAlbum(imageObjectId1: imageTogether.ImageTo[index].objectId)
+                    print(imageTogether.ImageTo[index].objectId)
+                    albumIndex = index
                 }){
                     
                     KFImage.url(URL(string:imageTogether.ImageTo[index].frontPhoto))
@@ -113,9 +118,9 @@ struct photosTogetherUIView: View {
                               .cacheMemoryOnly()
                               .fade(duration: 0.25)
 //                              .lowDataModeSource(.network(lowResolutionURL))
-                              .onProgress { receivedSize, totalSize in  }
-                              .onSuccess { result in  }
-                              .onFailure { error in }
+                        .onProgress { receivedSize, totalSize in  }
+                        .onSuccess { result in  }
+                        .onFailure { error in }
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 110, height: 110, alignment: .center)
@@ -174,9 +179,13 @@ struct photosTogetherUIView: View {
     })
   }
         }
+            if(isSelected1){
+                Rectangle().fill(Color.gray).opacity(0.5)
+                ContentOfAlbumSwiftUIView(isSelected1: $isSelected1, imageOfAlbum: imageOfAlbum)
+            }
+    }
         
     }
-    
 }
 
 struct photosTogetherUIView_Previews: PreviewProvider {
