@@ -84,14 +84,22 @@ struct peopleLetter {
     var thisLetter:[everyLetter]
 }
 
+struct spLetter {
+    var ObjectId:String
+    var Name:String
+    var familyMuber:String
+    var LetterNum:Int
+    var pletter:peopleLetter
+}
+
 
 final class LLMumber:ObservableObject {
     
-    @Published var mumbersObjectId : [String]
+    @Published var mumbersObjectId: [String]
     @Published var mumbersName: [String]
     @Published var familyMumber: [String]
     @Published var mumbersLetterNum: [Int]
-    @Published var pLetter:[peopleLetter]
+    @Published var pLetter: [peopleLetter]
     
     init() {
         mumbersObjectId = []
@@ -184,8 +192,18 @@ final class LLMumber:ObservableObject {
         }
         print(self.pLetter)
     }
-
 }
+
+final class indexLetter:ObservableObject {
+    
+    @Published var indexL:Int
+    
+    init() {
+        indexL = -1
+    }
+    
+}
+
 
 struct LetterView: View {
     @State var name : String = " "
@@ -197,14 +215,14 @@ struct LetterView: View {
     @State var isLetterSelected : Bool = false
     
     @ObservedObject var familyLetterMumber:LLMumber
-    
     @ObservedObject var myLetter:MyLetter
+    @ObservedObject var indexLe:indexLetter = indexLetter()
     
     var body: some View{
 
         NavigationView {
             ZStack {
-        VStack {
+                VStack {
             // 上层导航栏
             UpperNavigationBar()
             Divider()
@@ -212,31 +230,49 @@ struct LetterView: View {
             ScrollView(.vertical) {
                     VStack{
                         VStack{
-                            Button(action: {
-                                print("myLetter123num\(self.myLetter.letterNum)")
-                            }) {
-                                Text("test")
-                            }
-                            
-                            Button(action: {
-                                print("myLetter Content1\(self.myLetter.letters[0])")
-                                print("myLetter Content2\(self.myLetter.letters[1])")
-                                print("myLetter Content3\(self.myLetter.letters[2])")
-                            }) {
-                                Text("test2")
-                            }
-                            Button(action: {
-                                print("########################################")
-                                print("myFamily mumberId\(self.familyLetterMumber.mumbersObjectId)")
-                                print("myFamily mumberName\(self.familyLetterMumber.mumbersName)")
-                                print("myFamily mumberLetterNumber\(self.familyLetterMumber.mumbersLetterNum)")
-                                print("****************************************")
-                                for i in 0..<self.familyLetterMumber.pLetter.count {
-                                    print(i)
-                                    print("\(self.familyLetterMumber.pLetter[i])")
+//                            Button(action: {
+//                                print("myLetter123num\(self.myLetter.letterNum)")
+//                            }) {
+//                                Text("test")
+//                            }
+//
+//                            Button(action: {
+//                                print("myLetter Content1\(self.myLetter.letters[0])")
+//                                print("myLetter Content2\(self.myLetter.letters[1])")
+//                                print("myLetter Content3\(self.myLetter.letters[2])")
+//                            }) {
+//                                Text("test2")
+//                            }
+//                            Button(action: {
+//                                print("########################################")
+//                                print("myFamily mumberId\(self.familyLetterMumber.mumbersObjectId)")
+//                                print("myFamily mumberName\(self.familyLetterMumber.mumbersName)")
+//                                print("myFamily mumberLetterNumber\(self.familyLetterMumber.mumbersLetterNum)")
+//                                print("****************************************")
+//                                for i in 0..<self.familyLetterMumber.pLetter.count {
+//                                    print(i)
+//                                    print("\(self.familyLetterMumber.pLetter[i])")
+//                                    print("这个人是\(self.familyLetterMumber.mumbersName[i])")
+//                                    print("这个人收到的家书数量\(self.familyLetterMumber.pLetter[i].thisLetter.count)")
+//                                }
+//                            }) {
+//                                Text("测试返回家庭成员信息")
+//                            }
+//
+//                            Button(action: {
+//                                print("\(familyLetterMumber.pLetter[1])")
+//                            }) {
+//                                Text("测试当前块")
+//                            }
+                            if(familyLetterMumber.pLetter.count > 0) {
+                                ForEach(0..<familyLetterMumber.pLetter.count, id:\.self) { i in
+                                    if(familyLetterMumber.pLetter[i].thisLetter.count >= 3 ) {
+                                        ThreeBlockView(name:$familyLetterMumber.mumbersName[i],letter_1: $familyLetterMumber.pLetter[i])
+                                    } else if (familyLetterMumber.pLetter[i].thisLetter.count > 0 && familyLetterMumber.pLetter[i].thisLetter.count < 3) {
+                                        OneBlockView(name:$familyLetterMumber.mumbersName[i],letter_1: $familyLetterMumber.pLetter[i])
+                                        }
+                                    }
                                 }
-                            }) {
-                                Text("测试返回家庭成员信息")
                             }
                         HStack {
                             Rectangle()
@@ -948,16 +984,6 @@ struct LetterView: View {
     }
 }
 
-// Spacer().frame(height:10).background(Color.gray)
-
-    
-    // 这段代码用于调出Xcode右侧的视图
-//struct LetterView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LetterView()
-//    }
-//}
-
 struct UpperNavigationBar: View {
     var body: some View {
         HStack {
@@ -1013,8 +1039,8 @@ struct SixBox: View {
             .frame(height: 156,alignment: .bottom)
         }
     }
-    }
 }
+
 
 
 struct PencilBox: View {

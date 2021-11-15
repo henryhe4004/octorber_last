@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct OneBlockView: View {
+    
+//    @ObservedObject var familyLetterMumber:LLMumber
+//    @ObservedObject var indexLe:indexLetter
+    @Binding var name:String
+    @Binding var letter_1:peopleLetter
+    
+    
     var body: some View {
         VStack {
             HStack {
@@ -15,7 +22,7 @@ struct OneBlockView: View {
                     .foregroundColor(orangeColor)
                     .frame(width: 2, height: 21)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                Text("我收到的家书")
+                Text("\(name)收到的家书")
                     .font(.system(size: 19))
                     .foregroundColor(grayColor)
                 Spacer()
@@ -37,7 +44,7 @@ struct OneBlockView: View {
                             VStack {
                                 VStack {
                                     HStack {
-                                        Text("老爸")
+                                        Text("\(letter_1.thisLetter[0].receiveName)")
                                             .foregroundColor(grayColor)
                                             .font(.system(size: 15.5))
                                             .frame(alignment: .leading)
@@ -46,7 +53,7 @@ struct OneBlockView: View {
                                     .padding(EdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 0))
                                     
                                     HStack {
-                                        Text("爸，工作顺利嘛？再过两年我就出来工作啦，给我传授点经验吧😭~")
+                                        Text("\(letter_1.thisLetter[0].letterContent)")
                                             .lineSpacing(10.5)
                                             .font(.system(size: 11))
                                             .foregroundColor(grayColor)
@@ -56,7 +63,7 @@ struct OneBlockView: View {
                                     .padding(EdgeInsets(top: 2,leading: 0, bottom: -5, trailing: 0))
                                     
                                     HStack {
-                                        Text("小妍妍")
+                                        Text("\(letter_1.thisLetter[0].sendName)")
                                             .foregroundColor(grayColor)
                                             .font(.system(size: 13))
                                             .frame(width: 70,height:21,alignment: .trailing)
@@ -64,7 +71,7 @@ struct OneBlockView: View {
                                     .padding(EdgeInsets(top: 7, leading: 0, bottom: -16, trailing: 0))
                                     .frame(width: 110,alignment: .trailing)
                                     HStack {
-                                        Text("2021.07.05")
+                                        Text("\(letter_1.thisLetter[0].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
                                             .foregroundColor(Color(UIColor(red: 0.55, green: 0.55, blue: 0.55,alpha:1)))
                                             .font(.system(size: 8))
                                             .frame(alignment: .trailing)
@@ -82,11 +89,5 @@ struct OneBlockView: View {
                 }
                 .frame(height: 156,alignment: .bottom)
         }
-    }
-}
-
-struct OneBlockView_Previews: PreviewProvider {
-    static var previews: some View {
-        OneBlockView()
     }
 }
