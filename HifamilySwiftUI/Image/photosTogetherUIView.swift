@@ -76,8 +76,10 @@ var item1s : [GridItem] = [
 struct photosTogetherUIView: View {
     @State var isPresented = false
     @ObservedObject  var imageTogether : ImageTogether
+    @ObservedObject  var imageTogether1 : ImageTogether1 = ImageTogether1()
     @ObservedObject var album : Album
     @ObservedObject var imageOfAlbum : ImageOfAlbum = ImageOfAlbum()
+  
     @State var albumIndex = -1
     @State var text123:[String]=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""]
     @State var isSelected1 : Bool = false
@@ -105,8 +107,12 @@ struct photosTogetherUIView: View {
                 VStack{
                 Button(action:{
                     isSelected1 = true
-                    imageOfAlbum.updateImageOfAlbum(imageObjectId1: imageTogether.ImageTo[index].objectId)
-                    print(imageTogether.ImageTo[index].objectId)
+                    imageOfAlbum.updateImageOfAlbum(imageObjectId1: imageTogether.ImageTo[index].objectId,imageTogether1: imageTogether1)
+//                    for item in imageOfAlbum.updateImageOfAlbum(imageObjectId1: imageTogether.ImageTo[index].objectId){
+////                        print("😊😊😊😊😊😊babab3123123😊😊😊😊😊😊😊😊😊😊😊😊😊\(item.objectId)")
+//                        imageTogether1.selectedObjectId.insert(item);
+//                        print("😊😊😊😊😊😊babab222222222222😊😊😊😊😊😊😊😊😊😊😊😊😊\(item)")
+//                    }
                     albumIndex = index
                 }){
                     
@@ -181,12 +187,13 @@ struct photosTogetherUIView: View {
         }
             if(isSelected1){
                 Rectangle().fill(Color.gray).opacity(0.5)
-                ContentOfAlbumSwiftUIView(isSelected1: $isSelected1, imageOfAlbum: imageOfAlbum)
+                ContentOfAlbumSwiftUIView(isSelected1: $isSelected1, imageOfAlbum: imageOfAlbum,album:album,imageTogether:imageTogether,imageTogether1:imageTogether1)
+                }
             }
     }
         
-    }
 }
+
 
 struct photosTogetherUIView_Previews: PreviewProvider {
     static var previews: some View {

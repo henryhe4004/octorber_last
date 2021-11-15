@@ -31,6 +31,8 @@
 		71A3A4B926FC0908004B9D53 /* DetailLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A3A4B826FC0908004B9D53 /* DetailLetterView.swift */; };
 		71BF8B7B26F609260006081B /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BF8B7A26F609260006081B /* ImagePickerView.swift */; };
 		71E4DB3D273BDAD000894F05 /* ContentOfAlbumSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E4DB3C273BDAD000894F05 /* ContentOfAlbumSwiftUIView.swift */; };
+		71E4DB3F274102C600894F05 /* UpdateImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E4DB3E274102C600894F05 /* UpdateImageUIView.swift */; };
+		71E4DB412741EFCD00894F05 /* SwiftUpdateUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E4DB402741EFCD00894F05 /* SwiftUpdateUIView.swift */; };
 		71EDEE1C272598B800DFD7D8 /* LynnPullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EDEE1B272598B800DFD7D8 /* LynnPullToRefresh.swift */; };
 		71EDEE1E272598D700DFD7D8 /* LynnPullToRefreshModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EDEE1D272598D700DFD7D8 /* LynnPullToRefreshModifier.swift */; };
 		71EDEE20272598FB00DFD7D8 /* LynnRefreshDefaultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71EDEE1F272598FB00DFD7D8 /* LynnRefreshDefaultViews.swift */; };
@@ -103,6 +105,8 @@
 		71A3A4B826FC0908004B9D53 /* DetailLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailLetterView.swift; sourceTree = "<group>"; };
 		71BF8B7A26F609260006081B /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		71E4DB3C273BDAD000894F05 /* ContentOfAlbumSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentOfAlbumSwiftUIView.swift; sourceTree = "<group>"; };
+		71E4DB3E274102C600894F05 /* UpdateImageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateImageUIView.swift; sourceTree = "<group>"; };
+		71E4DB402741EFCD00894F05 /* SwiftUpdateUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUpdateUIView.swift; sourceTree = "<group>"; };
 		71EDEE1B272598B800DFD7D8 /* LynnPullToRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LynnPullToRefresh.swift; sourceTree = "<group>"; };
 		71EDEE1D272598D700DFD7D8 /* LynnPullToRefreshModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LynnPullToRefreshModifier.swift; sourceTree = "<group>"; };
 		71EDEE1F272598FB00DFD7D8 /* LynnRefreshDefaultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LynnRefreshDefaultViews.swift; sourceTree = "<group>"; };
@@ -188,6 +192,8 @@
 				712901B727313C27003B8AC0 /* SwiftTestUIView.swift */,
 				712901BB27314082003B8AC0 /* Test123View.swift */,
 				71E4DB3C273BDAD000894F05 /* ContentOfAlbumSwiftUIView.swift */,
+				71E4DB3E274102C600894F05 /* UpdateImageUIView.swift */,
+				71E4DB402741EFCD00894F05 /* SwiftUpdateUIView.swift */,
 			);
 			path = Image;
 			sourceTree = "<group>";
@@ -510,6 +516,7 @@
 				CDD223D5272AB3E200EEABBB /* ThreeBlockView.swift in Sources */,
 				7196606727269F5500C4AD00 /* ContentVeiw.swift in Sources */,
 				89489A272718683B006FDDEC /* LeftMenuView.swift in Sources */,
+				71E4DB412741EFCD00894F05 /* SwiftUpdateUIView.swift in Sources */,
 				8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */,
 				89489A2B27186859006FDDEC /* HomeView.swift in Sources */,
 				718E65EC26F71A250010165C /* albumUIView.swift in Sources */,
@@ -527,6 +534,7 @@
 				8900C06726FB5C94007E7D4D /* InformUIView.swift in Sources */,
 				712901C6273371F6003B8AC0 /* AvatarPicker.swift in Sources */,
 				8900C06026FB4DC8007E7D4D /* MemberModel+CoreDataClass.swift in Sources */,
+				71E4DB3F274102C600894F05 /* UpdateImageUIView.swift in Sources */,
 				8997957A271C46DC00941FBB /* IsCreaterView.swift in Sources */,
 				716676AB2725843000555510 /* SwiftRefreshUIView.swift in Sources */,
 				8900C06126FB4DC8007E7D4D /* MemberModel+CoreDataProperties.swift in Sources */,

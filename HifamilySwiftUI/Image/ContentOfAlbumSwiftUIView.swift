@@ -23,18 +23,20 @@ struct ImageOfAlbumContent{
 final class ImageOfAlbum: ObservableObject {
     @Published var imageOfAlbum : [ImageOfAlbumContent]
     @Published var imageObjectId : String
+    @Published var objectID : [String]
     init(){
         imageOfAlbum = []
         imageObjectId = ""
+        objectID = []
     }
     
     func updateObjectId( imageObjectId : String?){
         self.imageObjectId = (imageObjectId?.stringValue)!
     }
-    func updateImageOfAlbum(imageObjectId1 : String){
+    func updateImageOfAlbum(imageObjectId1 : String,imageTogether1 : ImageTogether1){
         self.imageOfAlbum = []
         self.imageObjectId = (imageObjectId1.stringValue)!
-       
+        self.objectID = []
         let query = LCQuery(className: "AlbumAndImage")
 //        query.whereKey("objectId", .equalTo(user!))
         query.whereKey("imageObjectId",.equalTo(imageObjectId1));
@@ -52,18 +54,26 @@ final class ImageOfAlbum: ObservableObject {
                         case .success(object: let img):
 //                            let imageOfAlbum = ImageOfAlbumContent(Content: img., person: "", image: "", createdAt: "", UserObjectId: "", objectId: (item.imageObjectId?.stringValue!)!)
                             let imageOfAlbumContent = ImageOfAlbumContent(Content: (img.Content?.stringValue!)!, person: (img.person?.stringValue!)!, image: (img.url?.stringValue!)!, createdAt: formattedDate(date1: (img.createdAt?.dateValue!)!), UserObjectId: (img.UserObjectId?.stringValue!)!,objectId: (img.objectId?.stringValue!)!)
+                            self.objectID.append((img.objectId?.stringValue!)!)
+                            imageTogether1.selectedObjectId.insert((img.objectId?.stringValue!)!)
+//                            print("objectID:\(self.objectID.count)💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗\((img.objectId?.stringValue!)!)")
+//                            print("objectID:\(self.objectID.count)💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗")
                             self.imageOfAlbum.append(imageOfAlbumContent)
+                            
                             break
                         case .failure(error: let error1):
                             print(error1)
                         }
                     }
                 }
-                break
+//                return self.objectID
+           
             case .failure(error: let error):
                 print(error)
             }
         }
+//        print("objectID:\(self.objectID.count)💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗")
+//        return self.objectID
     }
 }
 
@@ -73,9 +83,14 @@ struct ContentOfAlbumSwiftUIView: View {
     @State private var animate3d = false
     @ObservedObject var imageOfAlbum : ImageOfAlbum
     @State private var indexNum = 0
+    @ObservedObject var album : Album
+   
+    @ObservedObject var imageTogether : ImageTogether
+    @ObservedObject var imageTogether1 : ImageTogether1 
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.horizontal, showsIndicators: false){
+               
 //                VStack{
 //                    HStack{
 //
@@ -95,11 +110,12 @@ struct ContentOfAlbumSwiftUIView: View {
 //                    }
 //                }
                 HStack{
-               
+                   
                     ForEach( 0 ..< imageOfAlbum.imageOfAlbum.count, id: \.self){ index in
                         VStack {
+                            HStack{
                             Image(systemName: "arrowshape.turn.up.left.fill")
-                                
+
                                 .resizable(resizingMode: .tile)
                                 .aspectRatio(contentMode: .fill)
                                 .foregroundColor(Color("AccentColor"))
@@ -108,8 +124,22 @@ struct ContentOfAlbumSwiftUIView: View {
                                 }
                                 .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                 .offset(x: 30, y: 100)
-                                .debugPrint("😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊\(imageOfAlbum.imageOfAlbum.count)")
-                              Spacer()
+//                                .debugPrint("😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊\(imageOfAlbum.imageOfAlbum.count)")
+                                .debugPrint("😊😊😊😊😊😊babab😊😊😊😊😊😊😊😊😊😊😊😊😊\(imageTogether1.selectedObjectId.count)")
+//                              Spacer()
+                                NavigationLink(destination:SwiftUpdateUIView(album:album, imageTogether1: imageTogether1, imageTogether:imageTogether,isSelected1: $isSelected1, imageObjectId: $imageOfAlbum.imageObjectId)){
+                                Image(systemName:"plus")
+                                    .resizable(resizingMode: .tile)
+                                    .aspectRatio(contentMode: .fill)
+                                    .foregroundColor(Color("AccentColor"))
+                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+//                                    .padding(EdgeInsets(top: 100, leading: 360, bottom: 0, trailing: 0))
+//                                    .offset(x: 360, y: 100)
+//                                    .onTapGesture(perform: {})
+                                }.offset(x: 360, y: 100)
+                                    
+                            }
+                            Spacer()
                         }
                         ZStack() {
                             FrontCard1(image123: $imageOfAlbum.imageOfAlbum[index]).opacity(imageOfAlbum.imageOfAlbum[index].flipped ? 0.0 : 1.0)
@@ -121,7 +151,7 @@ struct ContentOfAlbumSwiftUIView: View {
                                       imageOfAlbum.imageOfAlbum[index].animate3d.toggle()
                                   }
                             }
-                      }
+                    }
 //                      .modifier(FlipEffect(flipped: $flipped, angle: animate3d ? 180 : 0, axis: (x: 1, y: 0)))
 //                      .onTapGesture {
 //                            withAnimation(Animation.linear(duration: 0.8)) {
