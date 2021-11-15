@@ -11,7 +11,6 @@ import YPImagePicker
 import Kingfisher
 
 
-
 struct Arc: Shape {
     var startAngle: Angle
     var endAngle: Angle
@@ -28,18 +27,28 @@ struct Arc: Shape {
     }
 }
 
+//实时更新个人信息以及把家庭地位改成家庭昵称
+class InformationUser: ObservableObject {
+    @Published var username = ""
+    @Published var phone = ""
+    @Published var nickname = ""
+    @Published var userId = -1
+    @Published var familyPosition = -1//后续讨论是否删除
+    @Published var familyName = ""
+    @Published var familyStatus = 0
+    @Published var isCreater = true
+    
+    @Published var url = ""
+    @Published var MyImage : UIImage = UIImage()
+    @Published var treeObjectId = ""
+    @Published var objectId = (LCApplication.default.currentUser?.objectId)!
+}
 
 struct InformUIView: View {
     
     @Environment(\.presentationMode) var presentationModess
-    @State var isCreater = true;
-    @State var username = ""
-    @State var phone = ""
-    @State var familyPosition = -1
-    @State var userId = -1
-    @State var familyName = ""
-    @State var familyStatus = 0
-    
+    @StateObject var user = InformationUser()
+    @ObservedObject var treeData : FamilyTreeData
     @Binding var isLogin:Bool
     @Binding var isFirstLogin : LCBool
     @Binding var isPressed1 : Bool
@@ -47,20 +56,20 @@ struct InformUIView: View {
     
     @State var isToLogin = false
     @State var isAlert = false
-    
     @State var isPicker = false
+
     
+    //不确定是否修改
     @State var rolesArray = Array<String>()
-    @State private var selectedIndex:Int = 0
-    @State var treeObjectId = ""
+    @State var selectedIndex:Int = 0
+ 
     
-    @Binding var treeName : String
+//    @Binding var treeName : String
     @State var isNavigationBarHidden = false
-    @State var MyImage : UIImage = UIImage()
-    @State var url : String = ""
-    
+    //不变
     @State var isImage = false
     @State var isLoading = false
+    
     var body: some View {
         
         
@@ -69,6 +78,54 @@ struct InformUIView: View {
         VStack {
             //返回按钮
             Button(action: {
+                //修改treeData的值
+                let query = LCQuery(className: "_User")
+                let _ = query.get(user.objectId) { (result) in
+                    switch result {
+                    case .success(object: let todo):
+//                        let status = (todo.status?.intValue)!
+                        let id = (todo.id?.intValue)!
+                        let familyTreeId = (todo.familyTreeId?.intValue)!
+                        if(familyTreeId == 0){
+                            treeData.isHaveTree = false
+                            treeData.indexTree = 0
+                            treeData.familyIdWrite = 0
+                            treeData.familyMemberCountWrite = 1
+                            treeData.familyTreeWrite = 0
+                            treeData.familyTreeName = ""
+                            treeData.treeObjectId = ""
+                        }else{
+                            let query = LCQuery(className: "familyTree")
+                            query.whereKey("familyId", .equalTo(familyTreeId))
+                            _ = query.find { result in
+                                switch result {
+                                case .success(objects: let students):
+                                    for item in students{
+                                        let createrId = (item.createrId?.intValue)!
+                                        if(createrId == id){
+                                            treeData.isHaveTree = true
+                                        }else{
+                                            treeData.isHaveTree = false
+                                        }
+                                        treeData.indexTree = (item.indexTree?.intValue)!
+                                        treeData.familyIdWrite = (item.familyId?.intValue)!
+                                        treeData.familyMemberCountWrite = (item.familyNum?.intValue)!
+                                        treeData.familyTreeWrite = (item.indexTree?.intValue)!
+                                        treeData.familyTreeName = (item.familyName?.stringValue)!
+                                        treeData.treeObjectId = (item.objectId?.stringValue)!
+                                    }
+                                    break
+                                case .failure(error: let error):
+                                    print(error)
+                                }
+                            }
+                        }
+                        
+                    
+                    case .failure(error: let error):
+                        print(error)
+                    }
+                }
                 self.presentationModess.wrappedValue.dismiss()//返回的方法
             }) {
                 HStack {
@@ -87,7 +144,7 @@ struct InformUIView: View {
 
                 ZStack{
                     
-                    if(url == "father\n" || url == "" || url == "father"){
+                    if(user.url == "father\n" || user.url == "" || user.url == "father"){
                         Image("father")
                                 .padding(.leading,30)
                                 .shadow(color: Color.gray, radius: 3, x: 5, y: 5)
@@ -101,7 +158,7 @@ struct InformUIView: View {
                             .offset(x: /*@START_MENU_TOKEN@*/10.0/*@END_MENU_TOKEN@*/)
                             .shadow(color: Color.black, radius: 2, x: 3, y: 3)
                         
-                    KFImage.url(URL(string:url))
+                        KFImage.url(URL(string:user.url))
                         .loadDiskFileSynchronously()
                         .cacheMemoryOnly()
                         .onSuccess { result in  self.isLoading = false}
@@ -123,12 +180,12 @@ struct InformUIView: View {
                     
 
                 VStack {
-                    Text(username)
+                    Text(user.username)
                         .font(.title2)
                         .frame(width:geo.size.width - 150, alignment: .leading)
                         .padding(.top,10)
                     HStack {
-                        Text( isCreater ? "创建者" : "加入者")
+                        Text( user.isCreater ? "创建者" : "加入者")
                             .frame(width: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                             .font(.subheadline)
                             .foregroundColor(Color("AccentColor"))
@@ -155,48 +212,63 @@ struct InformUIView: View {
                 VStack {
                     Form{
                         HStack {
-                            Text("家庭身份")
+                            Text("家庭昵称")
                                 .padding(.trailing,15)
-                            if( rolesArray.count != 0 ){
-                                TextField("请选择您的家庭身份", text: $rolesArray[selectedIndex])
-                            }
-                            else{
-                                TextField("请选择您的家庭身份", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
-                            }
+                            //原来是家庭身份，现在改成家庭昵称
+//                            if( rolesArray.count != 0 ){
+//                                TextField("请选择您的家庭身份", text: $rolesArray[selectedIndex])
+//                            }
+//                            else{
+//                                TextField("请选择您的家庭身份", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
+//                            }
+                            
+                            TextField("请输入您的家庭昵称", text: $user.nickname,
+                            onCommit: {print("修改后的家庭昵称:\(user.nickname)")
+                                do {
+                                    let todo = LCObject(className: "_User", objectId: user.objectId)
+                                    try todo.set("nickname", value: user.nickname)
+                                    todo.save { (result) in
+                                        switch result {
+                                        case .success:
+                                            print("修改家庭昵称成功了")
+                                            break
+                                        case .failure(error: let error):
+                                            print(error)
+                                        }
+                                    }
+                                   
+                                } catch {
+                                    print(error)
+                                }
+                                
+                            })
                             
                         
                         }
                         .onTapGesture {
-                            isPicker = true
+//                            isPicker = true
                         }
                         
-                        if isCreater{
+                        if user.isCreater{
                             HStack {
                                 Text("家庭树名字")
-                                TextField(/*@START_MENU_TOKEN@*/"Placeholder"/*@END_MENU_TOKEN@*/, text: $familyName,
-                                onCommit: {print("修改后的家庭树的名字:\(familyName)")
+                                TextField(/*@START_MENU_TOKEN@*/"Placeholder"/*@END_MENU_TOKEN@*/, text: $user.familyName,
+                                                                onCommit: {print("修改后的家庭树的名字:\(user.familyName)")
                                     do {
-                                        let todo = LCObject(className: "familyTree", objectId: treeObjectId)
-                                        try todo.set("familyName", value: familyName)
+                                        let todo = LCObject(className: "familyTree", objectId: user.objectId)
+                                        try todo.set("familyName", value: user.familyName)
                                         todo.save { (result) in
                                             switch result {
                                             case .success:
-                                                self.treeName = familyName
+                                                //应该是传回给了首页
+                                                self.treeData.familyTreeName = user.familyName
                                                 print("修改名字成功了")
                                                 break
                                             case .failure(error: let error):
                                                 print(error)
                                             }
                                         }
-                                        _ = todo.fetch { result in
-                                            switch result {
-                                            case .success:
-                                                // todo 已刷新
-                                                break
-                                            case .failure(error: let error):
-                                                print(error)
-                                            }
-                                        }
+                                       
                                     } catch {
                                         print(error)
                                     }
@@ -207,7 +279,7 @@ struct InformUIView: View {
                        
                        
                     }
-                    .frame(width:geo.size.width - 20,height: 150, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .frame(width:geo.size.width - 20,height: user.isCreater ? 150 : 100, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                     .cornerRadius(20)
                     .offset(x: -5)
                     .padding(.bottom,5)
@@ -216,12 +288,12 @@ struct InformUIView: View {
                         HStack {
                             Text("昵称")
                                 .padding(.trailing,15)
-                            TextField("请输入昵称", text: $username,
+                            TextField("请输入昵称", text: $user.username,
                                       onCommit: {
-                                        print("用户修改后的昵称:\(username)")
+                                        print("用户修改后的昵称:\(user.username)")
                                         do {
-                                            let todo = LCObject(className: "_User", objectId: objectId)
-                                            try todo.set("username", value: username)
+                                            let todo = LCObject(className: "_User", objectId: user.objectId)
+                                            try todo.set("username", value: user.username)
                                             todo.save { (result) in
                                                 switch result {
                                                 case .success:
@@ -231,15 +303,7 @@ struct InformUIView: View {
                                                     print(error)
                                                 }
                                             }
-                                            _ = todo.fetch { result in
-                                                switch result {
-                                                case .success:
-                                                    // todo 已刷新
-                                                    break
-                                                case .failure(error: let error):
-                                                    print(error)
-                                                }
-                                            }
+                                           
                                         } catch {
                                             print(error)
                                         }
@@ -248,12 +312,30 @@ struct InformUIView: View {
                         }
                         HStack {
                             Text("手机号")
-                            if(phone == ""){
-                                TextField("请输入手机号", text: $phone)
-                            }else{
-                                Text(phone)
-                            }
-                            
+//                            if(user.phone == ""){
+//                                TextField("请输入手机号", text: $user.phone)
+//                            }else{
+//                                Text(user.phone)
+//                            }
+                            TextField("请输入手机号", text: $user.phone,onCommit: {
+                                      print("用户修改后的电话号码:\(user.phone)")
+                                      do {
+                                          let todo = LCObject(className: "_User", objectId: user.objectId)
+                                          try todo.set("mobilePhoneNUmber", value: user.phone)
+                                          todo.save { (result) in
+                                              switch result {
+                                              case .success:
+                                                  print("修改电话号码成功了")
+                                                  break
+                                              case .failure(error: let error):
+                                                  print(error)
+                                              }
+                                          }
+                                         
+                                      } catch {
+                                          print(error)
+                                      }
+                                    })
                         }
                         
                         
@@ -267,6 +349,7 @@ struct InformUIView: View {
                 if(isLoading){
                     LoadingView()
                 }
+                //是否还需要？？？
                 if(isPicker){
 
                     Picker(selection: $selectedIndex, label: /*@START_MENU_TOKEN@*/Text("Picker")/*@END_MENU_TOKEN@*/) {
@@ -290,7 +373,7 @@ struct InformUIView: View {
                     .onTapGesture {
                         isPicker = false
                         do {
-                            let todo = LCObject(className: "_User", objectId: objectId)
+                            let todo = LCObject(className: "_User", objectId: user.objectId)
                             try todo.set("familyPosition", value: selectedIndex + 1)
                             todo.save { (result) in
                                 switch result {
@@ -311,9 +394,10 @@ struct InformUIView: View {
             }
             Button(action: {
                 LCUser.logOut()
-                let currentUser = LCApplication.default.currentUser
+//                let currentUser = (LCApplication.default.currentUser?.objectId)!
+//                user.objectId = currentUser
                 isToLogin = true
-                print(currentUser as Any)
+//                print(currentUser as Any)
                 
             }) {
                 Text("退出当前账号")
@@ -332,23 +416,12 @@ struct InformUIView: View {
             }
                 isAlert = true
                     }) {
-            LoginUIView(isLogin: $isLogin, isFirstLogin: $isFirstLogin, isPressed1: $isPressed1, objectId: $objectId)
+            logOutView(isLogin: $isLogin, isFirstLogin: $isFirstLogin, isPressed1: $isPressed1, objectId: $user.objectId, isToLogin: $isToLogin, user: user)
 
                     }
-        .alert(isPresented: $isAlert, content: {
-            Alert(title: Text(isLogin ? "登陆成功":"出错了"),
-                  message: Text(isLogin ? "开启您的家庭之旅":"请先登录账号"),
-            dismissButton: .default(Text("OK"),
-                                    action: {
-                                        if(isLogin == false){
-                                            isToLogin = true
-                                        }
-                                    }))
-            
-        })
         
             .onAppear(){
-                //获取家庭成员关身份
+                
                         let familyMember = LCQuery(className: "FamilyMember")
                         _ = familyMember.find { result in
                             switch result {
@@ -367,48 +440,53 @@ struct InformUIView: View {
                             }
                         }
                 
-                //获取个人信息
+//                获取个人信息
                 let objectId = LCApplication.default.currentUser?.objectId
-                self.objectId = objectId!
+                self.user.objectId = objectId!
                 let query = LCQuery(className: "_User")
-                let _ = query.get(objectId!) { (result) in
+                let _ = query.get(user.objectId) { (result) in
                     switch result {
                     case .success(object: let todo):
-                        let avatar = todo.url?.stringValue
-                        self.url = avatar!
-                        let username = todo.username?.stringValue
+                        if(todo.nickname?.stringValue != nil){
+                            self.user.nickname = (todo.nickname?.stringValue)!
+                        }
+                        let avatar = (todo.url?.stringValue)!
+                        self.user.url = avatar
+                        let username = (todo.username?.stringValue)!
                         if todo.mobilePhoneNUmber?.stringValue != nil {
-                            let mobilePhoneNUmber = todo.mobilePhoneNUmber?.stringValue
-                            self.phone = mobilePhoneNUmber!
+                            let mobilePhoneNUmber = (todo.mobilePhoneNUmber?.stringValue)!
+                            self.user.phone = mobilePhoneNUmber
                         }
-                        if todo.familyPosition?.intValue != nil {
+                        //改？？？？？
                             let familyPosition = todo.familyPosition?.intValue
-                            self.familyPosition = familyPosition!
-                            self.selectedIndex = familyPosition!
-                        }
-                        let createrId = todo.id?.intValue
-                        self.username = username!
-                        let status = todo.status?.intValue
-                        self.familyStatus = status!
+                            self.selectedIndex = familyPosition! - 1
+
+                        let createrId = (todo.id?.intValue)!
+                        self.user.username = username
+                        let status = (todo.status?.intValue)!
+                        self.user.familyStatus = status
                         if status == 1{
-                            
+                            user.isCreater = true
+ 
                             let familyTree = LCQuery(className: "familyTree")
-                            familyTree.whereKey("createrId", .equalTo(createrId!))
+                            familyTree.whereKey("createrId", .equalTo(createrId))
                             _ = familyTree.find { result in
                                 switch result {
                                 case .success(objects: let tree):
                                     for item in tree{
-                                    let treeName = item.familyName?.stringValue!
-                                    self.familyName = treeName!
-                                    self.treeObjectId = (item.objectId?.stringValue!)!
-                                    print("家庭树的名字\(familyName)")
+                                    let treeName = (item.familyName?.stringValue!)!
+                                        self.user.familyName = treeName
+                                        self.user.treeObjectId = (item.objectId?.stringValue!)!
+                                        print("家庭树的名字\(user.familyName)")
                                     }
                                     break
-                                        
+
                                 case .failure(error: let error):
                                     print(error)
                                 }
                             }
+                        }else{
+                            user.isCreater = false
                         }
 
                     case .failure(error: let error1):
@@ -421,7 +499,7 @@ struct InformUIView: View {
             }
 
         .sheet(isPresented:$isImage){
-            AvatarPicker(MyImage : $MyImage,url:$url,isLoading:$isLoading)
+            AvatarPicker(MyImage : $user.MyImage,url:$user.url,isLoading:$isLoading)
          }
                 
             
@@ -432,9 +510,5 @@ struct InformUIView: View {
 
 
 
-//struct InformUIView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        InformUIView(isLogin: <#Binding<Bool>#>, isFirstLogin: <#Binding<LCBool>#>, isPressed1: <#Binding<Bool>#>, objectId: <#Binding<LCString>#>)
-//    }
-//}
+
 

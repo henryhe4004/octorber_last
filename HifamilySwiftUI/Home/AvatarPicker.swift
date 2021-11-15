@@ -10,6 +10,7 @@
 import SwiftUI
 import YPImagePicker
 import LeanCloud
+import AVFoundation
 
 struct AvatarPicker: View {
     @State private var showYPImagePickerView = true
@@ -31,6 +32,21 @@ struct AvatarPicker: View {
 
        }
 }
+
+func resizedImage1(image : UIImage) -> UIImage? {
+    let boundingRect = CGRect(x: 0, y: 0, width: 150, height:CGFloat.greatestFiniteMagnitude)
+
+
+    let aspectRect = AVMakeRect(aspectRatio: image.size, insideRect: boundingRect)
+
+    let renderer = UIGraphicsImageRenderer(size: aspectRect.size)
+
+    let img = renderer.image { (context) in
+        image.draw(in: CGRect(origin: .zero, size: aspectRect.size))
+    }
+   return img
+}
+
 
 struct MediaPicker1: UIViewControllerRepresentable {
     
@@ -89,7 +105,7 @@ struct MediaPicker1: UIViewControllerRepresentable {
                     do {
                         
                         MyImage =  photo.modifiedImage ??  photo.originalImage
-                        let image123 = resizedImage(image: MyImage)
+                        let image123 = resizedImage1(image: MyImage)
                         let file = LCFile(payload: .data(data: image123!.pngData()!))
                         _ = file.save { result in
                             switch result {

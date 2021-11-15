@@ -132,7 +132,7 @@ struct ContentOfAlbumSwiftUIView: View {
                                     .resizable(resizingMode: .tile)
                                     .aspectRatio(contentMode: .fill)
                                     .foregroundColor(Color("AccentColor"))
-                                    .frame(width: 30, height: 30, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                    .frame(width: 30, height: 30, alignment: .center)
 //                                    .padding(EdgeInsets(top: 100, leading: 360, bottom: 0, trailing: 0))
 //                                    .offset(x: 360, y: 100)
 //                                    .onTapGesture(perform: {})

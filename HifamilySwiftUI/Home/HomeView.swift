@@ -17,27 +17,39 @@ extension UIApplication{
     }
 }
 
+class FamilyTreeData: ObservableObject {
+    @Published var isHaveTree = false
+    @Published var indexTree = 0
+    @Published var familyIdWrite = 0
+    @Published var familyMemberCountWrite = 1
+    @Published var familyTreeWrite = 0
+    @Published var familyTreeName = "无名树"
+    @Published var treeObjectId = ""
+}
 
 
 struct HomeView: View {
+    
+    @StateObject var user = InformationUser()
+//    @ObservedObject var user : InformationUser
+    @StateObject var treeData = FamilyTreeData()
+    
     //isHaveTree true 为创建者，false为加入者
     @State var isHaveTree = false
+    //不变
     @State var isPresented = false
     @State var isPersonPresented = false
-    
+    @State var familyMemberCountWrite = 1
     //家庭树的初始值
     var imgsTree = ["tree","second tree","third tree"]
-    @State  private var indexTree = 0//默认树
-    @State var familyIdWrite = 0
-    @State var familyMemberCountWrite = 1
-    @State var familyTreeWrite = 0
-    @State var familyTreeName = ""
-    @State var treeObjectId = ""
+    
+
     
     //左边菜单栏
     @State var showLeftMenu = false
     @State var username = ""
     @State var status = 0
+    @State var avatar = ""
    
     
     @Binding var isLogin : Bool
@@ -49,12 +61,13 @@ struct HomeView: View {
         
         let drag = DragGesture()
             .onEnded {
-                    if $0.translation.width < -100 && status == 1{
+                if $0.translation.width < -100 && treeData.isHaveTree{
                         withAnimation {
+                            treeData.familyMemberCountWrite = familyMemberCountWrite
                                     self.showLeftMenu = false
                                 }
                             }
-                    else if $0.translation.width > 100 && status == 1{
+                    else if $0.translation.width > 100 && treeData.isHaveTree{
                         withAnimation {
                                     self.showLeftMenu = true
                         }
@@ -65,10 +78,10 @@ struct HomeView: View {
         ZStack(alignment: .leading) {
             VStack{
                 //title
-                Title(isPersonPresented: $isPersonPresented, showLeftMenu : $showLeftMenu,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, familyTreeName: $familyTreeName, status: $status)
+                Title(isPersonPresented: $isPersonPresented, showLeftMenu : $showLeftMenu,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, status: $status, treeData: treeData)
                 Divider()
                 //title 下面部分
-                TitleDown(familyTreeName: $familyTreeName, familyIdWrite: $familyIdWrite, familyMemberCountWrite: $familyMemberCountWrite,familyTreeWrite:$familyTreeWrite,isHaveTree :$isHaveTree,indexTree:$indexTree, treeObjectId: $treeObjectId, username: $username)
+                TitleDown(treeData: treeData, username: $username, avatar: $avatar)
                 
                 
             }
@@ -79,7 +92,7 @@ struct HomeView: View {
             
             
             if self.showLeftMenu{
-                LeftMenuView()
+                LeftMenuView(familyMemberCountWrite:$familyMemberCountWrite )
                     .offset(y: 30)
                     .frame(width: 1 * geometry.size.width/2)
                     .transition(.move(edge: .leading))
@@ -87,36 +100,41 @@ struct HomeView: View {
         }
         .gesture(drag)
         .onAppear(){
-            let objectId = LCApplication.default.currentUser?.objectId
-            self.objectId = objectId!
+            let objectId = (LCApplication.default.currentUser?.objectId)!
+            self.user.objectId = objectId
             let query = LCQuery(className: "_User")
-            
-            let _ = query.get(objectId!) { (result) in
+            let _ = query.get(user.objectId) { (result) in
                 switch result {
                 case .success(object: let todo):
-                    let createrId = todo.id?.intValue
-                    let status = todo.status?.intValue
-                    self.status = status!
+                    let createrId = (todo.id?.intValue)!
+                    let status = (todo.status?.intValue)!
+                    let url = (todo.url?.stringValue)!
+                    self.avatar = url
+                    self.status = status
                     self.username = (todo.username?.stringValue)!
+
                     if(status == 1){
                         //创建者
-                        isHaveTree = true
+                        treeData.isHaveTree = true
                         let familyTree = LCQuery(className: "familyTree")
-                        familyTree.whereKey("createrId", .equalTo(createrId!))
+                        familyTree.whereKey("createrId", .equalTo(createrId))
                         _ = familyTree.find { result in
                             switch result {
                             case .success(objects: let tree):
                                 for item in tree{
-                                let treeName = item.familyName?.stringValue
-                                let treeId = item.familyId?.intValue
-                                let familyNum = item.familyNum?.intValue
-                                self.familyMemberCountWrite = familyNum!
-                                self.familyIdWrite = treeId!
-                                self.treeObjectId = (item.objectId?.stringValue)!
-                                familyTreeName = treeName!
+                                let treeName = (item.familyName?.stringValue)!
+                                let treeId = (item.familyId?.intValue)!
+                                let familyNum = (item.familyNum?.intValue)!
+                                    self.treeData.familyMemberCountWrite = familyNum
+                                    self.treeData.familyIdWrite = treeId
+                                    self.treeData.treeObjectId = (item.objectId?.stringValue)!
+                                    self.treeData.familyTreeName = treeName
+                                    print("treeName:"+treeName)
+                                    self.treeData.indexTree = (item.indexTree?.intValue)!
+
                                     //更新
                                     do {
-                                        let todo = LCObject(className: "_User", objectId: objectId!)
+                                        let todo = LCObject(className: "_User", objectId: user.objectId)
                                         try todo.set("familyTreeId", value: treeId)
                                         todo.save { (result) in
                                             switch result {
@@ -131,61 +149,93 @@ struct HomeView: View {
                                     }
                                 }
                                 break
-                                    
+
                             case .failure(error: let error):
                                 print(error)
                             }
                         }
                     }else{
                         //加入者
-                        isHaveTree = false
-                        let treeId = todo.familyTreeId?.intValue
-                        if(treeId == nil){
-                            self.familyIdWrite = 0
-                        }else{
-                            self.familyIdWrite = treeId!
-                            let familyTree = LCQuery(className: "familyTree")
-                            familyTree.whereKey("familyId", .equalTo(treeId!))
-                            _ = familyTree.find { result in
-                                switch result {
-                                case .success(objects: let tree):
-                                    for item in tree{
-                                    let treeName = item.familyName?.stringValue
-                                    let familyNum = item.familyNum?.intValue
-                                    self.familyMemberCountWrite = familyNum!
-                                    self.treeObjectId = (item.objectId?.stringValue)!
-                                    familyTreeName = treeName!
+                        treeData.isHaveTree = false
+                        let query = LCQuery(className: "InvitationUser")
+                        query.whereKey("userId", .equalTo(createrId))
+                        _ = query.find { result in
+                            switch result {
+                            case .success(objects: let students):
+                                for item in students{
+                                    let status = (item.status?.intValue)!
+                                    let treeId = (item.treeId?.intValue)!
+                                    if(status == 1){
+                                        do {
+                                            let todo = LCObject(className: "_User", objectId: user.objectId)
+                                            try todo.set("familyTreeId", value: treeId)
+                                            todo.save { (result) in
+                                                switch result {
+                                                case .success:
+                                                    //加入者
+                                                  
+                                                    let treeId = todo.familyTreeId?.intValue
+                                                    if(treeId == nil){
+                                                        self.treeData.familyIdWrite = 0
+                                                    }else{
+                                                        self.treeData.familyIdWrite = treeId!
+                                                        let familyTree = LCQuery(className: "familyTree")
+                                                        familyTree.whereKey("familyId", .equalTo(treeId!))
+                                                        _ = familyTree.find { result in
+                                                            switch result {
+                                                            case .success(objects: let tree):
+                                                                for item in tree{
+                                                                let treeName = item.familyName?.stringValue
+                                                                let familyNum = item.familyNum?.intValue
+                                                                    self.treeData.familyMemberCountWrite = familyNum!
+                                                                    self.treeData.treeObjectId = (item.objectId?.stringValue)!
+                                                                    self.treeData.familyTreeName = treeName!
+                                                                    self.treeData.indexTree = (item.indextree?.intValue)!
+
+                                                                }
+                                                                break
+
+                                                            case .failure(error: let error):
+                                                                print(error)
+                                                            }
+                                                        }
+                                                    }
+                                                    break
+                                                case .failure(error: let error):
+                                                    print(error)
+                                                }
+                                            }
+                                        } catch {
+                                            print(error)
+                                        }
                                     }
-                                    break
-                                        
-                                case .failure(error: let error):
-                                    print(error)
                                 }
+                                break
+                            case .failure(error: let error):
+                                print(error)
                             }
                         }
+                  
                      
                         
                     }
-                  
+
 
                 case .failure(error: let error1):
                     print(error1)
                 }
-      
+
             }
 
     }
 }
 
     struct TitleDown: View {
-        @Binding var familyTreeName:String
-        @Binding var familyIdWrite : Int
-        @Binding var familyMemberCountWrite : Int
-        @Binding var familyTreeWrite : Int
-        @Binding var isHaveTree : Bool
-        @Binding var indexTree : Int
-        @Binding var treeObjectId : String
+
+        @StateObject var treeData = FamilyTreeData()
         @Binding var username : String
+        @Binding var avatar : String
+        
         var imgsTree = ["tree","second tree","third tree"]
         var body: some View {
             GeometryReader { geo in
@@ -193,10 +243,10 @@ struct HomeView: View {
                 
                 HStack() {
                     
-                    Text("家庭ID：\(familyIdWrite)").font(.system(size: 14))
+                    Text("家庭ID：\(treeData.familyIdWrite)").font(.system(size: 14))
                     Spacer()
                     Text("总共成员:").font(.system(size: 14))
-                        + Text("\(familyMemberCountWrite)").foregroundColor(Color("AccentColor"))
+                        + Text("\(treeData.familyMemberCountWrite)").foregroundColor(Color("AccentColor"))
                         .font(.system(size: 16))
                     
                 }.padding(EdgeInsets(top: 0, leading: 7, bottom: 10, trailing: 20))
@@ -207,7 +257,7 @@ struct HomeView: View {
                         .offset(x:-3)
                     HStack {
                         HStack {
-                            Image(imgsTree[familyTreeWrite])
+                            Image(imgsTree[treeData.indexTree])
                                 .animation(.interpolatingSpring(stiffness: 20, damping: 5))
                                 .scaledToFit()
                                 .offset(y: 20)
@@ -216,22 +266,22 @@ struct HomeView: View {
                         
                         //切换家庭树
                         Button(action: {
-                            if indexTree == 2{
+                            if treeData.indexTree == 2{
                                 withAnimation{
-                                    indexTree = 0
+                                    treeData.indexTree = 0
                                 }
                                 
                             }else{
                                 withAnimation{
-                                    indexTree = indexTree + 1
+                                    treeData.indexTree = treeData.indexTree + 1
                                 }
                                 
                             }
-                            familyTreeWrite = indexTree
-                            if(treeObjectId != ""){
+                            treeData.familyTreeWrite = treeData.indexTree
+                            if(treeData.treeObjectId != ""){
                             do {
-                                let familyTree = LCObject(className: "familyTree", objectId: treeObjectId)
-                                try familyTree.set("indexTree", value: familyTreeWrite)
+                                let familyTree = LCObject(className: "familyTree", objectId: treeData.treeObjectId)
+                                try familyTree.set("indexTree", value: treeData.familyTreeWrite)
                                 familyTree.save { (result) in
                                     switch result {
                                     case .success:
@@ -251,14 +301,23 @@ struct HomeView: View {
                             
                         }
                         .padding(EdgeInsets(top:280,leading:-80,bottom:0,trailing:0))
-                        if(!isHaveTree){
-                            AddFamilyButton(username: $username)
+                        if(!treeData.isHaveTree){
+                            AddFamilyButton(username: $username, avatar: $avatar)
                         }
                         
                     }
                     .padding(EdgeInsets(top:0,leading:0,bottom:0,trailing:0))
-                    
-                    FamilyBlackboard(familyTreeName: $familyTreeName)
+                    //家庭树名字
+                    //家庭树改名字在个人中心处改
+                    HStack {
+                        Text("\(treeData.familyTreeName)")
+                        .font(.system(size: 16))
+                        .foregroundColor(Color("FamliyTreeNameColor"))
+                        .frame(width: 90, height: 0)
+                        .offset(x: -123, y: 143)
+                        .multilineTextAlignment(.center)
+                      
+                    }
                     Textfield02()
 
                     
@@ -273,30 +332,29 @@ struct HomeView: View {
 //家庭树改名字在个人中心处改
 
     
-struct FamilyBlackboard: View {
-    //家庭树名字
-    @Binding var familyTreeName:String
-    @State var isPresented = false
-    
-        var body: some View {
-            
-            HStack {
-                Text("\(familyTreeName)")
-                .font(.system(size: 16))
-                .foregroundColor(Color("FamliyTreeNameColor"))
-                .frame(width: 90, height: 0)
-                .offset(x: -123, y: 143)
-                .multilineTextAlignment(.center)
-              
-            }
-        }
-    }
-//struct HomeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeView()
+//struct FamilyBlackboard: View {
+//    //家庭树名字
+////    @Binding var familyTreeName:String
+//    @StateObject var treeData = FamilyTreeData()
+//
+//
+//        var body: some View {
+//
+//            HStack {
+//                Text("\(treeData.familyTreeName)")
+//                .font(.system(size: 16))
+//                .foregroundColor(Color("FamliyTreeNameColor"))
+//                .frame(width: 90, height: 0)
+//                .offset(x: -123, y: 143)
+//                .multilineTextAlignment(.center)
+//
+//            }
+//
+//
+//        }
 //
 //    }
-//}
+//
 }
 
 
@@ -323,6 +381,7 @@ struct AddFamilyButton: View {
     @State private var familyIDAlert = ""
     @State private var showingAlert = false
     @Binding var username : String
+    @Binding var avatar : String
   
     var modalView: some View {
         GeometryReader { geo in
@@ -357,6 +416,7 @@ struct AddFamilyButton: View {
                                 InvitationUser.treeId = Int(familyIDAlert)
                                 InvitationUser.userId = LCApplication.default.currentUser?.id
                                 InvitationUser.username = username
+                                InvitationUser.url = avatar
                                 
                                 _ =  InvitationUser.save { result in
                                       switch result {
@@ -477,10 +537,11 @@ struct Title: View {
     @Binding var isFirstLogin : LCBool
     @Binding var isPressed1 : Bool
     @Binding var objectId:LCString
-    @Binding var familyTreeName:String
+//    @Binding var familyTreeName:String
     @Binding var status : Int
+//    @StateObject var treeData = FamilyTreeData()
     
-    
+    @ObservedObject var treeData : FamilyTreeData
     
     var body: some View {
         HStack {
@@ -491,7 +552,7 @@ struct Title: View {
                        alignment:.center)
             
                 .onTapGesture {
-                    if(status == 1){
+                    if(treeData.isHaveTree){
                         withAnimation {
                         self.showLeftMenu  = true
                         }
@@ -510,7 +571,7 @@ struct Title: View {
                 Image("person")
             }
             .fullScreenCover(isPresented: $isPersonPresented, content: {
-                InformUIView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, treeName: $familyTreeName)
+                InformUIView(treeData: treeData, isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId)
             })
             
         }.padding(15)

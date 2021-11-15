@@ -7,11 +7,14 @@
 
 import SwiftUI
 import LeanCloud
+import YPImagePicker
+import Kingfisher
 
 struct PersonItem{
     let name : String
     let id : Int
     let objectId : String
+    let url : String
 }
 
 class Person: ObservableObject {
@@ -21,8 +24,9 @@ class Person: ObservableObject {
 
 struct LeftMenuView: View {
     
-    
+//    @ObservedObject var treeData : FamilyTreeData
     @ObservedObject var person = Person()
+    @Binding var familyMemberCountWrite : Int
 
    
     var body: some View {
@@ -38,10 +42,20 @@ struct LeftMenuView: View {
                         HStack {
                             VStack {
                                 HStack {
-                                    Image("father")
-                                        .resizable()
-                                        .frame(width: 50, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                                        .shadow(color: Color.gray, radius: 3, x: 5, y: 5)
+                                    if(item.url == "father\n" || item.url == "" || item.url == "father"){
+                                        Image("father")
+                                            .resizable()
+                                            .frame(width: 50, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                            .shadow(color: Color.gray, radius: 3, x: 5, y: 5)
+                                    }else{
+                                        KFImage.url(URL(string:item.url))
+                                            .resizable()
+                                            .frame(width: 50, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                            .cornerRadius(40)
+                                            .shadow(color: Color.gray, radius: 3, x: 5, y: 5)
+                                    }
+                                    
+                                   
                                     Text(item.name)
                                         .foregroundColor(.black)
                                         .font(.headline)
@@ -71,6 +85,53 @@ struct LeftMenuView: View {
                                         .border(Color.red)
                                         .cornerRadius(10)
                                         Button(action: {
+                                            //获取tree ID
+                                            //获取object ID
+                                            //修改成员加一
+                                            //获取tree ID
+                                            let queryTreeId = LCQuery(className: "InvitationUser")
+                                            let _ = queryTreeId.get(item.objectId) { (result) in
+                                                switch result {
+                                                case .success(object: let tree):
+                                                    let treeId = (tree.get("treeId")?.intValue)!
+                                                //获取object ID
+                                                    let queryObjectId = LCQuery(className: "familyTree")
+                                                    queryObjectId.whereKey("familyId", .equalTo(treeId))
+                                                    _ = queryObjectId.find { result in
+                                                        switch result {
+                                                        case .success(objects: let id):
+                                                            for item in id{
+                                                                let objectId = (item.objectId?.stringValue)!
+                                                                let familyNum = (item.get("familyNum")?.intValue)!
+                                                                familyMemberCountWrite = familyNum
+                                                                do {
+                                                                    let editFamilyNum = LCObject(className: "familyTree", objectId: objectId)
+                                                                    try editFamilyNum.set("familyNum", value: familyNum + 1)
+                                                                    editFamilyNum.save { (result) in
+                                                                        switch result {
+                                                                        case .success:
+                                                                            familyMemberCountWrite =  familyNum + 1
+                                                                            break
+                                                                        case .failure(error: let error):
+                                                                            print(error)
+                                                                        }
+                                                                    }
+                                                                    
+                                                                } catch {
+                                                                    print(error)
+                                                                }
+                                                                
+                                                            }
+                                                            break
+                                                        case .failure(error: let error):
+                                                            print(error)
+                                                        }
+                                                    }
+
+                                                case .failure(error: let error):
+                                                    print(error)
+                                                }
+                                            }
                                             do {
                                                 let todo = LCObject(className: "InvitationUser", objectId: item.objectId)
                                                 try todo.set("status", value: 1)
@@ -140,7 +201,7 @@ struct LeftMenuView: View {
                             switch result {
                             case .success(objects: let user):
                                 for item in user{
-                                    let personItem = PersonItem(name:(item.username?.stringValue)!, id: ((item.userId?.intValue)!) ,objectId:(item.objectId?.stringValue)!)
+                                    let personItem = PersonItem(name:(item.username?.stringValue)!, id: ((item.userId?.intValue)!) ,objectId:(item.objectId?.stringValue)!, url: (item.url?.stringValue)!)
                                     self.person.items.append(personItem)
         
 
@@ -162,8 +223,4 @@ struct LeftMenuView: View {
     }
 }
 
-struct LeftMenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        LeftMenuView()
-    }
-}
+

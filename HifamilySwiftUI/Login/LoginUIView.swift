@@ -55,12 +55,23 @@ func isPasswordRuler(password:String) -> Bool {
       }
   }
 
-
+//struct entity_user{
+//    var username : String
+//    var password : String
+//    var againPassword: String
+//
+//    init() {
+//        username = ""
+//        password = ""
+//        againPassword = ""
+//    }
+//
+//}
 struct LoginUIView: View {
-    
+//    @State var user1 : entity_user
     @State var pageType = "signin"
     @State var isAnimating = false
-    @State var username = ""
+@State var username = ""
     @State var password = ""
     @State var againPassword = ""
     

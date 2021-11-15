@@ -17,6 +17,7 @@ struct IsCreaterView: View {
     @State var error2 = false
     @Binding var isLogin : Bool
     @State var error3 : String = ""
+    
     var body: some View {
         GeometryReader { geo in
         ZStack {
