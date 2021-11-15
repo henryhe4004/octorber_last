@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct ThreeBlockView: View {
+    
+//    @ObservedObject var familyLetterMumber:LLMumber
+//    @ObservedObject var indexLe:indexLetter
+    @Binding var name:String
+    @Binding var letter_1:peopleLetter
+    
     var body: some View {
         VStack {
             HStack {
@@ -15,7 +21,7 @@ struct ThreeBlockView: View {
                     .foregroundColor(orangeColor)
                     .frame(width: 2, height: 21)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0))
-                Text("我收到的家书")
+                Text("\(name)收到的家书")
                     .font(.system(size: 19))
                     .foregroundColor(grayColor)
                 Spacer()
@@ -35,7 +41,7 @@ struct ThreeBlockView: View {
                                 .foregroundColor(orangeColor)
                             VStack {
                                 HStack {
-                                    Text("我的妍大宝")
+                                    Text("\(letter_1.thisLetter[0].receiveName)")
                                         .foregroundColor(.white)
                                         .font(.system(size: 15.5))
                                     Spacer()
@@ -43,7 +49,7 @@ struct ThreeBlockView: View {
                                 .frame(width: 125, height: 21)
                                     
                                 HStack {
-                                    Text("多吃点，不要减肥，晚上 不要出门，要学会照顾自 己，常回家看看，给你做 你爱吃的红烧带鱼~🤗")
+                                    Text("\(letter_1.thisLetter[0].letterContent)")
                                         .foregroundColor(.white)
                                         .font(.system(size: 11))
                                         .frame(width: 125, height: 85,alignment: .topLeading)
@@ -52,13 +58,13 @@ struct ThreeBlockView: View {
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: -10, trailing: 0))
                                 VStack {
                                     HStack {
-                                        Text("爱你的妈妈")
+                                        Text("\(letter_1.thisLetter[0].sendName)")
                                             .foregroundColor(.white)
                                             .font(.system(size: 13))
                                             .frame(width: 70,alignment: .trailing)
                                     }.frame(width: 120,height: 21, alignment: .trailing)
                                     HStack {
-                                        Text("2021.07.05")
+                                        Text("\(letter_1.thisLetter[0].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
                                             .foregroundColor(.white)
                                             .font(.system(size: 8))
                                     }
@@ -77,7 +83,7 @@ struct ThreeBlockView: View {
                                 .shadow(color: shadowColor, radius: 8)
                             VStack {
                                 HStack {
-                                    Text("笨姐姐")
+                                    Text("\(letter_1.thisLetter[1].receiveName)")
                                         .foregroundColor(grayColor)
                                         .font(.system(size: 15.5))
                                     Spacer()
@@ -86,7 +92,7 @@ struct ThreeBlockView: View {
                                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 0.1, trailing: 0))
 
                                 HStack {
-                                    Text("😶记得把早饭吃了我去游泳了。都8:30了还不起床")
+                                    Text("\(letter_1.thisLetter[1].letterContent)")
                                         .frame(width: 119, height: 60,alignment: .topLeading)
                                         .lineSpacing(10.5)
                                         .font(.system(size: 11))
@@ -98,7 +104,7 @@ struct ThreeBlockView: View {
                                 VStack {
                                     HStack {
                                         Spacer()
-                                        Text("老弟")
+                                        Text("\(letter_1.thisLetter[1].sendName)老弟")
                                             .foregroundColor(grayColor)
                                             .font(.system(size: 13))
                                             .frame(width: 70,alignment: .trailing)
@@ -107,7 +113,7 @@ struct ThreeBlockView: View {
                                     
                                     HStack {
                                         Spacer()
-                                        Text("2021.07.05")
+                                        Text("\(letter_1.thisLetter[1].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
                                             .foregroundColor(Color(UIColor(red: 0.55, green: 0.55, blue: 0.55,alpha:1)))
                                             .font(.system(size: 8))
                                             .frame(alignment: .trailing)
@@ -135,7 +141,7 @@ struct ThreeBlockView: View {
                         VStack {
                             VStack {
                                 HStack {
-                                    Text("小女")
+                                    Text("\(letter_1.thisLetter[2].receiveName)")
                                         .foregroundColor(grayColor)
                                         .font(.system(size: 15.5))
                                         .frame(alignment: .leading)
@@ -144,7 +150,7 @@ struct ThreeBlockView: View {
                                 .padding(EdgeInsets(top: 15, leading: 7, bottom: 0, trailing: 0))
                                 
                                 HStack {
-                                    Text("在外学习，不要恋家。在外学在外学习，不要恋家。")
+                                    Text("\(letter_1.thisLetter[2].letterContent)")
                                         .lineSpacing(5)
                                         .font(.system(size: 11))
                                         .foregroundColor(grayColor)
@@ -154,7 +160,7 @@ struct ThreeBlockView: View {
                                 .padding(EdgeInsets(top: 2,leading: 0, bottom: -5, trailing: 0))
                                 
                                 HStack {
-                                    Text("爸爸")
+                                    Text("\(letter_1.thisLetter[2].sendName)")
                                         .foregroundColor(grayColor)
                                         .font(.system(size: 13))
                                         .frame(width: 70,height:21,alignment: .trailing)
@@ -162,7 +168,7 @@ struct ThreeBlockView: View {
                                 .padding(EdgeInsets(top: -39, leading: 0, bottom: 0, trailing: 0))
                                 .frame(width: 110,alignment: .trailing)
                                 HStack {
-                                    Text("2021.07.05")
+                                    Text("\(letter_1.thisLetter[2].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
                                         .foregroundColor(Color(UIColor(red: 0.55, green: 0.55, blue: 0.55,alpha:1)))
                                         .font(.system(size: 8))
                                         .frame(alignment: .trailing)
@@ -183,8 +189,8 @@ struct ThreeBlockView: View {
     }
 }
 
-struct ThreeBlockView_Previews: PreviewProvider {
-    static var previews: some View {
-        ThreeBlockView()
-    }
-}
+//struct ThreeBlockView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ThreeBlockView()
+//    }
+//}
