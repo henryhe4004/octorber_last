@@ -177,6 +177,8 @@ struct MissView: View {
 //            self.fold.toggle()
         }
         .overlay(RoundedRectangle(cornerRadius: 20.0, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
+        .frame(width: 300, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        .offset(x:geometry.size.width/8, y: geometry.size.height/12)
         }
     }
     

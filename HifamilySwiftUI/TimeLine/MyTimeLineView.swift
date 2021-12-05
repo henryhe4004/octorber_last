@@ -51,7 +51,7 @@ import SwiftUI
 
 struct MyTimeLineView: View {
     @State var isPushed = false
-    
+    @ObservedObject var timeLiner : TimeLiner
     var body: some View {
         NavigationView {
         VStack {
@@ -62,24 +62,24 @@ struct MyTimeLineView: View {
                            height:23,
                            alignment:.center)
                 Spacer()
-                Text("写家书")
+                Text("Time Liner")
                     .foregroundColor(Color.black)
                     .font(.system(size: 22))
                 Spacer()
-                NavigationLink(destination: EditTimelineView(isPushed: $isPushed), isActive: $isPushed) { Text("寄出")
+                NavigationLink(destination: EditTimelineView(isPushed: $isPushed), isActive: $isPushed) { Text("添加")
                         .foregroundColor(Color.black)
                         .font(.system(size: 22))
                 }.navigationBarHidden(true)
                 .navigationBarTitle("返回")
             }.padding()
-            TimeLineRight()
+            TimeLineRight(timeLiner: timeLiner)
         }
         }
     }
 }
 
-struct MyTimeLineView_Previews: PreviewProvider {
-    static var previews: some View {
-        MyTimeLineView()
-    }
-}
+//struct MyTimeLineView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MyTimeLineView()
+//    }
+//}

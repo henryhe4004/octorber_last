@@ -11,11 +11,11 @@ import LeanCloud
 struct HomeUIView: View {
     @State private var index = 3
     @ObservedObject var familyTree:FamilyTree = FamilyTree()
-    @ObservedObject var album:Album 
+    @ObservedObject var album:Album
     @ObservedObject var miss:Miss = Miss()
     @ObservedObject var myLetter:MyLetter = MyLetter()
     @ObservedObject var familyLetterMumber:LLMumber = LLMumber()
-    
+    @ObservedObject var timeLiner:TimeLiner = TimeLiner()
     @Binding var isLogin : Bool
 //    @State var isFirstLogin = true
     @Binding var isFirstLogin : LCBool
@@ -27,10 +27,11 @@ struct HomeUIView: View {
 //            FamilyTreeView()
             ImageUIView(album:album).tabItem { Image(index == 1 ? "Iconly-Bulk-Activity" : "fIconly-Bulk-Activity") }.tag(1).onAppear(perform: {
                     album.update()
-                if #available(iOS 15.0, *) {
-                    let appearance = UITabBarAppearance()
-                    UITabBar.appearance().scrollEdgeAppearance = appearance
-                }
+                //改回来
+//                if #available(iOS 15.0, *) {
+//                    let appearance = UITabBarAppearance()
+//                    UITabBar.appearance().scrollEdgeAppearance = appearance
+//                }
                     
             })
             LetterView(familyLetterMumber:familyLetterMumber, myLetter: myLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
@@ -42,17 +43,23 @@ struct HomeUIView: View {
                 }
             })
             HomeView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId).tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
-                if #available(iOS 15.0, *) {
-                    let appearance = UITabBarAppearance()
-                    UITabBar.appearance().scrollEdgeAppearance = appearance
-                }
+                //改回来
+//                if #available(iOS 15.0, *) {
+//                    let appearance = UITabBarAppearance()
+//                    UITabBar.appearance().scrollEdgeAppearance = appearance
+//                }
             }
             LoveView(familyTree: familyTree,miss:miss).tabItem { Image( index == 4 ? "Iconly-Bulk-Heart" : "fIconly-Bulk-Heart") }.tag(4).onAppear(perform: {
                 familyTree.queryUser()
                 miss.queryMiss()
             })
 
-            MyTimeLineView().tabItem { Image(index == 5 ? "fIconly-Bulk-Chart" : "Iconly-Bulk-Chart") }.tag(5)
+            MyTimeLineView(timeLiner: timeLiner).tabItem { Image(index == 5 ? "fIconly-Bulk-Chart" : "Iconly-Bulk-Chart") }.tag(5).onAppear(
+                perform: {
+                    timeLiner.queryFamilyId()
+                }
+            )
+                
         
         }
         .navigationBarTitle("",displayMode: .inline)
@@ -61,8 +68,4 @@ struct HomeUIView: View {
     }
 }
 
-//struct HomeUIView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeUIView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId,album:Album())
-//    }
-//}
+

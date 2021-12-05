@@ -1,8 +1,8 @@
 //
-//  ImagePickerView.swift
+//  TimeLineImageUIView.swift
 //  HifamilySwiftUI
 //
-//  Created by 潘炳名 on 2021/9/18.
+//  Created by 潘炳名 on 2021/11/20.
 //
 
 import SwiftUI
@@ -10,18 +10,19 @@ import YPImagePicker
 import LeanCloud
 import AVFoundation
 
-struct ImagePickerView: View {
+struct TimeLineImageUIView: View {
     @State private var showYPImagePickerView = true
-    @Binding var url : String
-    @ObservedObject var MyImage : Imagepicker
+    @ObservedObject var timeLineImage : TimeLineImage
+//    @Binding var url : String
+//    @ObservedObject var MyImage : Imagepicker
     var body: some View {
            VStack {
-            MediaPicker( url1 : $url, MyImage: MyImage)
+               MediaPicker2( timeLineImage:timeLineImage)
            }
        }
 }
 
-func resizedImage(image : UIImage) -> UIImage? {
+func resizedImage2(image : UIImage) -> UIImage? {
     let boundingRect = CGRect(x: 0, y: 0, width: 150, height:CGFloat.greatestFiniteMagnitude)
 
 
@@ -35,9 +36,10 @@ func resizedImage(image : UIImage) -> UIImage? {
    return img
 }
 
-struct MediaPicker: UIViewControllerRepresentable {
-    @Binding var url1 : String
-    @ObservedObject var MyImage : Imagepicker
+struct MediaPicker2: UIViewControllerRepresentable {
+    @ObservedObject var timeLineImage : TimeLineImage
+//    @Binding var url1 : String
+//    @ObservedObject var MyImage : Imagepicker
     func makeUIViewController(context: Context) -> YPImagePicker {
         var config = YPImagePickerConfiguration()
         //是否可以滑动
@@ -64,11 +66,11 @@ struct MediaPicker: UIViewControllerRepresentable {
         config.bottomMenuItemSelectedTextColour = UIColor(Color("AccentColor"))
         config.bottomMenuItemUnSelectedTextColour = UIColor(Color.white)
         //最大5倍变焦
-        config.maxCameraZoomFactor = 5.0
+        config.maxCameraZoomFactor = 10.0
         config.library.defaultMultipleSelection = true
         //图片和视频
         config.library.mediaType = YPlibraryMediaType.photo
-        config.library.maxNumberOfItems = 1
+        config.library.maxNumberOfItems = 9
         //不要预处理为最近一张图片
         config.library.preSelectItemOnMultipleSelection = false;
         config.library.spacingBetweenItems = 3
@@ -87,20 +89,20 @@ struct MediaPicker: UIViewControllerRepresentable {
                 switch item {
                 case let .photo(photo) :
                     do {
-                        let image123 = resizedImage(image: photo.modifiedImage!)
+                        let image123 = resizedImage(image: photo.modifiedImage ??  photo.originalImage)
                         let file = LCFile(payload: .data(data: (image123?.pngData()!)!))
                         _ = file.save { result in
                             switch result {
                             case .success:
                                 if let value = file.url?.value {
-                                    url1 = value
+                                    timeLineImage.addImageUrl(img1: value)
                                     print("文件保存完成。URL: \(value)")
                                 }
                             case .failure(error: let error):
                                 print(error)
                             }
                         }
-                        MyImage.addImage( img1 : photo.modifiedImage ??  photo.originalImage)
+                        timeLineImage.addImage( img1 : photo.modifiedImage ??  photo.originalImage)
                         
                     }
                 case .video(let video) :
@@ -121,8 +123,4 @@ struct MediaPicker: UIViewControllerRepresentable {
     typealias UIViewControllerType = YPImagePicker
     
 }
-//struct ImagePickerView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ImagePickerView()
-//    }
-//}
+//import SwiftUI

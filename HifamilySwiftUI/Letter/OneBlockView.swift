@@ -13,7 +13,23 @@ struct OneBlockView: View {
 //    @ObservedObject var indexLe:indexLetter
     @Binding var name:String
     @Binding var letter_1:peopleLetter
-    
+    @Binding var isLetterSelected : Bool
+//    @Binding var isLetterSelected : Bool
+    @Binding var name1 : String
+    @Binding
+//    @State
+    var content : String
+//        = "多吃点，不要减肥，晚上 不要出门，要学会照顾自 己，常回家看看，给你做 你爱吃的红烧带鱼~🤗"
+    @Binding
+//    @State
+    var yourName : String
+//        = "爱你的妈妈"
+    @Binding
+//    @State
+    var date : String
+//        = "2021.07.05"
+    @Binding
+    var namefirst : String
     
     var body: some View {
         VStack {
@@ -88,6 +104,14 @@ struct OneBlockView: View {
                     }.padding(EdgeInsets(top: -130, leading: 0, bottom: 0, trailing: 0))
                 }
                 .frame(height: 156,alignment: .bottom)
+                .onTapGesture(perform: {
+                    isLetterSelected = true
+                    name1 = letter_1.thisLetter[0].receiveName
+                    content = letter_1.thisLetter[0].letterContent
+                    yourName = letter_1.thisLetter[0].sendName
+                    date = letter_1.thisLetter[0].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash))
+                    namefirst = name
+                })
         }
     }
 }

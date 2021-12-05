@@ -148,7 +148,8 @@ struct SelectImageToAlbumDetailView: View {
                             //                              .placeholder(UIImage("AppIcon"))
                             //                              .setProcessor(processor)
                                 .loadDiskFileSynchronously()
-                                .cacheMemoryOnly()
+//                                .cacheMemoryOnly()
+                                .cacheOriginalImage()
                                 .fade(duration: 0.25)
                             //                              .lowDataModeSource(.network(lowResolutionURL))
                                  .onProgress { receivedSize, totalSize in  }

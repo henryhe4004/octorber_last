@@ -142,7 +142,7 @@ struct ImageUIView: View {
 //                        })
 //                            }
                         PullToRefreshView(header: RefreshDefaultHeader(), footer: RefreshDefaultFooter()) {
-                            albumUIView(album: album, detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected,selectWho:$SelectWho)
+                            albumUIView(album: album, detailImage: $detailImage, detailText: $detailText,isSelected: $isSelected,selectWho:$SelectWho).contentShape(Rectangle())
                         }.environmentObject(listState)
                     }
 //                    if(indexSelected == 2){
@@ -166,7 +166,7 @@ struct ImageUIView: View {
                             Rectangle().fill(Color.gray).opacity(0.5)
                             VStack{
                                 FlippingView(isSelected: $isSelected, album: album,selectWho: $SelectWho)
-                                }
+                                }.contentShape(Rectangle())
                             }
                         }
 //                    if(isSelected1){

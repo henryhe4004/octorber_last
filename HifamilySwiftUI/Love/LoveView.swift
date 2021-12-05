@@ -49,7 +49,7 @@ func checkDiff(date:Date) -> Int {
   // 固定日期
   let endDate = formatter.date(from: formatter.string(from: date))
   
-  let diff:DateComponents = calendar.dateComponents([.day], from: startDate!, to: endDate!)
+  let diff:DateComponents = calendar.dateComponents([.day], from: endDate!, to: startDate!)
   return diff.day!
 }
 
@@ -102,16 +102,15 @@ final class Miss : ObservableObject{
         missQuery.whereKey("receiver",.equalTo(objectId!))
         missQuery.whereKey("createdAt",.descending)
         missQuery.limit = 10
-        print("哈哈")
         _ = missQuery.find(){ (result) in
             switch result {
-           
                 case .success(objects: let miss):
                     self.MissMember = miss
                     for item in miss{
                         print("miss\((item.updatedAt?.dateValue!)!)")
                         if(checkDiff(date: (item.updatedAt?.dateValue!)!)<=1){
-                          
+                            print("😊😊😊😊😊😊😊😊")
+                            print(checkDiff(date: (item.updatedAt?.dateValue!)!))
                             self.MissToday.append((item.receiver?.stringValue!)!)
                             let contentQuery = LCQuery(className: "_User")
                             contentQuery.whereKey("objectId",.equalTo((item.receiver?.stringValue!)!))
@@ -332,9 +331,9 @@ struct LoveView: View {
                                height:23,
                                alignment:.center)
                 }.padding()
-                
-                Divider()
+                    Divider()
             ZStack {
+            
                 ScrollView(.vertical, showsIndicators: false)
                 {
                 HStack{
@@ -376,7 +375,7 @@ struct LoveView: View {
                             
                                         }
                             .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, height: 50, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                            .animation(.easeInOut)
+//                            .animation(.easeInOut,value:nil)
 //                                                .buttonStyle(MyButtonStyle())
                        
                                                 .background( who == index ? LinearGradient(gradient: Gradient(colors: [Color.init(red : 255/255,green: 144/255,blue: 13/255), Color.init(red: 255/255, green: 169/255, blue: 54/255)]), startPoint: .topLeading, endPoint: .bottomTrailing) : LinearGradient(gradient: Gradient(colors: [Color.white, Color.white]), startPoint: .topLeading, endPoint: .bottomTrailing)).cornerRadius(15)
@@ -727,6 +726,7 @@ struct LoveView: View {
                         Rectangle().fill(Color.gray).opacity(0.5)
                     VStack{
                         MissView( missSetting : $missSetting,familyTree:familyTree)
+                            .contentShape(Rectangle())
                     }
                     }
                 }
@@ -735,7 +735,9 @@ struct LoveView: View {
                     ZStack{
                         Rectangle().fill(Color.gray).opacity(0.5)
                     VStack{
-                        LoveHistoryView( miss: miss, loveHistory : $loveHistory).onAppear(perform: {
+                        LoveHistoryView( miss: miss, loveHistory : $loveHistory)
+                            .contentShape(Rectangle())
+                            .onAppear(perform: {
                             miss.setempty()
                             miss.queryMissHistory()
                             miss.queryMissByHistory()

@@ -38,6 +38,7 @@ struct IssueUIView: View {
     @State var isIssue : Bool = false
     @State var inputImage : UIImage = UIImage()
     @State var person : String = ""
+    @State var errorIssue : Bool = false
 //    func loadImage() {
 //        guard let inputImage = UIImage(named: "Example") else { return }
 //     // 将UIImage转换为CIImage
@@ -137,7 +138,6 @@ struct IssueUIView: View {
         .navigationBarItems(trailing: Button(action:{
             self.isIssue.toggle()
             do {
-                
                 let user = LCApplication.default.currentUser
                 let objectId = user?.objectId?.stringValue!
                 let query = LCQuery(className: "_User")
@@ -160,6 +160,9 @@ struct IssueUIView: View {
                                 switch result {
                                 case .success:
                                     // 成功保存之后，执行其他逻辑
+                                    person = ""
+                                    content = ""
+                                    inputImage = UIImage()
                                     break
                                 case .failure(error: let error):
                                     // 异常处理

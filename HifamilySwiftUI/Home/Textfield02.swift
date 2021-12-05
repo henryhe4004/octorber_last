@@ -7,9 +7,15 @@
 
 import SwiftUI
 import CoreData
+//import EFQRCode
+import Foundation
+import AVFoundation
+import LeanCloud
 
 
 struct Textfield02: View {
+    
+    
     
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(entity: MemberModel.entity(),
@@ -19,7 +25,6 @@ struct Textfield02: View {
     
     @State var isPressed = false //是否按压图片
     @State var keyboardHight : CGFloat = 0
-    
     
     var body: some View {
         ZStack {
@@ -35,8 +40,8 @@ struct Textfield02: View {
                         HStack(alignment: .center) {
                             Spacer()
                                 ScrollView{
-                                AddMemberCardUIView()
-                                    .padding(20)
+//                                AddMemberCardUIView()
+//                                    .padding(20)
                                 }
                                 .frame(width: 280, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                                 
@@ -105,11 +110,7 @@ struct Textfield02: View {
     }
 }
 
-struct Textfield02_Previews: PreviewProvider {
-    static var previews: some View {
-        Textfield02()
-    }
-}
+
 
 struct KeyboardHost<Content: View>: View {
     let view: Content
@@ -154,6 +155,7 @@ struct KeyboardHost<Content: View>: View {
 
 struct avaterTree: View {
     @Binding var isPressed : Bool;
+    @State private var offset = CGSize.zero
     var body: some View {
         VStack {
             HStack {
@@ -196,7 +198,14 @@ struct avaterTree: View {
                     .offset(x: 40, y: -40)
                 
             }
+    
+                
+        // 二维码
+
             
         }.offset(x: 10, y: -100)
     }
 }
+
+
+

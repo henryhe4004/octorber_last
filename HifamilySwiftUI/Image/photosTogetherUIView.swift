@@ -117,11 +117,11 @@ struct photosTogetherUIView: View {
                 }){
                     
                     KFImage.url(URL(string:imageTogether.ImageTo[index].frontPhoto))
-                       
 //                              .placeholder(UIImage("AppIcon"))
 //                              .setProcessor(processor)
                               .loadDiskFileSynchronously()
-                              .cacheMemoryOnly()
+                              .cacheOriginalImage()
+//                              .cacheMemoryOnly()
                               .fade(duration: 0.25)
 //                              .lowDataModeSource(.network(lowResolutionURL))
                         .onProgress { receivedSize, totalSize in  }

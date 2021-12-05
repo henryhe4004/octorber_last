@@ -87,7 +87,6 @@ final class Album : ObservableObject{
                 print(person)
                 self.skip=self.skip+20
                 for item in person{
-                   
                     let imageContent = ImageContent(Content: (item.Content?.stringValue!)!, person: (item.person?.stringValue!)!, image: (item.url?.stringValue!)!, createdAt: formattedDate(date1: (item.createdAt?.dateValue!)!), UserObjectId: (item.UserObjectId?.stringValue!)!,objectId: (item.objectId?.stringValue!)!)
                     self.dateNeed.append(imageContent)
                 }
@@ -144,7 +143,8 @@ struct albumUIView: View {
 //                              .placeholder(UIImage("AppIcon"))
 //                              .setProcessor(processor)
                               .loadDiskFileSynchronously()
-                              .cacheMemoryOnly()
+                              .cacheOriginalImage()
+//                              .cacheMemoryOnly()
                               .fade(duration: 0.25)
 //                              .lowDataModeSource(.network(lowResolutionURL))
                               .onProgress { receivedSize, totalSize in  }

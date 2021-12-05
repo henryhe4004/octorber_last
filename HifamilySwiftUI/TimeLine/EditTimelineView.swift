@@ -11,8 +11,40 @@ import HalfModal
 import HalfASheet
 
 
-
-
+var imageItems : [GridItem] = [
+    GridItem(GridItem.Size.flexible(),spacing:1),
+    GridItem(GridItem.Size.flexible(),spacing:1),
+    GridItem(GridItem.Size.flexible(),spacing:1)
+]
+final class TimeLineImage: ObservableObject {
+    @Published  var img: [UIImage]
+//    @Published var date: [Int]
+    @Published var imgUrl : [String]
+    @Published var imgObjectId : [String]
+    init() {
+        img = []
+        imgUrl = []
+        imgObjectId = []
+    }
+    func addImage(img1 : UIImage){
+        img.append(img1)
+    }
+    func addImageUrl(img1 : String){
+        imgUrl.append(img1)
+    }
+    func addImageObjectId(objectId : String){
+        imgUrl.append(objectId)
+    }
+    func deleteImage(img1 : Int){
+        img.remove(at: img1)
+    }
+    func deleteImageUrl(img1 : Int){
+        imgUrl.remove(at: img1)
+    }
+    func deleteImageObjectId(objectId : Int){
+        imgUrl.remove(at: objectId)
+    }
+}
 struct EditTimelineView: View {
 //    @EnvironmentObject var action: NavigationAction
     
@@ -20,8 +52,7 @@ struct EditTimelineView: View {
     @State var isSelected = -1;
     @State var isPresented = false
     @State var showingAlert = false
-
-
+    @ObservedObject var timeLineImage : TimeLineImage = TimeLineImage()
     @State private var date = Date()
     @State var descriptionEventName = "妍妍"
     @State var thingContent = "未知"
@@ -30,7 +61,7 @@ struct EditTimelineView: View {
     @State var thingIcon = 0
     
     @Binding var isPushed : Bool
-
+   
     
 
     var body: some View {
@@ -52,7 +83,7 @@ struct EditTimelineView: View {
                         .padding(EdgeInsets(top: 20, leading: 33, bottom: 0, trailing: 33))
                     }
                     Divider().frame(width:320)
-                    DescriptionEvent(descriptionEventName: $descriptionEventName, thingContent: $thingContent)
+                    DescriptionEvent(descriptionEventName: $descriptionEventName, thingContent: $thingContent,timeLineImage: timeLineImage)
                     EventType(isSelected: $isSelected, selectedType: $thingType, isPresented: $isPresented)
                     EnableReminder(isReminder: $isReminder)
                     EventMarkers(eventIcon: $thingIcon)
@@ -71,29 +102,81 @@ struct EditTimelineView: View {
             .navigationBarItems(trailing: Button(action:{
 
                 do {
-                    // 构建对象
-                    let timer = LCObject(className: "TimeLine")
-
-                    // 为属性赋值
-                    try timer.set("eventTime", value: date)
-                    try timer.set("eventContent", value: thingContent)
-                    try timer.set("eventPerson", value: descriptionEventName)
-                    try timer.set("eventType", value: thingType)
-                    try timer.set("isWarn", value: isReminder)
-                    try timer.set("eventIcon", value: thingIcon)
-                    // 将对象保存到云端
-                    _ = timer.save { result in
-                        switch result {
-                        case .success:
-                            // 成功保存之后，执行其他逻辑
-                            print("事件保存成功")
-//                            self.action.backToRoot = false
-                            break
-                        case .failure(error: let error):
-                            // 异常处理
-                            print(error)
+                        let user = LCApplication.default.currentUser?.objectId?.stringValue!
+                        let query = LCQuery(className: "_User")
+                        query.whereKey("objectId", .equalTo(user!))
+                        _ = query.getFirst() { result1 in
+                            switch result1 {
+                            case .success(object: let person):
+                                //生产uuid
+                                do{
+                                let uuid = UUID().uuidString
+                                // 构建对象
+                                let timer = LCObject(className: "TimeLine")
+                                // 为属性赋值
+                                try timer.set("eventTime", value: date)
+                                try timer.set("eventContent", value: thingContent)
+                                try timer.set("eventPerson", value: descriptionEventName)
+                                try timer.set("eventType", value: thingType)
+                                try timer.set("isWarn", value: isReminder)
+                                try timer.set("eventIcon", value: thingIcon)
+                                try timer.set("UUID",value: uuid)
+                                try timer.set("familyId",value:(person.familyTreeId?.intValue!)!)
+                                
+                                // 将对象保存到云端
+                                _ = timer.save { result in
+                                    switch result {
+                                    case .success:
+                                        // 成功保存之后，执行其他逻辑
+                                        print("事件保存成功")
+                                        let query = LCQuery(className: "TimeLine")
+                                        query.whereKey("UUID", .equalTo(uuid))
+                                        _ = query.getFirst() { result in
+                                            switch result {
+                                            case .success(object: let students):
+                                                let objectId = students.objectId;
+                                                var objects: [LCObject] = []
+                                                do{
+                                                    for object1 in timeLineImage.imgUrl{
+                                                        let object2 = LCObject(className: "TimeLineAndImage")
+                                                        try object2.set("timeLineObjectId", value: objectId?.stringValue!)
+                                                        try object2.set("imageUrl",value: object1.stringValue!)
+                                                        objects.append(object2)
+                                                        print("😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯😯\(objects.count)")
+                                                    }
+                                                    _ = LCObject.save(objects, completion: { (result) in
+                                                        switch result {
+                                                        case .success:
+                                                            timeLineImage.imgUrl.removeAll()
+                                                            timeLineImage.img.removeAll()
+                                                            break
+                                                        case .failure(error: let error):
+                                                            print(error)
+                                                        }
+                                                    })
+                                                }catch{
+                                                    print(error)
+                                                }
+                                                break
+                                            case .failure(error: let error):
+                                                print(error)
+                                            }
+                                        }
+                                        break
+                                    
+                                    case .failure(error: let error):
+                                        // 异常处理
+                                        print(error)
+                                    }
+                                }
+                                break
+                            }catch{
+                                    print(error)
+                            }
+                            case .failure(error: let error):
+                                print(error)
+                            }
                         }
-                    }
                 } catch {
                     print(error)
                 }
@@ -102,7 +185,6 @@ struct EditTimelineView: View {
                 Text("确定")
                     .font(.system(size: 22))
             })
-            
             .onAppear(){
                 let objectId = LCApplication.default.currentUser?.objectId
                 let query = LCQuery(className: "_User")
@@ -139,7 +221,6 @@ struct EditTimelineView: View {
                 .background(Color.orange)
                 .foregroundColor(.white)
                 .cornerRadius(30)
-                
             }
                 Spacer()
             }
@@ -159,7 +240,8 @@ struct DescriptionEvent: View {
     
     @Binding var descriptionEventName : String
     @Binding var thingContent : String
-    
+    @State var isPresented : Bool = false
+    @ObservedObject var timeLineImage : TimeLineImage
     var body: some View {
         VStack{
             Text("简单描述事件：")
@@ -178,9 +260,57 @@ struct DescriptionEvent: View {
             }
             .background(Color("DescriptionEventTextfield"))
             .cornerRadius(20)
+            LazyVGrid(columns: imageItems, content: {
+                ForEach(0 ..< timeLineImage.img.count,id: \.self){
+                    index in
+                ZStack{
+                    Image(uiImage : timeLineImage.img[index])
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 110, height: 110, alignment: .center)
+                        .cornerRadius(10)
+                        .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
+                    
+                    Button(action:{
+                        timeLineImage.img.remove(at: index)
+                        timeLineImage.imgUrl.remove(at: index)
+                    }){
+                        ZStack{
+                            Circle()
+                                .fill(Color.gray)
+                                .frame(width: 18, height: 18, alignment: .center)
+                                
+                                
+                        Image("叉")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 15, height: 15, alignment: .center)
+                        }
+                    }.offset(x: 45, y: -45)
+                }
+                }
+                Button(action:{
+                    self.isPresented.toggle()
+                }){
+                HStack{
+                    VStack{
+                        Image("ic_add_a_photo_48px")
+                            .resizable()
+                            .frame(width: 40/*@END_MENU_TOKEN@*/, height: 40, alignment: /*@START_MENU_TOKEN@*/.center)
+                        Text("记录相片").font(.system(size:12)).foregroundColor(Color.black)
+                    }
+                }.frame(width: 110, height: 110, alignment: .center)
+                .cornerRadius(10)
+                .background(Color(red: 245/255, green: 245/255, blue: 245/255)).cornerRadius(10)
+                }.fullScreenCover(isPresented: $isPresented, content: {
+                    TimeLineImageUIView(timeLineImage:timeLineImage)
+                })
+            })
+            
             Text("描述人：\(descriptionEventName)")
                 .foregroundColor(Color("AccentColor"))
                 .offset(x: 80)
+            
         }
         .padding(EdgeInsets(top: 20, leading: 33, bottom: 0, trailing: 33))
         Divider().frame(width:320)

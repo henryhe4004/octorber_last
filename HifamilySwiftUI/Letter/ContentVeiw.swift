@@ -15,8 +15,6 @@ struct ContentVeiw: View {
     @Binding var selectedItem:Int
     @Binding var showSheet: Bool
     @Binding var txt:String
-
-    
     var body: some View {
         Spacer()
         VStack (alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){

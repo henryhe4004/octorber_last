@@ -2,12 +2,17 @@
 //  HomeView.swift
 //  HifamilySwiftUI
 //
-//  Created by 游 on 2021/9/14.
+//  Created爱了by 游 on 2021/9/14.
 //
 
+//这里改了
 import SwiftUI
 import CoreData
 import LeanCloud
+import Combine
+//import EFQRCode
+import YPImagePicker
+import Kingfisher
 
 
 //首先通过扩展 UIApplication隐藏键盘
@@ -28,14 +33,52 @@ class FamilyTreeData: ObservableObject {
 }
 
 
+class LandmarkTest:Identifiable{
+    // 唯一ID
+    var id: Int
+    // 图片地址
+    var imageurl: String
+    var size : CGSize
+    var offsetx : CGFloat
+    var offsety :CGFloat
+    var status : Bool
+    init(size:CGSize,imageurl: String,id: Int,status:Bool,offsetx : CGFloat,offsety:CGFloat) {
+
+        self.offsetx = offsetx
+        self.offsety = offsety
+        self.id = id;
+        self.imageurl = imageurl;
+        self.status = status
+        self.size = size
+    }
+}
+class DraftMarkModel:ObservableObject{
+    @Published var landmarkTest : [LandmarkTest]
+    init() {
+        self.landmarkTest = [LandmarkTest(size: CGSize(width: 10, height: 0),  imageurl: "father", id: 21, status: false,offsetx: 0, offsety: 0 ),
+                             LandmarkTest(size: CGSize(width: 10, height: 0),  imageurl: "father", id: 21, status: false, offsetx: 20, offsety: 20 )]
+                             
+          
+    }
+}
+struct AvatarList{
+    var url :String
+    let id : Int
+    var username : String
+    
+}
+class AvatarListModel:ObservableObject{
+    @Published var avatarList = [AvatarList]()
+    @Published var arrayCount = 0
+    
+}
 struct HomeView: View {
     
     @StateObject var user = InformationUser()
-//    @ObservedObject var user : InformationUser
     @StateObject var treeData = FamilyTreeData()
-    
+    @StateObject var draftMarkModel = DraftMarkModel()
+   
     //isHaveTree true 为创建者，false为加入者
-    @State var isHaveTree = false
     //不变
     @State var isPresented = false
     @State var isPersonPresented = false
@@ -57,7 +100,14 @@ struct HomeView: View {
     @Binding var isPressed1 : Bool
     @Binding var objectId:LCString
     
+    @State var offset: CGSize = .zero
+    @GestureState var isLongPressed = false
+
+
+  
+    @StateObject  var avatarListModel = AvatarListModel()
     var body: some View {
+        
         
         let drag = DragGesture()
             .onEnded {
@@ -78,11 +128,12 @@ struct HomeView: View {
         ZStack(alignment: .leading) {
             VStack{
                 //title
-                Title(isPersonPresented: $isPersonPresented, showLeftMenu : $showLeftMenu,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, status: $status, treeData: treeData)
+                Title(isPersonPresented: $isPersonPresented, showLeftMenu : $showLeftMenu,isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, status: $status, treeData: treeData, avatarListModel: avatarListModel)
                 Divider()
                 //title 下面部分
-                TitleDown(treeData: treeData, username: $username, avatar: $avatar)
-                
+                TitleDown(avatarListModel: avatarListModel, treeData: treeData, username: $username, avatar: $avatar)
+//                DrapView( isLongPressed1: isLongPressed, draftMarkModel: draftMarkModel)
+
                 
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -113,8 +164,50 @@ struct HomeView: View {
                     self.status = status
                     self.username = (todo.username?.stringValue)!
 
+                    //树上的头像
+                    let familyId = (todo.familyTreeId?.intValue)!
+                    if(familyId != 0){
+                        let user = LCQuery(className: "_User")
+                        user.whereKey("familyTreeId", .equalTo(familyId))
+                        user.whereKey("status", .equalTo(1))
+                        _ = user.find { result in
+                            switch result {
+                            case .success(objects: let user):
+                                for item in user{
+                                    let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.id?.intValue)!,username: (item.username?.stringValue)!)
+                                    self.avatarListModel.avatarList.append(avatar)
+                                }
+                                avatarListModel.arrayCount = avatarListModel.avatarList.count
+                                break
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
+
+                        let InvitationUser = LCQuery(className: "InvitationUser")
+                        InvitationUser.whereKey("treeId", .equalTo(familyId))
+                        InvitationUser.whereKey("status", .equalTo(1))
+                        _ = InvitationUser.find { result in
+                            switch result {
+                            case .success(objects: let user):
+                                for item in user{
+                                    let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.userId?.intValue)!,username: (item.username?.stringValue)!)
+                                    self.avatarListModel.avatarList.append(avatar)
+                                }
+                                avatarListModel.arrayCount = avatarListModel.avatarList.count
+
+                                break
+                            case .failure(error: let error):
+                                print(error)
+                            }
+                        }
+
+                    }
+
+
                     if(status == 1){
                         //创建者
+
                         treeData.isHaveTree = true
                         let familyTree = LCQuery(className: "familyTree")
                         familyTree.whereKey("createrId", .equalTo(createrId))
@@ -131,6 +224,8 @@ struct HomeView: View {
                                     self.treeData.familyTreeName = treeName
                                     print("treeName:"+treeName)
                                     self.treeData.indexTree = (item.indexTree?.intValue)!
+
+
 
                                     //更新
                                     do {
@@ -155,7 +250,7 @@ struct HomeView: View {
                             }
                         }
                     }else{
-                        //加入者
+                        //加入者???
                         treeData.isHaveTree = false
                         let query = LCQuery(className: "InvitationUser")
                         query.whereKey("userId", .equalTo(createrId))
@@ -173,7 +268,7 @@ struct HomeView: View {
                                                 switch result {
                                                 case .success:
                                                     //加入者
-                                                  
+
                                                     let treeId = todo.familyTreeId?.intValue
                                                     if(treeId == nil){
                                                         self.treeData.familyIdWrite = 0
@@ -191,6 +286,8 @@ struct HomeView: View {
                                                                     self.treeData.treeObjectId = (item.objectId?.stringValue)!
                                                                     self.treeData.familyTreeName = treeName!
                                                                     self.treeData.indexTree = (item.indextree?.intValue)!
+
+
 
                                                                 }
                                                                 break
@@ -215,9 +312,9 @@ struct HomeView: View {
                                 print(error)
                             }
                         }
-                  
-                     
-                        
+
+
+
                     }
 
 
@@ -229,9 +326,65 @@ struct HomeView: View {
 
     }
 }
+        
+        //拖拽部分做不出来
+        
+        struct DrapView: View{
+
+            @GestureState var isLongPressed1 = false
+            
+            @ObservedObject var draftMarkModel = DraftMarkModel()
+            
+            @GestureState private var dragOffset = CGSize.zero
+            var body: some View{
+                
+           
+                VStack(alignment: .leading){
+                    // 滚动组件; 数据可能为空需要加！强制不为空
+                    ScrollView(.horizontal,  showsIndicators: false){
+                            // 排列元素的间隔： spacning
+                        HStack(spacing: 10){
+                            ForEach(Array(draftMarkModel.landmarkTest.enumerated()), id: \.1.id) { (index,item) in
+                                        VStack(alignment: .leading){
+                                            Image(item.imageurl)
+                                                .resizable() // 拉伸图片
+                                                .frame(width: 80, height: 80, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                                                .cornerRadius(50)
+                                                .offset(x:item.size.width + item.offsetx,y: item.size.height+item.offsety)
+                                                .gesture(DragGesture()
+                                                            .updating($dragOffset, body: { (value, state, transaction) in
+                                                                                    state = value.translation
+                                                                                })
+                                                           
+                                                            .onChanged { (value) in
+                                                                print(value.startLocation, value.location, value.translation)
+                                                                item.status = true
+                                                                item.offsetx = value.location.x
+                                                                item.offsety = value.location.y
+                                                                
+                                                        }
+                                                        .onEnded { (value) in
+                                                                        item.status = false
+                                                            
+                                                        }
+                                                     
+        
+                                            )
+                                            
+                                            .scaleEffect(item.status ? 1.2 : 1)
+                                            .animation(.spring())
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                .padding(.bottom,10)
+
+            }
+        }
 
     struct TitleDown: View {
-
+        @ObservedObject var avatarListModel : AvatarListModel
         @StateObject var treeData = FamilyTreeData()
         @Binding var username : String
         @Binding var avatar : String
@@ -318,8 +471,139 @@ struct HomeView: View {
                         .multilineTextAlignment(.center)
                       
                     }
-                    Textfield02()
 
+                    
+                    if(avatarListModel.arrayCount >= 1){
+                        VStack(spacing: 10) {
+                            HStack{
+                                KFImage.url(URL(string:avatarListModel.avatarList[0].url))
+                                    .loadDiskFileSynchronously()
+                                    .cacheOriginalImage()
+                                    .resizable()
+                                    .frame(width: 85, height: 85)
+                                    .cornerRadius(80)
+                                    .overlay(
+                                            RoundedRectangle(cornerRadius: 80, style: .continuous)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                        )
+                                    .offset(x: -20, y: CGFloat(-220))
+                                    .contextMenu{
+                                        Button{
+                                            
+                                        } label:{
+                                            Text("用户名：\(avatarListModel.avatarList[0].username)")
+                                        }
+                                    }
+                                
+                                }
+                           
+                            }
+                    }
+                    if(avatarListModel.arrayCount >= 2){
+                        HStack{
+                            KFImage.url(URL(string:avatarListModel.avatarList[1].url))
+                            .loadDiskFileSynchronously()
+                            .cacheMemoryOnly()
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                            .cornerRadius(80)
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 80, style: .continuous)
+                                            .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 7)
+                                                    )
+
+                            .offset(x: 90, y: CGFloat(-180))
+                                .contextMenu{
+                                    Button(action:{
+                                    }){
+                                        Text("用户名：\(avatarListModel.avatarList[1].username)")
+                                    }
+                                }                            }
+                        }
+                    if(avatarListModel.arrayCount >= 3){
+                            HStack{
+                                KFImage.url(URL(string:avatarListModel.avatarList[2].url))
+                                    .loadDiskFileSynchronously()
+                                     .cacheOriginalImage()
+                                    .resizable()
+                                    .frame(width: 70, height: 70)
+                                    .cornerRadius(70)
+                                    .overlay(
+                                            RoundedRectangle(cornerRadius: 70, style: .continuous)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                        )
+                                    .offset(x: -90, y: CGFloat(-110))
+                                    .contextMenu{
+                                        Button(action:{
+                                        }){
+                                            Text("用户名：\(avatarListModel.avatarList[2].username)")
+                                        }
+                                    }
+                                }
+                    }
+                    if(avatarListModel.arrayCount >= 4){
+                            HStack{
+                                KFImage.url(URL(string:avatarListModel.avatarList[3].url))
+                                    .loadDiskFileSynchronously()
+                                     .cacheOriginalImage()
+                                    .resizable()
+                                    .frame(width: 70, height: 70)
+                                    .cornerRadius(70)
+                                    .overlay(
+                                            RoundedRectangle(cornerRadius: 70, style: .continuous)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                        )
+                                    .offset(x: 60, y: CGFloat(-80))
+                                    .contextMenu{
+                                        Button(action:{
+                                        }){
+                                            Text("用户名：\(avatarListModel.avatarList[3].username)")
+                                        }
+                                    }
+                                }
+                    }
+                    if(avatarListModel.arrayCount >= 5){
+                            HStack{
+                                KFImage.url(URL(string:avatarListModel.avatarList[4].url))
+                                    .loadDiskFileSynchronously()
+                                     .cacheOriginalImage()
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                            RoundedRectangle(cornerRadius: 50, style: .continuous)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                        )
+                                    .offset(x: -80, y: CGFloat(-10))
+                                    .contextMenu{
+                                        Button(action:{
+                                        }){
+                                            Text("用户名：\(avatarListModel.avatarList[4].username)")
+                                        }
+                                    }
+                                }
+                    }
+                    if(avatarListModel.arrayCount >= 6){
+                            HStack{
+                                KFImage.url(URL(string:avatarListModel.avatarList[5].url))
+                                    .loadDiskFileSynchronously()
+                                     .cacheOriginalImage()
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                            RoundedRectangle(cornerRadius: 50, style: .continuous)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                        )
+                                    .offset(x: 80, y: CGFloat(0))
+                                    .contextMenu{
+                                        Button(action:{
+                                        }){
+                                            Text("用户名：\(avatarListModel.avatarList[5].username)")
+                                        }
+                                    }
+                                }
+                    }
                     
                 }
             }
@@ -327,36 +611,7 @@ struct HomeView: View {
             }
         }
     }
-
-//家庭树名字
-//家庭树改名字在个人中心处改
-
-    
-//struct FamilyBlackboard: View {
-//    //家庭树名字
-////    @Binding var familyTreeName:String
-//    @StateObject var treeData = FamilyTreeData()
-//
-//
-//        var body: some View {
-//
-//            HStack {
-//                Text("\(treeData.familyTreeName)")
-//                .font(.system(size: 16))
-//                .foregroundColor(Color("FamliyTreeNameColor"))
-//                .frame(width: 90, height: 0)
-//                .offset(x: -123, y: 143)
-//                .multilineTextAlignment(.center)
-//
-//            }
-//
-//
-//        }
-//
-//    }
-//
 }
-
 
 struct CutButton: View {
     var body: some View {
@@ -542,6 +797,7 @@ struct Title: View {
 //    @StateObject var treeData = FamilyTreeData()
     
     @ObservedObject var treeData : FamilyTreeData
+    @ObservedObject var avatarListModel : AvatarListModel
     
     var body: some View {
         HStack {
@@ -571,7 +827,7 @@ struct Title: View {
                 Image("person")
             }
             .fullScreenCover(isPresented: $isPersonPresented, content: {
-                InformUIView(treeData: treeData, isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId)
+                InformUIView(treeData: treeData, isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId, avatarListModel: avatarListModel)
             })
             
         }.padding(15)
@@ -579,4 +835,18 @@ struct Title: View {
     }
 }
 
+}
+
+struct Photo: View {
+    @Binding var url: String
+    var body: some View {
+        HStack{
+            KFImage.url(URL(string:url))
+                .loadDiskFileSynchronously()
+                .cacheOriginalImage()
+                .resizable()
+        }
+    }
+   
+    
 }

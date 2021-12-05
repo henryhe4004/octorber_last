@@ -334,6 +334,8 @@ struct LoginView: View {
                         isLoginError = true
                     }
                     if isPasswordRuler(password:password) && password == againPassword{
+                        isShowLoading = true
+
                         let user = LCUser()
                         user.username = LCString(username)
                         user.password = LCString(password)
@@ -375,6 +377,8 @@ struct LoginView: View {
                     
                     }
                 if pageType == "signin"{
+                    isShowLoading = true
+
                     _ = LCUser.logIn(username: username, password: password) { result in
                         switch result {
                         case .success(object: let user):
@@ -396,9 +400,7 @@ struct LoginView: View {
                             errorReason = error.reason!;
                             isLoginError = true
                             isLoginTrue = false
-                            
                             print("登陆失败原因\(error)")
-                        
                     }
                 }
                 
@@ -419,12 +421,8 @@ struct LoginView: View {
                 Alert(title:Text( isLoginTrue ?"成功了":"出错了"),
                       message: Text(isLoginTrue ?"\(successReason)":"\(errorReason)"),
                     dismissButton: .default(Text("OK")))
-                
             })
-    
-
             VStack{
-                
                 ZStack{
                     Rectangle()
                         .fill(Color("LoginLine"))
@@ -461,5 +459,4 @@ struct LoginView: View {
         }
         .padding(.top,15)
     }
-    
 }

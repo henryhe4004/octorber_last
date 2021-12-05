@@ -56,7 +56,7 @@ struct LoveHistoryView: View {
                             self.loveHistory = false
                         }) {
                             
-                            Text("提交")
+                            Text("确定")
                                 .padding(10)
                                 .foregroundColor(.white)
                                 .background(Color("AccentColor").cornerRadius(10))

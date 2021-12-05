@@ -13,6 +13,24 @@ struct ThreeBlockView: View {
 //    @ObservedObject var indexLe:indexLetter
     @Binding var name:String
     @Binding var letter_1:peopleLetter
+    @Binding var isLetterSelected : Bool
+    @Binding var name1 : String
+    @Binding
+//    @State
+    var content : String
+//        = "多吃点，不要减肥，晚上 不要出门，要学会照顾自 己，常回家看看，给你做 你爱吃的红烧带鱼~🤗"
+    @Binding
+//    @State
+    var yourName : String
+//        = "爱你的妈妈"
+    @Binding
+//    @State
+    var date : String
+//        = "2021.07.05"
+    @Binding
+    var namefirst : String
+//    @Binding
+//    var nameSecond : String
     
     var body: some View {
         VStack {
@@ -75,6 +93,14 @@ struct ThreeBlockView: View {
                             }
                         }
                     }.frame(width: 152.0, height: 190.0)
+                        .onTapGesture(perform: {
+                            isLetterSelected = true
+                            name1 = letter_1.thisLetter[0].receiveName
+                            content = letter_1.thisLetter[0].letterContent
+                            yourName = letter_1.thisLetter[0].sendName
+                            date = letter_1.thisLetter[0].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash))
+                            namefirst = name
+                        })
                     VStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 20)
@@ -122,11 +148,20 @@ struct ThreeBlockView: View {
                                     
                                 }
                             }
-                            
+                
                         }
                     }
                     .frame(width: 152.0, height: 137)
+                    
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 53, trailing: 0))
+                    .onTapGesture(perform: {
+                        isLetterSelected = true
+                        name1 = letter_1.thisLetter[1].receiveName
+                        content = letter_1.thisLetter[1].letterContent
+                        yourName = letter_1.thisLetter[1].sendName
+                        date = letter_1.thisLetter[1].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash))
+                        namefirst = name
+                    })
                 }
                
                 HStack {
@@ -176,6 +211,14 @@ struct ThreeBlockView: View {
                                 .padding(EdgeInsets(top: -26, leading: 0, bottom: 0, trailing: 0))
                             }
                             .frame(width: 120, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                            .onTapGesture(perform: {
+                                isLetterSelected = true
+                                name1 = letter_1.thisLetter[2].receiveName
+                                content = letter_1.thisLetter[2].letterContent
+                                yourName = letter_1.thisLetter[2].sendName
+                                date = letter_1.thisLetter[2].sendTime.formatted(.iso8601.month().day().year().dateSeparator(.dash))
+                                namefirst = name
+                            })
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: -60, trailing: 0))
             
                         }

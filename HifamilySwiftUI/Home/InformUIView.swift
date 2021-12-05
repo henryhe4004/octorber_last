@@ -5,6 +5,7 @@
 //  Created by 游 on 2021/9/22.
 //
 
+//这里改了
 import SwiftUI
 import LeanCloud
 import YPImagePicker
@@ -41,7 +42,8 @@ class InformationUser: ObservableObject {
     @Published var url = ""
     @Published var MyImage : UIImage = UIImage()
     @Published var treeObjectId = ""
-    @Published var objectId = (LCApplication.default.currentUser?.objectId)!
+    
+    @Published var objectId = LCString("")
 }
 
 struct InformUIView: View {
@@ -57,6 +59,8 @@ struct InformUIView: View {
     @State var isToLogin = false
     @State var isAlert = false
     @State var isPicker = false
+    
+    @ObservedObject var avatarListModel : AvatarListModel
 
     
     //不确定是否修改
@@ -78,6 +82,7 @@ struct InformUIView: View {
         VStack {
             //返回按钮
             Button(action: {
+                avatarListModel.avatarList.removeAll()
                 //修改treeData的值
                 let query = LCQuery(className: "_User")
                 let _ = query.get(user.objectId) { (result) in
@@ -94,6 +99,7 @@ struct InformUIView: View {
                             treeData.familyTreeWrite = 0
                             treeData.familyTreeName = ""
                             treeData.treeObjectId = ""
+                            
                         }else{
                             let query = LCQuery(className: "familyTree")
                             query.whereKey("familyId", .equalTo(familyTreeId))
@@ -117,6 +123,45 @@ struct InformUIView: View {
                                     break
                                 case .failure(error: let error):
                                     print(error)
+                                }
+                                
+                                let familyId = familyTreeId
+                                if(familyId != 0){
+                                    let user = LCQuery(className: "_User")
+                                    user.whereKey("familyTreeId", .equalTo(familyId))
+                                    user.whereKey("status", .equalTo(1))
+                                    _ = user.find { result in
+                                        switch result {
+                                        case .success(objects: let user):
+                                            for item in user{
+                                                let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.id?.intValue)!,username: (item.username?.stringValue)!)
+                                                self.avatarListModel.avatarList.append(avatar)
+                                            }
+                                            avatarListModel.arrayCount = avatarListModel.avatarList.count
+                                            break
+                                        case .failure(error: let error):
+                                            print(error)
+                                        }
+                                    }
+                                    
+                                    let InvitationUser = LCQuery(className: "InvitationUser")
+                                    InvitationUser.whereKey("treeId", .equalTo(familyId))
+                                    InvitationUser.whereKey("status", .equalTo(1))
+                                    _ = InvitationUser.find { result in
+                                        switch result {
+                                        case .success(objects: let user):
+                                            for item in user{
+                                                let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.userId?.intValue)!,username: (item.username?.stringValue)!)
+                                                self.avatarListModel.avatarList.append(avatar)
+                                            }
+                                            avatarListModel.arrayCount = avatarListModel.avatarList.count
+                                
+                                            break
+                                        case .failure(error: let error):
+                                            print(error)
+                                        }
+                                    }
+                                   
                                 }
                             }
                         }
@@ -413,15 +458,27 @@ struct InformUIView: View {
         .sheet(isPresented: $isToLogin, onDismiss: {
             if(isLogin == true){
                 isToLogin = false
-            }
+            }else{
+                isToLogin = true
                 isAlert = true
+            }
+          
+            
+            
                     }) {
             logOutView(isLogin: $isLogin, isFirstLogin: $isFirstLogin, isPressed1: $isPressed1, objectId: $user.objectId, isToLogin: $isToLogin, user: user)
+                .alert(isPresented: $isAlert, content: {
+                    Alert(title:Text("登陆失败"),
+                          message: Text("请登陆一个账号"),
+                        dismissButton: .default(Text("OK")))
+                    
+                })
 
                     }
         
+        
             .onAppear(){
-                
+                self.user.objectId = (LCApplication.default.currentUser?.objectId)!
                         let familyMember = LCQuery(className: "FamilyMember")
                         _ = familyMember.find { result in
                             switch result {

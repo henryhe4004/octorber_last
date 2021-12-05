@@ -35,9 +35,11 @@ struct HomeLandUIView: View {
     }
 }
 
-struct HomeLandUIView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeLandUIView()
-    }
-}
+//struct HomeLandUIView_Previews: PreviewProvider {
+//    @StateObject var avatarModel : AvatarModel
+//    static var previews: some View {
+//        HomeLandUIView(avatarModel: avatarModel)
+//    }
+//}
+
 

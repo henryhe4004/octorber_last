@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct DetailLetterView: View {
-    @Binding
-//    @State
-    var name : String
-//        = "我的妍大宝"
+//    @Binding
+////    @State
+//    var name1 : String
+////        = "我的妍大宝"
     @Binding
 //    @State
     var content : String
@@ -38,6 +38,7 @@ struct DetailLetterView: View {
     
 //        = false
     var body: some View {
+        GeometryReader { geometry in
         ZStack{
             Rectangle().fill(Color.gray).opacity(0.5)
             ScrollView(.vertical, showsIndicators: false){
@@ -56,7 +57,7 @@ struct DetailLetterView: View {
                         Spacer()
                     }
                     HStack{
-                        Text(name)
+                        Text(namefirst)
                             .foregroundColor(Color(red: 97/255, green: 97/255, blue: 97/255))
                             .font(.system(size: 23))
                         Spacer()
@@ -77,19 +78,19 @@ struct DetailLetterView: View {
                             
                     }
                     VStack{
-                        HStack{
-                            Text("收件人: \(namefirst)").padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
-                                .foregroundColor(Color(red: 97/255, green: 97/255, blue: 97/255))
-                                .font(.system(size: 20))
-                            Spacer()
-                        }
-                        HStack{
-                            Text("发件人: \(nameSecond)")
-                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 5, trailing: 15))
-                                .foregroundColor(Color(red: 97/255, green: 97/255, blue: 97/255))
-                                .font(.system(size: 20))
-                            Spacer()
-                        }
+//                        HStack{
+//                            Text("收件人: \(namefirst)").padding(EdgeInsets(top: 0, leading: 15, bottom: 2, trailing: 15))
+//                                .foregroundColor(Color(red: 97/255, green: 97/255, blue: 97/255))
+//                                .font(.system(size: 20))
+//                            Spacer()
+//                        }
+//                        HStack{
+//                            Text("发件人: \(nameSecond)")
+//                                .padding(EdgeInsets(top: 0, leading: 15, bottom: 5, trailing: 15))
+//                                .foregroundColor(Color(red: 97/255, green: 97/255, blue: 97/255))
+//                                .font(.system(size: 20))
+//                            Spacer()
+//                        }
                         HStack{
                             Text("上传时间: \(date)")
                                 .padding(EdgeInsets(top: 0, leading: 15, bottom: 20, trailing: 15))
@@ -105,9 +106,11 @@ struct DetailLetterView: View {
                 .shadow(color: .gray, radius: 10, x: 0, y: 3)
                 .animation(.easeInOut)
             }.frame(width: 300, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .offset( y: geometry.size.width/3)
         }
         }
     }
+}
 
 //struct DetailLetterView_Previews: PreviewProvider {
 //    static var previews: some View {
