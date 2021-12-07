@@ -5,18 +5,18 @@
         "package": "HalfASheet",
         "repositoryURL": "https://github.com/franklynw/HalfASheet",
         "state": {
-          "branch": null,
-          "revision": "4f43296b3722082dd5735521ee0fbf25e61cd21c",
-          "version": "1.0.2"
+          "branch": "develop",
+          "revision": "5d1ade1157f87c4f922f4aa1af318f53fa1a3764",
+          "version": null
         }
       },
       {
         "package": "HalfModal",
         "repositoryURL": "https://github.com/ViktorMaric/HalfModal",
         "state": {
-          "branch": null,
-          "revision": "621cbde96fe051805e359c75bb39183f46c234e4",
-          "version": "1.0.0"
+          "branch": "master",
+          "revision": "cd3814b63e3d14264c5356ff3e8554cb328701fc",
+          "version": null
         }
       },
       {

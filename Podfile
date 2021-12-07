@@ -11,4 +11,5 @@ target 'HifamilySwiftUI' do
    pod 'LeanCloud'
    pod 'Kingfisher', '~> 7.0'
    pod 'SwiftFormat/CLI'
+   pod 'WaterfallGrid', '~> 1.0.0'
  end

@@ -82,15 +82,16 @@ struct InformUIView: View {
         VStack {
             //返回按钮
             Button(action: {
-                avatarListModel.avatarList.removeAll()
+                
                 //修改treeData的值
                 let query = LCQuery(className: "_User")
                 let _ = query.get(user.objectId) { (result) in
                     switch result {
                     case .success(object: let todo):
-//                        let status = (todo.status?.intValue)!
                         let id = (todo.id?.intValue)!
                         let familyTreeId = (todo.familyTreeId?.intValue)!
+                        avatarListModel.avatarList.removeAll()
+                        avatarListModel.arrayCount = 0
                         if(familyTreeId == 0){
                             treeData.isHaveTree = false
                             treeData.indexTree = 0
@@ -99,8 +100,44 @@ struct InformUIView: View {
                             treeData.familyTreeWrite = 0
                             treeData.familyTreeName = ""
                             treeData.treeObjectId = ""
+                            avatarListModel.avatarList.removeAll()
                             
-                        }else{
+                        }else if(familyTreeId != 0 ){
+                            let familyId = familyTreeId
+                                let user = LCQuery(className: "_User")
+                                user.whereKey("familyTreeId", .equalTo(familyId))
+                                user.whereKey("status", .equalTo(1))
+                                _ = user.find { result in
+                                    switch result {
+                                    case .success(objects: let user):
+                                        for item in user{
+                                            let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.id?.intValue)!,username: (item.username?.stringValue)!)
+                                            self.avatarListModel.avatarList.append(avatar)
+                                        }
+                                        avatarListModel.arrayCount = avatarListModel.avatarList.count
+                                        break
+                                    case .failure(error: let error):
+                                        print(error)
+                                    }
+                                }
+                                
+                                let InvitationUser = LCQuery(className: "InvitationUser")
+                                InvitationUser.whereKey("treeId", .equalTo(familyId))
+                                InvitationUser.whereKey("status", .equalTo(1))
+                                _ = InvitationUser.find { result in
+                                    switch result {
+                                    case .success(objects: let user):
+                                        for item in user{
+                                            let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.userId?.intValue)!,username: (item.username?.stringValue)!)
+                                            self.avatarListModel.avatarList.append(avatar)
+                                        }
+                                        avatarListModel.arrayCount = avatarListModel.avatarList.count
+                            
+                                        break
+                                    case .failure(error: let error):
+                                        print(error)
+                                    }
+                                }
                             let query = LCQuery(className: "familyTree")
                             query.whereKey("familyId", .equalTo(familyTreeId))
                             _ = query.find { result in
@@ -125,44 +162,9 @@ struct InformUIView: View {
                                     print(error)
                                 }
                                 
-                                let familyId = familyTreeId
-                                if(familyId != 0){
-                                    let user = LCQuery(className: "_User")
-                                    user.whereKey("familyTreeId", .equalTo(familyId))
-                                    user.whereKey("status", .equalTo(1))
-                                    _ = user.find { result in
-                                        switch result {
-                                        case .success(objects: let user):
-                                            for item in user{
-                                                let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.id?.intValue)!,username: (item.username?.stringValue)!)
-                                                self.avatarListModel.avatarList.append(avatar)
-                                            }
-                                            avatarListModel.arrayCount = avatarListModel.avatarList.count
-                                            break
-                                        case .failure(error: let error):
-                                            print(error)
-                                        }
-                                    }
-                                    
-                                    let InvitationUser = LCQuery(className: "InvitationUser")
-                                    InvitationUser.whereKey("treeId", .equalTo(familyId))
-                                    InvitationUser.whereKey("status", .equalTo(1))
-                                    _ = InvitationUser.find { result in
-                                        switch result {
-                                        case .success(objects: let user):
-                                            for item in user{
-                                                let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.userId?.intValue)!,username: (item.username?.stringValue)!)
-                                                self.avatarListModel.avatarList.append(avatar)
-                                            }
-                                            avatarListModel.arrayCount = avatarListModel.avatarList.count
-                                
-                                            break
-                                        case .failure(error: let error):
-                                            print(error)
-                                        }
-                                    }
+                              
                                    
-                                }
+                                
                             }
                         }
                         

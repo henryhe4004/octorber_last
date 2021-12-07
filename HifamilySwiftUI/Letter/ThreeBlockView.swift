@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import LeanCloud
 
 struct ThreeBlockView: View {
+    
+    @ObservedObject var moreLetter:MoreLetter
     
 //    @ObservedObject var familyLetterMumber:LLMumber
 //    @ObservedObject var indexLe:indexLetter
@@ -32,6 +35,8 @@ struct ThreeBlockView: View {
 //    @Binding
 //    var nameSecond : String
     
+    
+    
     var body: some View {
         VStack {
             HStack {
@@ -43,10 +48,14 @@ struct ThreeBlockView: View {
                     .font(.system(size: 19))
                     .foregroundColor(grayColor)
                 Spacer()
-                Text("更多")
-                    .font(.system(size: 15))
-                    .foregroundColor(Color(UIColor(red: 0.75, green: 0.75, blue: 0.75,alpha:1)))
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 15))
+                NavigationLink(destination: CardsContainer(moreLetter: moreLetter))
+                {
+                    Text("更多")
+                        .font(.system(size: 15))
+                        .foregroundColor(Color(UIColor(red: 0.75, green: 0.75, blue: 0.75,alpha:1)))
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 15))
+                }.navigationBarHidden(true)
+                .navigationTitle("返回")
             }.padding(EdgeInsets(top: 18, leading: 25, bottom: 0, trailing: 30))
             
             

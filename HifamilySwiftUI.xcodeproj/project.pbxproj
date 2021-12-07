@@ -15,6 +15,24 @@
 		712901C6273371F6003B8AC0 /* AvatarPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712901C5273371F6003B8AC0 /* AvatarPicker.swift */; };
 		712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */; };
 		7144DFA226F9C8DD00BF4113 /* DetailImageUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */; };
+		71591460275DE86E006236F7 /* MoreLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7159145F275DE86E006236F7 /* MoreLetterView.swift */; };
+		715914E9275DFB49006236F7 /* ImagesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914E8275DFB49006236F7 /* ImagesContainer.swift */; };
+		715914EB275DFB7B006236F7 /* ImagesGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914EA275DFB7B006236F7 /* ImagesGrid.swift */; };
+		715914EE275DFBD7006236F7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914ED275DFBD7006236F7 /* SettingsView.swift */; };
+		715914F0275DFBFC006236F7 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914EF275DFBFC006236F7 /* Settings.swift */; };
+		715914F2275DFC1B006236F7 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914F1275DFC1B006236F7 /* Screen.swift */; };
+		715914F5275DFC8F006236F7 /* EditMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914F4275DFC8F006236F7 /* EditMode.swift */; };
+		715914F8275DFD19006236F7 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914F7275DFD19006236F7 /* Generator.swift */; };
+		715914FA275DFD32006236F7 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914F9275DFD32006236F7 /* View+Extension.swift */; };
+		715914FC275DFD4D006236F7 /* LoremIpsum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914FB275DFD4D006236F7 /* LoremIpsum.swift */; };
+		71591500275DFF6D006236F7 /* Cardd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715914FF275DFF6D006236F7 /* Cardd.swift */; };
+		71591502275DFF7C006236F7 /* CardVieww.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71591501275DFF7C006236F7 /* CardVieww.swift */; };
+		71591504275DFF90006236F7 /* CardsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71591503275DFF90006236F7 /* CardsContainer.swift */; };
+		71591506275DFFA3006236F7 /* CardsGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71591505275DFFA3006236F7 /* CardsGrid.swift */; };
+		71591508275DFFF1006236F7 /* RectangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71591507275DFFF1006236F7 /* RectangleView.swift */; };
+		7159150A275E0002006236F7 /* RectangleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71591509275E0002006236F7 /* RectangleModel.swift */; };
+		7159150C275E0016006236F7 /* RectanglesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7159150B275E0016006236F7 /* RectanglesContainer.swift */; };
+		7159150E275E002A006236F7 /* RectanglesGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7159150D275E002A006236F7 /* RectanglesGrid.swift */; };
 		715927EA2722AEFB00041D75 /* TextFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927E92722AEFB00041D75 /* TextFile.swift */; };
 		715927EE2725037200041D75 /* RefreshableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927ED2725037200041D75 /* RefreshableScrollView.swift */; };
 		715927F02725070200041D75 /* RefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715927EF2725070200041D75 /* RefreshView.swift */; };
@@ -92,6 +110,24 @@
 		712901C5273371F6003B8AC0 /* AvatarPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPicker.swift; sourceTree = "<group>"; };
 		712FF5D926FA33EC0000BE2B /* DetailAlbumUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAlbumUIView.swift; sourceTree = "<group>"; };
 		7144DFA126F9C8DD00BF4113 /* DetailImageUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageUIView.swift; sourceTree = "<group>"; };
+		7159145F275DE86E006236F7 /* MoreLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLetterView.swift; sourceTree = "<group>"; };
+		715914E8275DFB49006236F7 /* ImagesContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesContainer.swift; sourceTree = "<group>"; };
+		715914EA275DFB7B006236F7 /* ImagesGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGrid.swift; sourceTree = "<group>"; };
+		715914ED275DFBD7006236F7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		715914EF275DFBFC006236F7 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		715914F1275DFC1B006236F7 /* Screen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screen.swift; sourceTree = "<group>"; };
+		715914F4275DFC8F006236F7 /* EditMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMode.swift; sourceTree = "<group>"; };
+		715914F7275DFD19006236F7 /* Generator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
+		715914F9275DFD32006236F7 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		715914FB275DFD4D006236F7 /* LoremIpsum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoremIpsum.swift; sourceTree = "<group>"; };
+		715914FF275DFF6D006236F7 /* Cardd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardd.swift; sourceTree = "<group>"; };
+		71591501275DFF7C006236F7 /* CardVieww.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardVieww.swift; sourceTree = "<group>"; };
+		71591503275DFF90006236F7 /* CardsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsContainer.swift; sourceTree = "<group>"; };
+		71591505275DFFA3006236F7 /* CardsGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsGrid.swift; sourceTree = "<group>"; };
+		71591507275DFFF1006236F7 /* RectangleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleView.swift; sourceTree = "<group>"; };
+		71591509275E0002006236F7 /* RectangleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleModel.swift; sourceTree = "<group>"; };
+		7159150B275E0016006236F7 /* RectanglesContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectanglesContainer.swift; sourceTree = "<group>"; };
+		7159150D275E002A006236F7 /* RectanglesGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectanglesGrid.swift; sourceTree = "<group>"; };
 		715927E92722AEFB00041D75 /* TextFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFile.swift; sourceTree = "<group>"; };
 		715927ED2725037200041D75 /* RefreshableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshableScrollView.swift; sourceTree = "<group>"; };
 		715927EF2725070200041D75 /* RefreshView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshView.swift; sourceTree = "<group>"; };
@@ -179,6 +215,58 @@
 				4F6080D8468FFC155461D480 /* Pods_HifamilySwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		715914EC275DFBB4006236F7 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				715914ED275DFBD7006236F7 /* SettingsView.swift */,
+				715914EF275DFBFC006236F7 /* Settings.swift */,
+				715914F1275DFC1B006236F7 /* Screen.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		715914F3275DFC77006236F7 /* Rectangles */ = {
+			isa = PBXGroup;
+			children = (
+				715914F4275DFC8F006236F7 /* EditMode.swift */,
+				71591507275DFFF1006236F7 /* RectangleView.swift */,
+				71591509275E0002006236F7 /* RectangleModel.swift */,
+				7159150B275E0016006236F7 /* RectanglesContainer.swift */,
+				7159150D275E002A006236F7 /* RectanglesGrid.swift */,
+			);
+			path = Rectangles;
+			sourceTree = "<group>";
+		};
+		715914F6275DFCF6006236F7 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				715914F7275DFD19006236F7 /* Generator.swift */,
+				715914F9275DFD32006236F7 /* View+Extension.swift */,
+				715914FB275DFD4D006236F7 /* LoremIpsum.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		715914FD275DFD6D006236F7 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				715914E8275DFB49006236F7 /* ImagesContainer.swift */,
+				715914EA275DFB7B006236F7 /* ImagesGrid.swift */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		715914FE275DFD8F006236F7 /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				715914FF275DFF6D006236F7 /* Cardd.swift */,
+				71591501275DFF7C006236F7 /* CardVieww.swift */,
+				71591503275DFF90006236F7 /* CardsContainer.swift */,
+				71591505275DFFA3006236F7 /* CardsGrid.swift */,
+			);
+			path = Cards;
 			sourceTree = "<group>";
 		};
 		71BF8B7926F6090D0006081B /* Image */ = {
@@ -373,12 +461,18 @@
 		CDED5B0B26F4DF2300570485 /* Letter */ = {
 			isa = PBXGroup;
 			children = (
+				715914FE275DFD8F006236F7 /* Cards */,
+				715914FD275DFD6D006236F7 /* Images */,
+				715914F6275DFCF6006236F7 /* Utilities */,
+				715914F3275DFC77006236F7 /* Rectangles */,
+				715914EC275DFBB4006236F7 /* Settings */,
 				CDED5B0C26F4DF2F00570485 /* LetterVeiw.swift */,
 				CDED5B0E26F4E0D300570485 /* WriteLetterVeiw.swift */,
 				71A3A4B826FC0908004B9D53 /* DetailLetterView.swift */,
 				7196606627269F5500C4AD00 /* ContentVeiw.swift */,
 				CDD223D4272AB3E200EEABBB /* ThreeBlockView.swift */,
 				CDD223D6272AB51A00EEABBB /* OneBlockView.swift */,
+				7159145F275DE86E006236F7 /* MoreLetterView.swift */,
 			);
 			path = Letter;
 			sourceTree = "<group>";
@@ -508,10 +602,14 @@
 				71A8A0FF27427071006E7F97 /* logOutView.swift in Sources */,
 				71EDEE1E272598D700DFD7D8 /* LynnPullToRefreshModifier.swift in Sources */,
 				890C993C26EF3A6800494182 /* Persistence.swift in Sources */,
+				7159150A275E0002006236F7 /* RectangleModel.swift in Sources */,
 				71FBB621273017E30062684A /* SelectImageToAlbumDetailView.swift in Sources */,
+				7159150E275E002A006236F7 /* RectanglesGrid.swift in Sources */,
 				CDD223D7272AB51A00EEABBB /* OneBlockView.swift in Sources */,
 				890C993526EF3A6700494182 /* ContentView.swift in Sources */,
 				8948191C26F5C0C90095E91D /* Model.xcdatamodeld in Sources */,
+				715914FA275DFD32006236F7 /* View+Extension.swift in Sources */,
+				71591504275DFF90006236F7 /* CardsContainer.swift in Sources */,
 				896F3A9226FB45DD005ED305 /* CoreData.swift in Sources */,
 				898693E726F374F400EA991E /* MissView.swift in Sources */,
 				89489A2927186849006FDDEC /* Textfield02.swift in Sources */,
@@ -527,11 +625,15 @@
 				7196606727269F5500C4AD00 /* ContentVeiw.swift in Sources */,
 				89489A272718683B006FDDEC /* LeftMenuView.swift in Sources */,
 				71E4DB412741EFCD00894F05 /* SwiftUpdateUIView.swift in Sources */,
+				7159150C275E0016006236F7 /* RectanglesContainer.swift in Sources */,
 				8989D13326F4D7A0007B6719 /* AddMemberCardUIView.swift in Sources */,
+				715914F8275DFD19006236F7 /* Generator.swift in Sources */,
+				715914F2275DFC1B006236F7 /* Screen.swift in Sources */,
 				89489A2B27186859006FDDEC /* HomeView.swift in Sources */,
 				718E65EC26F71A250010165C /* albumUIView.swift in Sources */,
 				7199557B26FB1EE1003ABE28 /* VideoUIView.swift in Sources */,
 				715C33A026F8B06E00491BF7 /* TextView.swift in Sources */,
+				715914F0275DFBFC006236F7 /* Settings.swift in Sources */,
 				8900C06526FB4DE9007E7D4D /* FamilyModel+CoreDataProperties.swift in Sources */,
 				71E4DB3D273BDAD000894F05 /* ContentOfAlbumSwiftUIView.swift in Sources */,
 				893BD76126F04A6000026C38 /* LoveView.swift in Sources */,
@@ -540,12 +642,17 @@
 				89C968352715C3DA00EFBA93 /* LoadingView.swift in Sources */,
 				718E65E626F6D1BA0010165C /* ImageUIView.swift in Sources */,
 				712FF5DA26FA33EC0000BE2B /* DetailAlbumUIView.swift in Sources */,
+				715914EE275DFBD7006236F7 /* SettingsView.swift in Sources */,
 				CDED5B0F26F4E0D300570485 /* WriteLetterVeiw.swift in Sources */,
 				8900C06726FB5C94007E7D4D /* InformUIView.swift in Sources */,
+				715914F5275DFC8F006236F7 /* EditMode.swift in Sources */,
 				712901C6273371F6003B8AC0 /* AvatarPicker.swift in Sources */,
+				71591506275DFFA3006236F7 /* CardsGrid.swift in Sources */,
 				8900C06026FB4DC8007E7D4D /* MemberModel+CoreDataClass.swift in Sources */,
 				71E4DB3F274102C600894F05 /* UpdateImageUIView.swift in Sources */,
+				71591502275DFF7C006236F7 /* CardVieww.swift in Sources */,
 				8997957A271C46DC00941FBB /* IsCreaterView.swift in Sources */,
+				71591508275DFFF1006236F7 /* RectangleView.swift in Sources */,
 				716676AB2725843000555510 /* SwiftRefreshUIView.swift in Sources */,
 				8900C06126FB4DC8007E7D4D /* MemberModel+CoreDataProperties.swift in Sources */,
 				711DD730271853EC0055A02E /* WhetherLoginBeforeUIView.swift in Sources */,
@@ -558,16 +665,21 @@
 				71EDEE1C272598B800DFD7D8 /* LynnPullToRefresh.swift in Sources */,
 				890C993326EF3A6700494182 /* HifamilySwiftUIApp.swift in Sources */,
 				715927EA2722AEFB00041D75 /* TextFile.swift in Sources */,
+				715914E9275DFB49006236F7 /* ImagesContainer.swift in Sources */,
 				718E65EF26F74E430010165C /* IssueUIView.swift in Sources */,
 				CDED5B0D26F4DF2F00570485 /* LetterVeiw.swift in Sources */,
 				710C9048272ACB4200EC47C6 /* photosTogetherUIView.swift in Sources */,
 				89489A2E271868A1006FDDEC /* Card.swift in Sources */,
 				8996E2C026F420E000F122BD /* LoveHistoryView.swift in Sources */,
+				71591500275DFF6D006236F7 /* Cardd.swift in Sources */,
 				715927EE2725037200041D75 /* RefreshableScrollView.swift in Sources */,
+				71591460275DE86E006236F7 /* MoreLetterView.swift in Sources */,
 				718E65E926F71A0D0010165C /* photosUIView.swift in Sources */,
 				71A3A4B926FC0908004B9D53 /* DetailLetterView.swift in Sources */,
 				89489A32271868AC006FDDEC /* CardView.swift in Sources */,
+				715914EB275DFB7B006236F7 /* ImagesGrid.swift in Sources */,
 				7184BE1C275CD9F600C25788 /* DetailTimeLineView.swift in Sources */,
+				715914FC275DFD4D006236F7 /* LoremIpsum.swift in Sources */,
 				8900C06B26FB60B6007E7D4D /* TimeLineVeiw.swift in Sources */,
 				71EDEE222725991700DFD7D8 /* LynnRefreshState.swift in Sources */,
 				71EDEE20272598FB00DFD7D8 /* LynnRefreshDefaultViews.swift in Sources */,

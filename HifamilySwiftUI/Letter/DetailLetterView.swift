@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct DetailLetterView: View {
-//    @Binding
+    @Binding
 ////    @State
-//    var name1 : String
-////        = "我的妍大宝"
+    var name1 : String
+//        = "我的妍大宝"
     @Binding
 //    @State
     var content : String
@@ -57,7 +57,7 @@ struct DetailLetterView: View {
                         Spacer()
                     }
                     HStack{
-                        Text(namefirst)
+                        Text(name1)
                             .foregroundColor(Color(red: 97/255, green: 97/255, blue: 97/255))
                             .font(.system(size: 23))
                         Spacer()

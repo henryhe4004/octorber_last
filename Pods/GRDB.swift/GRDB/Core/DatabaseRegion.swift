@@ -60,6 +60,7 @@ public struct DatabaseRegion: CustomStringConvertible, Equatable {
         self.init(tableRegions: [:])
     }
     
+    // TODO: @available(*, deprecated, message: "In order to specify a table region, prefer `Table(tableName)`")
     /// Creates a region that spans all rows and columns of a database table.
     ///
     /// - parameter table: A table name.
@@ -347,6 +348,14 @@ public protocol DatabaseRegionConvertible {
     /// - parameter db: A database connection.
     func databaseRegion(_ db: Database) throws -> DatabaseRegion
 }
+
+#if compiler(>=5.5)
+extension DatabaseRegionConvertible where Self == DatabaseRegion {
+    /// The region that covers the full database: all columns and all rows
+    /// from all tables.
+    public static var fullDatabase: Self { DatabaseRegion.fullDatabase }
+}
+#endif
 
 extension DatabaseRegion: DatabaseRegionConvertible {
     /// :nodoc:

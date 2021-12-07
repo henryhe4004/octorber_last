@@ -16,6 +16,57 @@ let grayColor = Color(UIColor(red: 0.45, green: 0.45, blue: 0.45,alpha: 1))
 
 let grayColor2 = Color(UIColor(red: 0.55, green: 0.55, blue: 0.55,alpha:1))
 
+final class MoreLetter:ObservableObject {
+    @Published var letterNum:Int
+    @Published var letters:[everyLetter]
+    @Published var cards:[Cardd]
+    
+    init() {
+        letterNum = 0
+        letters = []
+        cards = []
+    }
+    
+    func queryAllMyLetter() {
+        // 获取当前用户的Id
+        let myLetterId = LCApplication.default.currentUser?.objectId?.value
+        
+        let query = LCQuery(className: "Letter")
+        
+        query.whereKey("receiveLetterId", .equalTo(myLetterId!))
+        query.whereKey("createdAt", .descending)
+        _ = query.find { result in
+            switch result {
+            case .success(objects: let l):
+                for Item in l {
+                    // 查出来每封信的Id
+                    var mis:Cardd = Cardd(image: "", title: Date(), subtitle: "")
+                    mis.subtitle = (Item.letterContent?.stringValue!)!
+                    let letterId = (Item.objectId?.stringValue!)!
+                    let query = LCQuery(className: "LetterM")
+                    query.whereKey("letterObjectId", .equalTo(letterId))
+                    _ = query.getFirst { result in
+                        switch result {
+                        case .success(object: let todo):
+                            mis.image = (todo.sendName?.stringValue!)!
+//                            mis.receiveName = (todo.receiveName?.stringValue!)!
+                            mis.title = (todo.createdAt?.dateValue!)!
+                            self.cards.append(mis)
+                            print("NNNNNNNNNNNNNNNNNNN")
+                            print(mis)
+                        case .failure(error: let error):
+                            print(error)
+                        }
+                    }
+                }
+                break
+            case .failure(error: let error):
+                print(error)
+            }
+        }
+    }
+}
+
 
 struct everyLetter {
     var letterContent:String
@@ -68,12 +119,10 @@ final class MyLetter:ObservableObject {
                 print(error)
             }
         }
-        
         let query2 = LCQuery(className: "Letter")
         query2.whereKey("receiveLetterId", .equalTo(myLetterId!))
         let count = query2.count()
         self.letterNum = count.intValue
-
     }
 }
 
@@ -217,10 +266,11 @@ struct LetterView: View {
     @ObservedObject var familyLetterMumber:LLMumber
     @ObservedObject var myLetter:MyLetter
     @ObservedObject var indexLe:indexLetter = indexLetter()
+    @ObservedObject var moreLetter:MoreLetter
     
     var body: some View{
 
-//        NavigationView {
+        NavigationView {
             ZStack {
                 VStack {
             // 上层导航栏
@@ -230,48 +280,14 @@ struct LetterView: View {
             // 滚动视图
             ScrollView(.vertical) {
                     VStack{
-                        VStack{
-//                            Button(action: {
-//                                print("myLetter123num\(self.myLetter.letterNum)")
-//                            }) {
-//                                Text("test")
-//                            }
-//
-//                            Button(action: {
-//                                print("myLetter Content1\(self.myLetter.letters[0])")
-//                                print("myLetter Content2\(self.myLetter.letters[1])")
-//                                print("myLetter Content3\(self.myLetter.letters[2])")
-//                            }) {
-//                                Text("test2")
-//                            }
-//                            Button(action: {
-//                                print("########################################")
-//                                print("myFamily mumberId\(self.familyLetterMumber.mumbersObjectId)")
-//                                print("myFamily mumberName\(self.familyLetterMumber.mumbersName)")
-//                                print("myFamily mumberLetterNumber\(self.familyLetterMumber.mumbersLetterNum)")
-//                                print("****************************************")
-//                                for i in 0..<self.familyLetterMumber.pLetter.count {
-//                                    print(i)
-//                                    print("\(self.familyLetterMumber.pLetter[i])")
-//                                    print("这个人是\(self.familyLetterMumber.mumbersName[i])")
-//                                    print("这个人收到的家书数量\(self.familyLetterMumber.pLetter[i].thisLetter.count)")
-//                                }
-//                            }) {
-//                                Text("测试返回家庭成员信息")
-//                            }
-//
-//                            Button(action: {
-//                                print("\(familyLetterMumber.pLetter[1])")
-//                            }) {
-//                                Text("测试当前块")
-//                            }
+                        VStack{           
                             if(familyLetterMumber.pLetter.count > 0) {
                                 ForEach(0..<familyLetterMumber.pLetter.count, id:\.self) { i in
                                     if(familyLetterMumber.pLetter[i].thisLetter.count >= 3 ) {
-                                        ThreeBlockView(name:$familyLetterMumber.mumbersName[i],letter_1: $familyLetterMumber.pLetter[i], isLetterSelected: $isLetterSelected,name1:$name1,content:$content,yourName:$yourName,date:$date,namefirst:$namefirst)
+                                        ThreeBlockView(moreLetter: moreLetter, name:$familyLetterMumber.mumbersName[i],letter_1: $familyLetterMumber.pLetter[i], isLetterSelected: $isLetterSelected,name1:$name1,content:$content,yourName:$yourName,date:$date,namefirst:$namefirst)
                                     }
                                     else if (familyLetterMumber.pLetter[i].thisLetter.count > 0 && familyLetterMumber.pLetter[i].thisLetter.count < 3) {
-                                        OneBlockView(name:$familyLetterMumber.mumbersName[i],letter_1: $familyLetterMumber.pLetter[i],isLetterSelected: $isLetterSelected,name1:$name1,content:$content,yourName:$yourName,date:$date,namefirst:$namefirst)
+                                        OneBlockView(moreLetter: moreLetter, name:$familyLetterMumber.mumbersName[i],letter_1: $familyLetterMumber.pLetter[i],isLetterSelected: $isLetterSelected,name1:$name1,content:$content,yourName:$yourName,date:$date,namefirst:$namefirst)
                                     }
                                 }
                             }
@@ -980,10 +996,10 @@ struct LetterView: View {
                 
                 }
                 if(isLetterSelected == true){
-                    DetailLetterView(content:$content,yourName:$yourName,date:$date,isLetterSelected: $isLetterSelected,namefirst:$namefirst,nameSecond: $nameSecond)
+                    DetailLetterView(name1:$name1,content:$content,yourName:$yourName,date:$date,isLetterSelected: $isLetterSelected,namefirst:$namefirst,nameSecond: $nameSecond).contentShape(Rectangle())
                 }
             }
-                
+        }
         }
     }
 //}

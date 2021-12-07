@@ -12,18 +12,18 @@ struct Liner{
     var eventContent:String
     var eventIcon:Int
     var eventPerson:String
-    var eventTime:String
+    var eventTime:Date
     var eventType:String
     var familyId:Int
     var isWarn:Bool
     var objectId:String
     var img:[String]
 }
-func checkDay1(date:Date)->String{
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateStyle = .long
-    return dateFormatter.string(from: date)
-}
+//func checkDay1(date:Date)->String{
+//    let dateFormatter = DateFormatter()
+//    dateFormatter.dateStyle = .short
+//    return dateFormatter.string(from: date)
+//}
 final class TimeLiner: ObservableObject {
     @Published  var familyId:Int
     @Published  var lineRight:[Liner]
@@ -67,7 +67,7 @@ final class TimeLiner: ObservableObject {
                 var index = 0;
                 for item in person{
                     index+=1
-                    var line = Liner(eventContent: (item.eventContent?.stringValue!)!, eventIcon: (item.eventIcon?.intValue!)!, eventPerson: (item.eventPerson?.stringValue!)!, eventTime: checkDay1(date: (item.eventTime?.dateValue!)!), eventType:(item.eventType?.stringValue!)!, familyId: (item.familyId?.intValue!)!, isWarn: (item.isWarn?.boolValue!)!, objectId: (item.objectId?.stringValue!)!, img: [])
+                    var line = Liner(eventContent: (item.eventContent?.stringValue!)!, eventIcon: (item.eventIcon?.intValue!)!, eventPerson: (item.eventPerson?.stringValue!)!, eventTime:  (item.eventTime?.dateValue!)!, eventType:(item.eventType?.stringValue!)!, familyId: (item.familyId?.intValue!)!, isWarn: (item.isWarn?.boolValue!)!, objectId: (item.objectId?.stringValue!)!, img: [])
                     let query2 = LCQuery(className: "TimeLineAndImage")
                     query2.whereKey("timeLineObjectId", .equalTo(item.objectId!))
                     _ = query2.find(){result in
@@ -76,6 +76,14 @@ final class TimeLiner: ObservableObject {
                             for item in img1{
                                 line.img.append((item.imageUrl?.stringValue!)!)
                                 print("😊\(line.img.count)")
+//                                if(index%2==1){
+//                                    self.lineRight.append(line)
+//                                    print("😊💗\(line.img.count)")
+//                                    self.count = max(self.count,self.lineRight.count)
+//                                }else{
+//                                    self.lineLeft.append(line)
+//                                    self.count = max(self.count,self.lineLeft.count)
+//                                }
                             }
                             break
                         case .failure(error: let error):
@@ -97,9 +105,138 @@ final class TimeLiner: ObservableObject {
             }
     }
     }
+    func queryImg(objectId:String){
+//        let query2 = LCQuery(className: "TimeLineAndImage")
+//        query2.whereKey("timeLineObjectId", .equalTo(line.objectId!))
+//        _ = query2.find(){result in
+//            switch result{
+//            case .success(objects: let img1):
+//                for item in img1{
+//                    line.img.append((item.imageUrl?.stringValue!)!)
+//                    print("😊\(line.img.count)")
+//                }
+//                break
+//            case .failure(error: let error):
+//                print(error)
+//            }
+//        }
+    }
 
 }
 
+final class TimeLinerOnly: ObservableObject {
+//    @Published  var familyId:Int
+//    @Published  var lineRight:[Liner]
+//    @Published  var lineLeft:[Liner]
+//    @Published  var count:Int
+    @Published var liner:Liner
+    init() {
+       liner = Liner(eventContent: "", eventIcon: 0, eventPerson: "", eventTime: Date(), eventType: "", familyId: 0, isWarn: false, objectId: "", img: [])
+    }
+    func query(){
+        let query2 = LCQuery(className: "TimeLineAndImage")
+        query2.whereKey("timeLineObjectId", .equalTo(self.liner.objectId))
+        print("😊我好烦object\(self.liner.objectId)")
+        _ = query2.find(){result in
+            switch result{
+            case .success(objects: let img1):
+                for item in img1{
+                    self.liner.img.append((item.imageUrl?.stringValue!)!)
+                    print("😊我好烦\(self.liner.img.count)")
+                }
+                break
+            case .failure(error: let error):
+                print(error)
+            }
+    }
+//    func queryFamilyId(){
+//        let user = LCApplication.default.currentUser?.objectId?.stringValue!
+//        let query = LCQuery(className: "_User")
+//        query.whereKey("objectId", .equalTo(user!))
+//        _ = query.getFirst() { result in
+//            switch result {
+//            case .success(object: let person):
+//                self.familyId = (person.familyTreeId?.intValue!)!
+//                self.queryLine()
+//                break
+//            case .failure(error: let error):
+//                print(error)
+//            }
+//        }
+//    }
+//
+//    func queryLine(){
+//        let query = LCQuery(className: "TimeLine")
+//        query.whereKey("familyId",.equalTo(self.familyId))
+////        print("123123123saddasd13afsfgsdgewrgerg\(self.treeId)")
+//        query.whereKey("createdAt",.descending)
+////        query.skip=self.skip
+////        query.limit=20
+//        _ = query.find() { result in
+//            switch result {
+//            case .success(objects: let person):
+//                print("代码执行3213123123123123123123123123123123123")
+//                print(person)
+////                self.skip=self.skip+20
+//                var index = 0;
+//                for item in person{
+//                    index+=1
+//                    var line = Liner(eventContent: (item.eventContent?.stringValue!)!, eventIcon: (item.eventIcon?.intValue!)!, eventPerson: (item.eventPerson?.stringValue!)!, eventTime: checkDay1(date: (item.eventTime?.dateValue!)!), eventType:(item.eventType?.stringValue!)!, familyId: (item.familyId?.intValue!)!, isWarn: (item.isWarn?.boolValue!)!, objectId: (item.objectId?.stringValue!)!, img: [])
+//                    let query2 = LCQuery(className: "TimeLineAndImage")
+//                    query2.whereKey("timeLineObjectId", .equalTo(item.objectId!))
+//                    _ = query2.find(){result in
+//                        switch result{
+//                        case .success(objects: let img1):
+//                            for item in img1{
+//                                line.img.append((item.imageUrl?.stringValue!)!)
+//                                print("😊\(line.img.count)")
+////                                if(index%2==1){
+////                                    self.lineRight.append(line)
+////                                    print("😊💗\(line.img.count)")
+////                                    self.count = max(self.count,self.lineRight.count)
+////                                }else{
+////                                    self.lineLeft.append(line)
+////                                    self.count = max(self.count,self.lineLeft.count)
+////                                }
+//                            }
+//                            break
+//                        case .failure(error: let error):
+//                            print(error)
+//                        }
+//                    }
+//                    if(index%2==1){
+//                        self.lineRight.append(line)
+//                        print("😊💗\(line.img.count)")
+//                        self.count = max(self.count,self.lineRight.count)
+//                    }else{
+//                        self.lineLeft.append(line)
+//                        self.count = max(self.count,self.lineLeft.count)
+//                    }
+//                }
+//                break
+//            case .failure(error: let error):
+//                print(error)
+//            }
+//    }
+    }
+    func queryImg(objectId:String){
+//        let query2 = LCQuery(className: "TimeLineAndImage")
+//        query2.whereKey("timeLineObjectId", .equalTo(line.objectId!))
+//        _ = query2.find(){result in
+//            switch result{
+//            case .success(objects: let img1):
+//                for item in img1{
+//                    line.img.append((item.imageUrl?.stringValue!)!)
+//                    print("😊\(line.img.count)")
+//                }
+//                break
+//            case .failure(error: let error):
+//                print(error)
+//            }
+//        }
+    }
+
+}
 
 public struct TimeLineView<LeftView: View, RightView: View>: View {
     
@@ -179,7 +316,7 @@ public struct TimeLineView<LeftView: View, RightView: View>: View {
 struct TimeLineRight: View {
     @ObservedObject var timeLiner:TimeLiner
     @State var isSelected : Bool = false
-    @State var line : Liner = Liner(eventContent: "", eventIcon: 0, eventPerson: "", eventTime: "", eventType: "", familyId: 0, isWarn: false, objectId: "", img: [])
+    @ObservedObject var liner:TimeLinerOnly = TimeLinerOnly()
     var body: some View {
         ZStack{
         ScrollView {
@@ -190,14 +327,16 @@ struct TimeLineRight: View {
                 } rightView: {
                     Button(action:{
                         isSelected = true;
-                        line.eventContent = timeLiner.lineRight[index].eventContent
-                        line.eventIcon = timeLiner.lineRight[index].eventIcon
-                        line.eventPerson = timeLiner.lineRight[index].eventPerson
-                        line.eventType = timeLiner.lineRight[index].eventType
-                        line.familyId = timeLiner.lineRight[index].familyId
-                        line.isWarn = timeLiner.lineRight[index].isWarn
+                        liner.liner.objectId = timeLiner.lineRight[index].objectId
+                        liner.liner.eventContent = timeLiner.lineRight[index].eventContent
+                        liner.liner.eventIcon = timeLiner.lineRight[index].eventIcon
+                        liner.liner.eventPerson = timeLiner.lineRight[index].eventPerson
+                        liner.liner.eventType = timeLiner.lineRight[index].eventType
+                        liner.liner.familyId = timeLiner.lineRight[index].familyId
+                        liner.liner.isWarn = timeLiner.lineRight[index].isWarn
+                        liner.liner.eventTime = timeLiner.lineRight[index].eventTime
                         print("😊\(timeLiner.lineRight[index].img.count)")
-                        line.img = timeLiner.lineRight[index].img
+                        liner.liner.img = timeLiner.lineRight[index].img
                     }){
                     VStack (alignment: .trailing){
                         ZStack {
@@ -220,14 +359,14 @@ struct TimeLineRight: View {
                                     .foregroundColor(.white)
                                 VStack {
                                     Text(timeLiner.lineRight[index].eventContent)
-                                        .font(.system(size: 16))
-                                        .foregroundColor(Color("wTimeLineFontColorGray"))
-                                        .frame(width: 100, height: 50, alignment: .topLeading)
+                                        .font(.system(size: 15))
+//                                        .foregroundColor(Color("wTimeLineFontColorGray"))
+                                        .foregroundColor(Color.black)
+                                        .frame(width: 110, height: 50, alignment: .topLeading)
                                         .offset(x: 5,y:3)
-//                                    Text("2021年7月28日")
-//                                        .font(.system(size: 12))
-//                                        .foregroundColor(Color("shadowColor"))
-//                                        .offset(x: 0, y: 4)
+                                    Text("\(timeLiner.lineRight[index].eventTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")                                        .font(.system(size: 12))
+                                        .foregroundColor(Color("shadowColor"))
+                                        .offset(x: 0, y: 4)
                                 }
                             }.offset(x: -170, y: 150)
 //                            Text("创建人：\(timeLiner.lineRight[index].eventPerson)")
@@ -245,13 +384,15 @@ struct TimeLineRight: View {
                 
                     Button(action:{
                         isSelected = true;
-                        line.eventContent = timeLiner.lineLeft[index].eventContent
-                        line.eventIcon = timeLiner.lineLeft[index].eventIcon
-                        line.eventPerson = timeLiner.lineLeft[index].eventPerson
-                        line.eventType = timeLiner.lineLeft[index].eventType
-                        line.familyId = timeLiner.lineLeft[index].familyId
-                        line.isWarn = timeLiner.lineLeft[index].isWarn
-                        line.img = timeLiner.lineLeft[index].img
+                        liner.liner.objectId = timeLiner.lineLeft[index].objectId
+                        liner.liner.eventContent = timeLiner.lineLeft[index].eventContent
+                        liner.liner.eventIcon = timeLiner.lineLeft[index].eventIcon
+                        liner.liner.eventPerson = timeLiner.lineLeft[index].eventPerson
+                        liner.liner.eventTime = timeLiner.lineLeft[index].eventTime
+                        liner.liner.eventType = timeLiner.lineLeft[index].eventType
+                        liner.liner.familyId = timeLiner.lineLeft[index].familyId
+                        liner.liner.isWarn = timeLiner.lineLeft[index].isWarn
+//                        line.img = timeLiner.lineLeft[index].img
                     }){
                 VStack(alignment: .leading) {
                         // 我们的原UI
@@ -271,14 +412,14 @@ struct TimeLineRight: View {
                         .foregroundColor(.white)
                     VStack {
                         Text(timeLiner.lineLeft[index].eventContent)
-                            .font(.system(size: 16))
-                            .foregroundColor(Color("wTimeLineFontColorGray"))
-                            .frame(width: 100, height: 50, alignment: .topLeading)
+                            .font(.system(size: 15))
+                            .foregroundColor(Color.black)
+                            .frame(width: 110, height: 50, alignment: .topLeading)
                             .offset(x: 5,y:3)
-//                        Text("2021年7月28日")
-//                            .font(.system(size: 12))
-//                            .foregroundColor(Color("shadowColor"))
-//                            .offset(x: 0, y: 4)
+                        Text("\(timeLiner.lineLeft[index].eventTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color("shadowColor"))
+                            .offset(x: 0, y: 4)
                     }}}
             VStack {
 //                Text("创建人\(timeLiner.lineLeft[index].eventPerson)")
@@ -299,7 +440,9 @@ struct TimeLineRight: View {
         }
             if(isSelected){
                 Rectangle().fill(Color.gray).opacity(0.5)
-                DetailTimeLineView(liner: $line, isSelected:$isSelected)
+                DetailTimeLineView(liner: liner, isSelected:$isSelected).contentShape(Rectangle()).onAppear(perform:{
+                    liner.query()
+                })
             }
         }
     }

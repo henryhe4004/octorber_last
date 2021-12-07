@@ -1,3 +1,18 @@
+import Foundation
+
+// MARK: - TypedRequest
+
+/// The protocol for all requests that know how database rows should
+/// be interpreted.
+public protocol TypedRequest {
+    /// The type that can decode database rows.
+    ///
+    /// In the request below, it is Player:
+    ///
+    ///     let request = Player.all()
+    associatedtype RowDecoder
+}
+
 // MARK: - SelectionRequest
 
 /// The protocol for all requests that can refine their selection.
@@ -221,7 +236,7 @@ public protocol TableRequest {
     func aliased(_ alias: TableAlias) -> Self
 }
 
-extension TableRequest where Self: FilteredRequest {
+extension TableRequest where Self: FilteredRequest, Self: TypedRequest {
     
     /// Creates a request filtered by primary key.
     ///
@@ -246,7 +261,38 @@ extension TableRequest where Self: FilteredRequest {
     -> Self
     where Sequence.Element: DatabaseValueConvertible
     {
-        let keys = Array(keys)
+        // In order to encode keys in the database, we perform a runtime check
+        // for EncodableRecord, and look for a customized encoding strategy.
+        // Such dynamic dispatch is unusual in GRDB, but static dispatch
+        // (customizing TableRequest where RowDecoder: EncodableRecord) would
+        // make it impractical to define `filter(id:)`, `fetchOne(_:key:)`,
+        // `deleteAll(_:ids:)` etc.
+        if let recordType = RowDecoder.self as? EncodableRecord.Type {
+            if Sequence.Element.self == Date.self {
+                let strategy = recordType.databaseDateEncodingStrategy
+                let keys = keys.compactMap { strategy.encode($0 as! Date)?.databaseValue }
+                return filter(rawKeys: keys)
+            } else if Sequence.Element.self == UUID.self {
+                let strategy = recordType.databaseUUIDEncodingStrategy
+                let keys = keys.map { strategy.encode($0 as! UUID).databaseValue }
+                return filter(rawKeys: keys)
+            }
+        }
+        
+        return filter(rawKeys: keys)
+    }
+    
+    /// Creates a request filtered by primary key.
+    ///
+    ///     // SELECT * FROM player WHERE ... id IN (1, 2, 3)
+    ///     let request = try Player...filter(encodedKeys: [1, 2, 3])
+    ///
+    /// - parameter keys: A collection of primary keys
+    func filter<Sequence: Swift.Sequence>(rawKeys: Sequence)
+    -> Self
+    where Sequence.Element: DatabaseValueConvertible
+    {
+        let keys = Array(rawKeys)
         if keys.isEmpty {
             return none()
         }
@@ -309,8 +355,16 @@ extension TableRequest where Self: FilteredRequest {
                     return key
                         // Preserve ordering of columns in the unique index
                         .sorted { (kv1, kv2) in
-                            let index1 = lowercaseColumns.firstIndex(of: kv1.key.lowercased())!
-                            let index2 = lowercaseColumns.firstIndex(of: kv2.key.lowercased())!
+                            guard let index1 = lowercaseColumns.firstIndex(of: kv1.key.lowercased()) else {
+                                // We allow extra columns which are not in the unique key
+                                // Put them last in the query
+                                return false
+                            }
+                            guard let index2 = lowercaseColumns.firstIndex(of: kv2.key.lowercased()) else {
+                                // We allow extra columns which are not in the unique key
+                                // Put them last in the query
+                                return true
+                            }
                             return index1 < index2
                         }
                         .map { (column, value) in Column(column) == value }
@@ -324,7 +378,7 @@ extension TableRequest where Self: FilteredRequest {
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6, *)
 extension TableRequest
 where Self: FilteredRequest,
-      Self: JoinableRequest, // for RowDecoder
+      Self: TypedRequest,
       RowDecoder: Identifiable,
       RowDecoder.ID: DatabaseValueConvertible
 {
@@ -355,7 +409,7 @@ where Self: FilteredRequest,
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6, *)
 extension TableRequest
 where Self: FilteredRequest,
-      Self: JoinableRequest, // for RowDecoder
+      Self: TypedRequest,
       RowDecoder: Identifiable,
       RowDecoder.ID: _OptionalProtocol,
       RowDecoder.ID.Wrapped: DatabaseValueConvertible
@@ -612,21 +666,7 @@ public protocol _JoinableRequest {
 }
 
 /// The protocol for all requests that can be associated.
-public protocol JoinableRequest: _JoinableRequest {
-    /// The record type that can be associated to.
-    ///
-    /// In the request below, it is Book:
-    ///
-    ///     let request = Book.all()
-    ///
-    /// In the `belongsTo` association below, it is Author:
-    ///
-    ///     struct Book: TableRecord {
-    ///         // BelongsToAssociation<Book, Author>
-    ///         static let author = belongsTo(Author.self)
-    ///     }
-    associatedtype RowDecoder
-}
+public protocol JoinableRequest: TypedRequest, _JoinableRequest { }
 
 extension JoinableRequest {
     /// Creates a request that prefetches an association.
@@ -660,6 +700,94 @@ extension JoinableRequest {
     /// that the associated database table contains a matching row.
     public func joining<A: Association>(required association: A) -> Self where A.OriginRowDecoder == RowDecoder {
         _joining(required: association._sqlAssociation)
+    }
+}
+
+extension JoinableRequest where Self: SelectionRequest {
+    /// Creates a request which appends *columns of an associated record* to
+    /// the current selection.
+    ///
+    ///     // SELECT player.*, team.color
+    ///     // FROM player LEFT JOIN team ...
+    ///     let teamColor = Player.team.select(Column("color"))
+    ///     let request = Player.all().annotated(withOptional: teamColor)
+    ///
+    /// This method performs the same SQL request as `including(optional:)`.
+    /// The difference is in the shape of Decodable records that decode such
+    /// a request: the associated columns can be decoded at the same level as
+    /// the main record:
+    ///
+    ///     struct PlayerWithTeamColor: FetchableRecord, Decodable {
+    ///         var player: Player
+    ///         var color: String?
+    ///     }
+    ///     let players = try dbQueue.read { db in
+    ///         try request
+    ///             .asRequest(of: PlayerWithTeamColor.self)
+    ///             .fetchAll(db)
+    ///     }
+    ///
+    /// Note: this is a convenience method. You can build the same request with
+    /// `TableAlias`, `annotated(with:)`, and `joining(optional:)`:
+    ///
+    ///     let teamAlias = TableAlias()
+    ///     let request = Player.all()
+    ///         .annotated(with: teamAlias[Column("color")])
+    ///         .joining(optional: Player.team.aliased(teamAlias))
+    public func annotated<A: Association>(withOptional association: A) -> Self where A.OriginRowDecoder == RowDecoder {
+        // TODO: find a way to prefix the selection with the association key
+        let alias = TableAlias()
+        let selection = association._sqlAssociation.destination.relation.selectionPromise
+        return self
+            .joining(optional: association.aliased(alias))
+            .annotated(with: { db in
+                try selection.resolve(db).map { selection in
+                    selection.qualified(with: alias)
+                }
+            })
+    }
+    
+    /// Creates a request which appends *columns of an associated record* to
+    /// the current selection.
+    ///
+    ///     // SELECT player.*, team.color
+    ///     // FROM player JOIN team ...
+    ///     let teamColor = Player.team.select(Column("color"))
+    ///     let request = Player.all().annotated(withRequired: teamColor)
+    ///
+    /// This method performs the same SQL request as `including(required:)`.
+    /// The difference is in the shape of Decodable records that decode such
+    /// a request: the associated columns can be decoded at the same level as
+    /// the main record:
+    ///
+    ///     struct PlayerWithTeamColor: FetchableRecord, Decodable {
+    ///         var player: Player
+    ///         var color: String
+    ///     }
+    ///     let players = try dbQueue.read { db in
+    ///         try request
+    ///             .asRequest(of: PlayerWithTeamColor.self)
+    ///             .fetchAll(db)
+    ///     }
+    ///
+    /// Note: this is a convenience method. You can build the same request with
+    /// `TableAlias`, `annotated(with:)`, and `joining(required:)`:
+    ///
+    ///     let teamAlias = TableAlias()
+    ///     let request = Player.all()
+    ///         .annotated(with: teamAlias[Column("color")])
+    ///         .joining(required: Player.team.aliased(teamAlias))
+    public func annotated<A: Association>(withRequired association: A) -> Self where A.OriginRowDecoder == RowDecoder {
+        // TODO: find a way to prefix the selection with the association key
+        let selection = association._sqlAssociation.destination.relation.selectionPromise
+        let alias = TableAlias()
+        return self
+            .joining(required: association.aliased(alias))
+            .annotated(with: { db in
+                try selection.resolve(db).map { selection in
+                    selection.qualified(with: alias)
+                }
+            })
     }
 }
 
@@ -757,20 +885,20 @@ extension DerivableRequest {
     
     /// Creates a request which appends *aggregates* to the current selection.
     ///
-    ///     // SELECT player.*, COUNT(DISTINCT book.id) AS bookCount
-    ///     // FROM player LEFT JOIN book ...
-    ///     var request = Player.all()
-    ///     request = request.annotated(with: Player.books.count)
+    ///     // SELECT team.*, COUNT(DISTINCT player.id) AS playerCount
+    ///     // FROM team LEFT JOIN player ...
+    ///     var request = Team.all()
+    ///     request = request.annotated(with: Team.players.count)
     public func annotated(with aggregates: AssociationAggregate<RowDecoder>...) -> Self {
         annotated(with: aggregates)
     }
     
     /// Creates a request which appends *aggregates* to the current selection.
     ///
-    ///     // SELECT player.*, COUNT(DISTINCT book.id) AS bookCount
-    ///     // FROM player LEFT JOIN book ...
-    ///     var request = Player.all()
-    ///     request = request.annotated(with: [Player.books.count])
+    ///     // SELECT team.*, COUNT(DISTINCT player.id) AS playerCount
+    ///     // FROM team LEFT JOIN player ...
+    ///     var request = team.all()
+    ///     request = request.annotated(with: [Team.players.count])
     public func annotated(with aggregates: [AssociationAggregate<RowDecoder>]) -> Self {
         aggregates.reduce(self) { request, aggregate in
             request.annotated(with: aggregate)
@@ -780,11 +908,11 @@ extension DerivableRequest {
     /// Creates a request which appends the provided aggregate *predicate* to
     /// the eventual set of already applied predicates.
     ///
-    ///     // SELECT player.*
-    ///     // FROM player LEFT JOIN book ...
-    ///     // HAVING COUNT(DISTINCT book.id) = 0
-    ///     var request = Player.all()
-    ///     request = request.having(Player.books.isEmpty)
+    ///     // SELECT team.*
+    ///     // FROM team LEFT JOIN player ...
+    ///     // HAVING COUNT(DISTINCT player.id) = 0
+    ///     var request = Team.all()
+    ///     request = request.having(Team.players.isEmpty)
     public func having(_ predicate: AssociationAggregate<RowDecoder>) -> Self {
         var request = self
         let expression = predicate.prepare(&request)

@@ -15,6 +15,7 @@ struct HomeUIView: View {
     @ObservedObject var miss:Miss = Miss()
     @ObservedObject var myLetter:MyLetter = MyLetter()
     @ObservedObject var familyLetterMumber:LLMumber = LLMumber()
+    @ObservedObject var moreLetter:MoreLetter = MoreLetter()
     @ObservedObject var timeLiner:TimeLiner = TimeLiner()
     @Binding var isLogin : Bool
 //    @State var isFirstLogin = true
@@ -34,12 +35,15 @@ struct HomeUIView: View {
 //                }
                     
             })
-            LetterView(familyLetterMumber:familyLetterMumber, myLetter: myLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
+            LetterView(familyLetterMumber:familyLetterMumber, myLetter: myLetter, moreLetter: moreLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
                 if(familyLetterMumber.mumbersObjectId.isEmpty) {
                     familyLetterMumber.queryFamilyMumber()
                 }
                 if(myLetter.letters.isEmpty) {
                     myLetter.queryAllMyLetter()
+                }
+                if(moreLetter.cards.isEmpty) {
+                    moreLetter.queryAllMyLetter()
                 }
             })
             HomeView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId).tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
