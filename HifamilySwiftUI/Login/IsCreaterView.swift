@@ -27,6 +27,75 @@ struct IsCreaterView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 Button(action: {
+                    
+                    
+                    //用自己的userId执行创建一个家庭树，并赋值会给user
+                    //获取自己的user ID
+                    let objectId = (LCApplication.default.currentUser?.objectId)!
+                    let query = LCQuery(className: "_User")
+                    let _ = query.get(objectId) { (result) in
+                        switch result {
+                        case .success(object: let todo):
+                            //获取到自己的userId
+                            let userId = (todo.id?.intValue)!
+                            //建立一个家庭树
+                            do {
+                                // 构建对象
+                                let tree = LCObject(className: "familyTree")
+                                // 为属性赋值
+                                try tree.set("createrId", value: userId)
+                                // 将对象保存到云端
+                                _ = tree.save { result in
+                                    switch result {
+                                    case .success:
+                                        //找到tree ID
+                                        let query = LCQuery(className: "familyTree")
+                                        query.whereKey("createrId", .equalTo(userId))
+                                        _ = query.find { result in
+                                            switch result {
+                                            case .success(objects: let students):
+                                                for item in students{
+                                                    let treeId = (item.familyId?.intValue)!
+                                                    //把treeID返回到_user
+                                                        do {
+                                                            let user = LCObject(className: "_User", objectId: objectId)
+                                                            try user.set("familyTreeId", value: treeId)
+                                                            user.save { (result) in
+                                                                switch result {
+                                                                case .success:
+                                                                    break
+                                                                case .failure(error: let error):
+                                                                    print(error)
+                                                                }
+                                                            }
+                                                        } catch {
+                                                            print(error)
+                                                        }
+                                                    
+                                                }
+                                                        
+                                                break
+                                            case .failure(error: let error):
+                                                print(error)
+                                            }
+                                        }
+                                        break
+                                    case .failure(error: let error):
+                                        // 异常处理
+                                        print(error)
+                                    }
+                                }
+                            } catch {
+                                print(error)
+                            }
+                        
+                       
+                            
+                            
+                        case .failure(error: let error):
+                            print(error)
+                        }
+                    }
                     status = 1
                     isLoginBefore = true
                     isPressed = false

@@ -29,10 +29,10 @@ struct HomeUIView: View {
             ImageUIView(album:album).tabItem { Image(index == 1 ? "Iconly-Bulk-Activity" : "fIconly-Bulk-Activity") }.tag(1).onAppear(perform: {
                     album.update()
                 //改回来
-//                if #available(iOS 15.0, *) {
-//                    let appearance = UITabBarAppearance()
-//                    UITabBar.appearance().scrollEdgeAppearance = appearance
-//                }
+                if #available(iOS 15.0, *) {
+                    let appearance = UITabBarAppearance()
+                    UITabBar.appearance().scrollEdgeAppearance = appearance
+                }
                     
             })
             LetterView(familyLetterMumber:familyLetterMumber, myLetter: myLetter, moreLetter: moreLetter).tabItem { Image(index == 2 ? "Iconly-Bulk-Message" : "fIconly-Bulk-Message") }.tag(2).onAppear(perform: {
@@ -48,10 +48,10 @@ struct HomeUIView: View {
             })
             HomeView(isLogin: $isLogin,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId).tabItem { Image( index == 3 ? "fIconly-Bulk-Home" : "Iconly-Bulk-Home") }.tag(3).onAppear {
                 //改回来
-//                if #available(iOS 15.0, *) {
-//                    let appearance = UITabBarAppearance()
-//                    UITabBar.appearance().scrollEdgeAppearance = appearance
-//                }
+                if #available(iOS 15.0, *) {
+                    let appearance = UITabBarAppearance()
+                    UITabBar.appearance().scrollEdgeAppearance = appearance
+                }
             }
             LoveView(familyTree: familyTree,miss:miss).tabItem { Image( index == 4 ? "Iconly-Bulk-Heart" : "fIconly-Bulk-Heart") }.tag(4).onAppear(perform: {
                 familyTree.queryUser()

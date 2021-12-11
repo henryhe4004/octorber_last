@@ -106,7 +106,7 @@ struct DetailLetterView: View {
                 .shadow(color: .gray, radius: 10, x: 0, y: 3)
                 .animation(.easeInOut)
             }.frame(width: 300, height: 600, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                .offset( y: geometry.size.width/3)
+                .offset( y: geometry.size.width/5)
         }
         }
     }

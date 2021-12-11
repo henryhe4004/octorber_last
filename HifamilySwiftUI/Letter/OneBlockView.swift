@@ -35,7 +35,10 @@ struct OneBlockView: View {
 //        = "2021.07.05"
     @Binding
     var namefirst : String
-    
+//    
+//    @ObservedObject var familyLetterMumber:LLMumber
+//    @ObservedObject var myLetter:MyLetter
+//    
     var body: some View {
         VStack {
             HStack {

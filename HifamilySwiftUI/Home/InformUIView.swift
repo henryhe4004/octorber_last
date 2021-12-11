@@ -5,7 +5,6 @@
 //  Created by 游 on 2021/9/22.
 //
 
-//这里改了
 import SwiftUI
 import LeanCloud
 import YPImagePicker
@@ -120,6 +119,7 @@ struct InformUIView: View {
                                         print(error)
                                     }
                                 }
+                        
                                 
                                 let InvitationUser = LCQuery(className: "InvitationUser")
                                 InvitationUser.whereKey("treeId", .equalTo(familyId))
@@ -208,7 +208,10 @@ struct InformUIView: View {
                         KFImage.url(URL(string:user.url))
                         .loadDiskFileSynchronously()
                         .cacheMemoryOnly()
-                        .onSuccess { result in  self.isLoading = false}
+                        .onSuccess { result in
+     
+                            self.isLoading = false
+                        }
                         .resizable()
                         .frame(width:80,height: 80)
                         .cornerRadius(40)
@@ -502,6 +505,7 @@ struct InformUIView: View {
 //                获取个人信息
                 let objectId = LCApplication.default.currentUser?.objectId
                 self.user.objectId = objectId!
+                
                 let query = LCQuery(className: "_User")
                 let _ = query.get(user.objectId) { (result) in
                     switch result {
@@ -515,7 +519,9 @@ struct InformUIView: View {
                         if todo.mobilePhoneNUmber?.stringValue != nil {
                             let mobilePhoneNUmber = (todo.mobilePhoneNUmber?.stringValue)!
                             self.user.phone = mobilePhoneNUmber
+                        
                         }
+                        self.user.userId = (todo.id?.intValue)!
                         //改？？？？？
                             let familyPosition = todo.familyPosition?.intValue
                             self.selectedIndex = familyPosition! - 1
@@ -558,7 +564,7 @@ struct InformUIView: View {
             }
 
         .sheet(isPresented:$isImage){
-            AvatarPicker(MyImage : $user.MyImage,url:$user.url,isLoading:$isLoading)
+            AvatarPicker(user: user, MyImage : $user.MyImage,url:$user.url,isLoading:$isLoading)
          }
                 
             

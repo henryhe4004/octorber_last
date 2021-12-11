@@ -167,9 +167,14 @@ struct WriteLetterView: View {
     
     @State var txt:String = "选择你的家人"
     
+//    
+//    @ObservedObject var familyLetterMumber:LLMumber
+//    @ObservedObject var myLetter:MyLetter
+//    @ObservedObject var moreLetter:MoreLetter
+    
     
     var body: some View {
-
+        ScrollView(.vertical){
         VStack {
             Divider()
             VStack{
@@ -202,6 +207,7 @@ struct WriteLetterView: View {
                 
                 VStack {
                     KeyboardHost{
+                        
                         TextEditor(text: $letterr.letter)
                             .frame(width: 323, height: 200,alignment: .topLeading)
                                            .foregroundColor(grayColor2)
@@ -209,6 +215,7 @@ struct WriteLetterView: View {
                                            .multilineTextAlignment(.leading)
                                            .overlay(RoundedRectangle(cornerRadius: 10.0, style: .continuous).stroke(Color.init(red: 255/255, green: 169/255, blue: 54/255),lineWidth: 1.4)).shadow(radius: 1)
                                        }
+            
                                        .dismissKeyboardOnTap()
                 }.padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 
@@ -277,18 +284,19 @@ struct WriteLetterView: View {
                         }
                     }.padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 0))
                 }.padding(EdgeInsets(top: 20, leading: 250, bottom: 0, trailing:0))
-            }.navigationBarTitle(Text("写家书").foregroundColor(grayColor2)
+            }
+            .navigationBarTitle(Text("写家书")
                 .font(.system(size: 22)),displayMode: .inline)
             .navigationBarItems(trailing: Button(
                 action:{
                 lcletter.insertLetter(letterContent: letterr.letter, receiveLetterId: lcmumber.mumbersObjectId[selectedItem],letterSatus: lcletter.letterStatus,sendName: letterr.sender, receiveName: letterr.recipient)
-                
                     // 执行完后全部为空
                     letterr.letter = ""
                     lcletter.letterStatus = 0
                     letterr.sender = ""
                     letterr.recipient = ""
-
+                
+                    
             }){
                 Text("寄出")
                     .foregroundColor(orangeColor)
@@ -300,4 +308,5 @@ struct WriteLetterView: View {
             }
         }
     }
+}
 }

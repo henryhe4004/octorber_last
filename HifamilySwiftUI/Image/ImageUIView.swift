@@ -233,6 +233,7 @@ struct ImageUIView: View {
             listState.setNoMore(true)
         }else{
             album.skip = 0
+            print("😊😊😊\(album.skip)")
             album.dateNeed = []
             album.updateDateNeed()
         }

@@ -13,6 +13,7 @@ import LeanCloud
 import AVFoundation
 
 struct AvatarPicker: View {
+    @ObservedObject var user  : InformationUser
     @State private var showYPImagePickerView = true
     @Binding var MyImage : UIImage
     @Binding var url : String
@@ -21,7 +22,7 @@ struct AvatarPicker: View {
     var body: some View {
            VStack {
             
-            MediaPicker1( MyImage: $MyImage,url: $url, isLoading: $isLoading)
+               MediaPicker1( user: user, MyImage: $MyImage,url: $url, isLoading: $isLoading)
                
            }
 //           .navigationBarTitle("", displayMode: .inline)
@@ -49,6 +50,8 @@ func resizedImage1(image : UIImage) -> UIImage? {
 
 
 struct MediaPicker1: UIViewControllerRepresentable {
+    
+    @ObservedObject var user  : InformationUser
     
     @Binding var MyImage : UIImage
     @Binding var url : String
@@ -121,6 +124,55 @@ struct MediaPicker1: UIViewControllerRepresentable {
                                             switch result {
                                             case .success:
                                                 print("图片保存成功")
+                                                print("!!!!!!!!")
+                                              
+                                                let user = LCQuery(className: "_User")
+                                                user.whereKey("objectId", .equalTo(objectId!))
+                                                _ = user.find { result in
+                                                    switch result {
+                                                    case .success(objects: let students):
+                                                        for item in students{
+                                                            let userId = (item.id?.intValue)!
+                                                            //在InvitationUser修改头像url user.userId
+                                                            let query = LCQuery(className: "InvitationUser")
+                                                            query.whereKey("userId", .equalTo(userId))
+                                                            print("!!!!!!")
+                                                            print(userId)
+                                                            _ = query.find { result in
+                                                                switch result {
+                                                                case .success(objects: let userUrl):
+                                                                    for item in userUrl{
+                                                                        let objectId = (item.objectId?.stringValue)!
+                                                                        do {
+                                                                            let todo = LCObject(className: "InvitationUser", objectId: objectId)
+                                                                            try todo.set("url", value: value)
+                                                                            todo.save { (result) in
+                                                                                switch result {
+                                                                                case .success:
+                                                                                    print("更新的头像更新到invitationUser了")
+                                                                                    break
+                                                                                case .failure(error: let error):
+                                                                                    print(error)
+                                                                                }
+                                                                            }
+                                                                        } catch {
+                                                                            print(error)
+                                                                        }
+                                                                    }
+                                        
+                                                                    break
+                                                                case .failure(error: let error):
+                                                                    print(error)
+                                                                }
+                                                                
+                                                            }
+                                                        }
+                                                        break
+                                                    case .failure(error: let error):
+                                                        print(error)
+                                                    }
+                                                }
+                                           
                                                 break
                                             case .failure(error: let error):
                                                 print(error)

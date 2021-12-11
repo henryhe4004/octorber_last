@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct Generator {
-    
+   
     struct Rectangles {
         static func random(editMode: EditMode) -> [RectangleModel] {
             Array(0..<60).map {
@@ -31,13 +31,15 @@ struct Generator {
     
     struct Images {
         static func random() -> [String] {
+//            Array(0..<moreLetter.cards.count).map { "\(moreLetter.$0)" }.shuffled()
             Array(0..<22).map { "image\($0)" }.shuffled()
         }
     }
     
     struct Cards {
-        static func random() -> [Cardd] {
-            Images.random().map { Cardd(image: $0, title: Date(), subtitle: LoremIpsum.randomSentences()) }
+        static func random(moreLetter:MoreLetter) -> [Cardd] {
+            Array(0..<moreLetter.cards.count).map { moreLetter.cards[$0] }.shuffled()
+//            Images.random(moreLetter).map { Cardd(image: $0, title: Date(), subtitle: LoremIpsum.randomSentences()) }
         }
     }
     

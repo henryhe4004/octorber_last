@@ -46,6 +46,7 @@ final class Album : ObservableObject{
     @Published var skip = 0
     @Published var treeId : Int
     @Published var count : Int
+//    @Published var skip : Int
     init(){
         dateNeed = []
         skip = 0
@@ -79,13 +80,14 @@ final class Album : ObservableObject{
         print("123123123saddasd13afsfgsdgewrgerg\(self.treeId)")
         query.whereKey("createdAt",.descending)
         query.skip=self.skip
-        query.limit=20
+        query.limit=21
         _ = query.find() { result in
             switch result {
             case .success(objects: let person):
                 print("代码执行3213123123123123123123123123123123123")
                 print(person)
                 self.skip=self.skip+20
+                print("😊😊😊skip:\(self.skip)")
                 for item in person{
                     let imageContent = ImageContent(Content: (item.Content?.stringValue!)!, person: (item.person?.stringValue!)!, image: (item.url?.stringValue!)!, createdAt: formattedDate(date1: (item.createdAt?.dateValue!)!), UserObjectId: (item.UserObjectId?.stringValue!)!,objectId: (item.objectId?.stringValue!)!)
                     self.dateNeed.append(imageContent)

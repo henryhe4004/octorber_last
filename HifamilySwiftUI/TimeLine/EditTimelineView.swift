@@ -48,7 +48,7 @@ final class TimeLineImage: ObservableObject {
 struct EditTimelineView: View {
 //    @EnvironmentObject var action: NavigationAction
     
-   
+    @ObservedObject var timeLiner:TimeLiner
     @State var isSelected = -1;
     @State var isPresented = false
     @State var showingAlert = false
@@ -62,8 +62,6 @@ struct EditTimelineView: View {
     
     @Binding var isPushed : Bool
    
-    
-
     var body: some View {
         
         ZStack {
@@ -100,7 +98,6 @@ struct EditTimelineView: View {
                 }
             .navigationBarTitle(Text("编辑时间轴"),displayMode: .inline)
             .navigationBarItems(trailing: Button(action:{
-
                 do {
                         let user = LCApplication.default.currentUser?.objectId?.stringValue!
                         let query = LCQuery(className: "_User")
@@ -149,6 +146,10 @@ struct EditTimelineView: View {
                                                         case .success:
                                                             timeLineImage.imgUrl.removeAll()
                                                             timeLineImage.img.removeAll()
+                                                            timeLiner.count = 0;
+                                                            timeLiner.lineLeft = []
+                                                            timeLiner.lineRight = []
+                                                            timeLiner.queryFamilyId()
                                                             break
                                                         case .failure(error: let error):
                                                             print(error)
@@ -191,7 +192,7 @@ struct EditTimelineView: View {
                 let _ = query.get(objectId!) { (result) in
                     switch result {
                     case .success(object: let todo):
-                        let username = todo.username?.stringValue
+                        let username = todo.nickname?.stringValue
                         self.descriptionEventName = username!
                     case .failure(error: let error):
                         print(error)
@@ -499,8 +500,6 @@ struct EventMarkers: View {
                     Text(isPressedMore ? "收回" : "更多")
                         .foregroundColor(Color("fontColor"))
                         .frame(width: 40, height: 21, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                        
-                    
                     Image(systemName: "chevron.forward.2")
                         .foregroundColor(Color("fontColor"))
                         .rotationEffect(.degrees(isPressedMore ? -90 : 0))

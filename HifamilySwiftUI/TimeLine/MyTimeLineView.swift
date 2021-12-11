@@ -52,6 +52,7 @@ import SwiftUI
 struct MyTimeLineView: View {
     @State var isPushed = false
     @ObservedObject var timeLiner : TimeLiner
+//    @Published var liner:Liner
     var body: some View {
         NavigationView {
         VStack {
@@ -66,7 +67,7 @@ struct MyTimeLineView: View {
                     .foregroundColor(Color.black)
                     .font(.system(size: 22))
                 Spacer()
-                NavigationLink(destination: EditTimelineView(isPushed: $isPushed), isActive: $isPushed) { Text("添加")
+                NavigationLink(destination: EditTimelineView(timeLiner:timeLiner,isPushed: $isPushed), isActive: $isPushed) { Text("添加")
                         .foregroundColor(Color.black)
                         .font(.system(size: 22))
                 }.navigationBarHidden(true)

@@ -36,13 +36,16 @@ final class TimeLiner: ObservableObject {
         count = 0;
     }
     func queryFamilyId(){
-        let user = LCApplication.default.currentUser?.objectId?.stringValue!
+        let user = LCApplication.default.currentUser?.objectId?.stringValue
         let query = LCQuery(className: "_User")
         query.whereKey("objectId", .equalTo(user!))
         _ = query.getFirst() { result in
             switch result {
             case .success(object: let person):
                 self.familyId = (person.familyTreeId?.intValue!)!
+                self.lineRight = [];
+                self.lineLeft = [];
+                self.count = 0;
                 self.queryLine()
                 break
             case .failure(error: let error):
@@ -92,9 +95,13 @@ final class TimeLiner: ObservableObject {
                     }
                     if(index%2==1){
                         self.lineRight.append(line)
+                        self.lineLeft.append(Liner(eventContent: "Hi family", eventIcon: 0, eventPerson: "管理员", eventTime: Date(), eventType: "", familyId: 0, isWarn: false, objectId: "", img: []))
                         print("😊💗\(line.img.count)")
                         self.count = max(self.count,self.lineRight.count)
                     }else{
+                        if(self.lineLeft.count>=1){
+                            self.lineLeft.remove(at: self.lineLeft.count-1)
+                        }
                         self.lineLeft.append(line)
                         self.count = max(self.count,self.lineLeft.count)
                     }
@@ -134,6 +141,7 @@ final class TimeLinerOnly: ObservableObject {
        liner = Liner(eventContent: "", eventIcon: 0, eventPerson: "", eventTime: Date(), eventType: "", familyId: 0, isWarn: false, objectId: "", img: [])
     }
     func query(){
+        liner.img = []
         let query2 = LCQuery(className: "TimeLineAndImage")
         query2.whereKey("timeLineObjectId", .equalTo(self.liner.objectId))
         print("😊我好烦object\(self.liner.objectId)")
@@ -327,16 +335,16 @@ struct TimeLineRight: View {
                 } rightView: {
                     Button(action:{
                         isSelected = true;
-                        liner.liner.objectId = timeLiner.lineRight[index].objectId
-                        liner.liner.eventContent = timeLiner.lineRight[index].eventContent
-                        liner.liner.eventIcon = timeLiner.lineRight[index].eventIcon
-                        liner.liner.eventPerson = timeLiner.lineRight[index].eventPerson
-                        liner.liner.eventType = timeLiner.lineRight[index].eventType
-                        liner.liner.familyId = timeLiner.lineRight[index].familyId
-                        liner.liner.isWarn = timeLiner.lineRight[index].isWarn
-                        liner.liner.eventTime = timeLiner.lineRight[index].eventTime
-                        print("😊\(timeLiner.lineRight[index].img.count)")
-                        liner.liner.img = timeLiner.lineRight[index].img
+                        liner.liner.objectId = timeLiner.lineLeft[index].objectId
+                        liner.liner.eventContent = timeLiner.lineLeft[index].eventContent
+                        liner.liner.eventIcon = timeLiner.lineLeft[index].eventIcon
+                        liner.liner.eventPerson = timeLiner.lineLeft[index].eventPerson
+                        liner.liner.eventType = timeLiner.lineLeft[index].eventType
+                        liner.liner.familyId = timeLiner.lineLeft[index].familyId
+                        liner.liner.isWarn = timeLiner.lineLeft[index].isWarn
+                        liner.liner.eventTime = timeLiner.lineLeft[index].eventTime
+                        print("😊\(timeLiner.lineLeft[index].img.count)")
+                        liner.liner.img = timeLiner.lineLeft[index].img
                     }){
                     VStack (alignment: .trailing){
                         ZStack {
@@ -348,7 +356,7 @@ struct TimeLineRight: View {
 //                                .foregroundColor(Color.white)
 //                                .frame(width: 17, height: 17)
 //                                .offset(x:-130,y:87)
-                            Text(timeLiner.lineRight[index].eventType)
+                            Text(timeLiner.lineLeft[index].eventType)
                                 .foregroundColor(.white).font(.system(size: 14))
                                 .frame(width: 50, height: 20)
                                 .offset(x:-140,y:87)
@@ -358,13 +366,13 @@ struct TimeLineRight: View {
                                     .shadow(color: Color("shadowColor"), radius: 8, x: 1, y: 1)
                                     .foregroundColor(.white)
                                 VStack {
-                                    Text(timeLiner.lineRight[index].eventContent)
+                                    Text(timeLiner.lineLeft[index].eventContent)
                                         .font(.system(size: 15))
 //                                        .foregroundColor(Color("wTimeLineFontColorGray"))
                                         .foregroundColor(Color.black)
                                         .frame(width: 110, height: 50, alignment: .topLeading)
                                         .offset(x: 5,y:3)
-                                    Text("\(timeLiner.lineRight[index].eventTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")                                        .font(.system(size: 12))
+                                    Text("\(timeLiner.lineLeft[index].eventTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")                                        .font(.system(size: 12))
                                         .foregroundColor(Color("shadowColor"))
                                         .offset(x: 0, y: 4)
                                 }
@@ -381,19 +389,20 @@ struct TimeLineRight: View {
                         }
                     }
                 }
-                
+//                if(index<timeLiner.lineLeft.count){
                     Button(action:{
                         isSelected = true;
-                        liner.liner.objectId = timeLiner.lineLeft[index].objectId
-                        liner.liner.eventContent = timeLiner.lineLeft[index].eventContent
-                        liner.liner.eventIcon = timeLiner.lineLeft[index].eventIcon
-                        liner.liner.eventPerson = timeLiner.lineLeft[index].eventPerson
-                        liner.liner.eventTime = timeLiner.lineLeft[index].eventTime
-                        liner.liner.eventType = timeLiner.lineLeft[index].eventType
-                        liner.liner.familyId = timeLiner.lineLeft[index].familyId
-                        liner.liner.isWarn = timeLiner.lineLeft[index].isWarn
+                        liner.liner.objectId = timeLiner.lineRight[index].objectId
+                        liner.liner.eventContent = timeLiner.lineRight[index].eventContent
+                        liner.liner.eventIcon = timeLiner.lineRight[index].eventIcon
+                        liner.liner.eventPerson = timeLiner.lineRight[index].eventPerson
+                        liner.liner.eventTime = timeLiner.lineRight[index].eventTime
+                        liner.liner.eventType = timeLiner.lineRight[index].eventType
+                        liner.liner.familyId = timeLiner.lineRight[index].familyId
+                        liner.liner.isWarn = timeLiner.lineRight[index].isWarn
 //                        line.img = timeLiner.lineLeft[index].img
                     }){
+                    
                 VStack(alignment: .leading) {
                         // 我们的原UI
                         ZStack {
@@ -402,7 +411,7 @@ struct TimeLineRight: View {
                     .offset(x: -27, y: -55)
 //                Image("eventIcon\(timeLiner.lineLeft[index].eventIcon)")
 //                    .resizable().frame(width: 17, height: 17).offset(x: -42, y: -64)
-                Text(timeLiner.lineLeft[index].eventType)
+                Text(timeLiner.lineRight[index].eventType)
                     .offset(x: -30, y: -62).foregroundColor(.white).font(.system(size: 14))
                     .frame(width: 50, height: 20)
                 ZStack {
@@ -411,12 +420,12 @@ struct TimeLineRight: View {
                         .shadow(color: Color("shadowColor"), radius: 8, x: 1, y: 1)
                         .foregroundColor(.white)
                     VStack {
-                        Text(timeLiner.lineLeft[index].eventContent)
+                        Text(timeLiner.lineRight[index].eventContent)
                             .font(.system(size: 15))
                             .foregroundColor(Color.black)
                             .frame(width: 110, height: 50, alignment: .topLeading)
                             .offset(x: 5,y:3)
-                        Text("\(timeLiner.lineLeft[index].eventTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
+                        Text("\(timeLiner.lineRight[index].eventTime.formatted(.iso8601.month().day().year().dateSeparator(.dash)))")
                             .font(.system(size: 12))
                             .foregroundColor(Color("shadowColor"))
                             .offset(x: 0, y: 4)
@@ -434,10 +443,11 @@ struct TimeLineRight: View {
             }.padding(EdgeInsets(top: 10, leading: 5, bottom: 0, trailing: 0))
                 }
             }.padding(EdgeInsets(top: -40, leading: 40, bottom: 0, trailing: 0))
-                    }
+        }
                 }
             }
-        }
+//        }
+    }
             if(isSelected){
                 Rectangle().fill(Color.gray).opacity(0.5)
                 DetailTimeLineView(liner: liner, isSelected:$isSelected).contentShape(Rectangle()).onAppear(perform:{

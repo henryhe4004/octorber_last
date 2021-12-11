@@ -65,6 +65,7 @@ struct AvatarList{
     var url :String
     let id : Int
     var username : String
+
     
 }
 class AvatarListModel:ObservableObject{
@@ -115,6 +116,59 @@ struct HomeView: View {
                         withAnimation {
                             treeData.familyMemberCountWrite = familyMemberCountWrite
                                     self.showLeftMenu = false
+                            let query = LCQuery(className: "_User")
+                            let _ = query.get(user.objectId) { (result) in
+                                switch result {
+                                case .success(object: let todo):
+                                    //树上的头像
+                                    avatarListModel.avatarList.removeAll()
+                                    avatarListModel.arrayCount = 0
+                                    let familyId = (todo.familyTreeId?.intValue)!
+                                    
+                                        let user = LCQuery(className: "_User")
+                                        user.whereKey("familyTreeId", .equalTo(familyId))
+                                        user.whereKey("status", .equalTo(1))
+                                        _ = user.find { result in
+                                            switch result {
+                                            case .success(objects: let user):
+                                                for item in user{
+                                                    let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.id?.intValue)!,username: (item.username?.stringValue)!)
+                                                    self.avatarListModel.avatarList.append(avatar)
+                                                    avatarListModel.arrayCount = avatarListModel.avatarList.count
+                                                }
+                                                
+                                                break
+                                            case .failure(error: let error):
+                                                print(error)
+                                            }
+                                        }
+
+                                        let InvitationUser = LCQuery(className: "InvitationUser")
+                                        InvitationUser.whereKey("treeId", .equalTo(familyId))
+                                        InvitationUser.whereKey("status", .equalTo(1))
+                                        _ = InvitationUser.find { result in
+                                            switch result {
+                                            case .success(objects: let user):
+                                                for item in user{
+                                                    let avatar = AvatarList(url: (item.url?.stringValue)!, id: (item.userId?.intValue)!,username: (item.username?.stringValue)!)
+                                                    self.avatarListModel.avatarList.append(avatar)
+                                                }
+                                                avatarListModel.arrayCount = avatarListModel.avatarList.count
+
+                                                break
+                                            case .failure(error: let error):
+                                                print(error)
+                                            }
+                                        }
+                                    
+                                case .failure(error: let error):
+                                    print(error)
+                                }
+                            }
+                            
+                          
+
+                            
                                 }
                             }
                     else if $0.translation.width > 100 && treeData.isHaveTree{
@@ -143,7 +197,7 @@ struct HomeView: View {
             
             
             if self.showLeftMenu{
-                LeftMenuView(familyMemberCountWrite:$familyMemberCountWrite )
+                LeftMenuView(familyMemberCountWrite:$familyMemberCountWrite, avatarListModel: avatarListModel )
                     .offset(y: 30)
                     .frame(width: 1 * geometry.size.width/2)
                     .transition(.move(edge: .leading))
@@ -163,8 +217,12 @@ struct HomeView: View {
                     self.avatar = url
                     self.status = status
                     self.username = (todo.username?.stringValue)!
+                    let familyTreeId = (todo.familyTreeId?.intValue)!
+                    
 
                     //树上的头像
+                    avatarListModel.avatarList.removeAll()
+                    avatarListModel.arrayCount = 0
                     let familyId = (todo.familyTreeId?.intValue)!
                     if(familyId != 0){
                         let user = LCQuery(className: "_User")
@@ -207,7 +265,7 @@ struct HomeView: View {
 
                     if(status == 1){
                         //创建者
-
+                        
                         treeData.isHaveTree = true
                         let familyTree = LCQuery(className: "familyTree")
                         familyTree.whereKey("createrId", .equalTo(createrId))
@@ -224,9 +282,6 @@ struct HomeView: View {
                                     self.treeData.familyTreeName = treeName
                                     print("treeName:"+treeName)
                                     self.treeData.indexTree = (item.indexTree?.intValue)!
-
-
-
                                     //更新
                                     do {
                                         let todo = LCObject(className: "_User", objectId: user.objectId)
@@ -252,66 +307,92 @@ struct HomeView: View {
                     }else{
                         //加入者???
                         treeData.isHaveTree = false
-                        let query = LCQuery(className: "InvitationUser")
-                        query.whereKey("userId", .equalTo(createrId))
-                        _ = query.find { result in
-                            switch result {
-                            case .success(objects: let students):
-                                for item in students{
-                                    let status = (item.status?.intValue)!
-                                    let treeId = (item.treeId?.intValue)!
-                                    if(status == 1){
-                                        do {
-                                            let todo = LCObject(className: "_User", objectId: user.objectId)
-                                            try todo.set("familyTreeId", value: treeId)
-                                            todo.save { (result) in
-                                                switch result {
-                                                case .success:
-                                                    //加入者
+                        if(familyTreeId != 0){
+                            print("are you ok?")
+//                            treeData.isHaveTree = true
+                            let familyTree = LCQuery(className: "familyTree")
+                            familyTree.whereKey("familyId", .equalTo(familyTreeId))
+                            _ = familyTree.find { result in
+                                switch result {
+                                case .success(objects: let tree):
+                                    for item in tree{
+                                    let treeName = item.familyName?.stringValue
+                                    let familyNum = item.familyNum?.intValue
+                                        self.treeData.familyMemberCountWrite = familyNum!
+                                        self.treeData.treeObjectId = (item.objectId?.stringValue)!
+                                        self.treeData.familyTreeName = treeName!
+                                        self.treeData.indexTree = (item.indexTree?.intValue)!
+                                        self.treeData.familyIdWrite = familyTreeId
 
-                                                    let treeId = todo.familyTreeId?.intValue
-                                                    if(treeId == nil){
-                                                        self.treeData.familyIdWrite = 0
-                                                    }else{
-                                                        self.treeData.familyIdWrite = treeId!
-                                                        let familyTree = LCQuery(className: "familyTree")
-                                                        familyTree.whereKey("familyId", .equalTo(treeId!))
-                                                        _ = familyTree.find { result in
-                                                            switch result {
-                                                            case .success(objects: let tree):
-                                                                for item in tree{
-                                                                let treeName = item.familyName?.stringValue
-                                                                let familyNum = item.familyNum?.intValue
-                                                                    self.treeData.familyMemberCountWrite = familyNum!
-                                                                    self.treeData.treeObjectId = (item.objectId?.stringValue)!
-                                                                    self.treeData.familyTreeName = treeName!
-                                                                    self.treeData.indexTree = (item.indextree?.intValue)!
+                                    }
+                                    break
 
+                                case .failure(error: let error):
+                                    print(error)
+                                }
+                            }
+                        }else{
+                            let query = LCQuery(className: "InvitationUser")
+                            query.whereKey("userId", .equalTo(createrId))
+                            _ = query.find { result in
+                                switch result {
+                                case .success(objects: let students):
+                                    for item in students{
+                                        let status = (item.status?.intValue)!
+                                        let treeId = (item.treeId?.intValue)!
+                                        if(status == 1){
+                                            do {
+                                                let todo = LCObject(className: "_User", objectId: user.objectId)
+                                                try todo.set("familyTreeId", value: treeId)
+                                                todo.save { (result) in
+                                                    switch result {
+                                                    case .success:
+                                                        //加入者
 
+                                                        let treeId = todo.familyTreeId?.intValue
+                                                        if(treeId == nil){
+                                                            self.treeData.familyIdWrite = 0
+                                                        }else{
+                                                            self.treeData.familyIdWrite = treeId!
+                                                            let familyTree = LCQuery(className: "familyTree")
+                                                            familyTree.whereKey("familyId", .equalTo(treeId!))
+                                                            _ = familyTree.find { result in
+                                                                switch result {
+                                                                case .success(objects: let tree):
+                                                                    for item in tree{
+                                                                    let treeName = item.familyName?.stringValue
+                                                                    let familyNum = item.familyNum?.intValue
+                                                                        self.treeData.familyMemberCountWrite = familyNum!
+                                                                        self.treeData.treeObjectId = (item.objectId?.stringValue)!
+                                                                        self.treeData.familyTreeName = treeName!
+                                                                        self.treeData.indexTree = (item.indexTree?.intValue)!
 
+                                                                    }
+                                                                    break
+
+                                                                case .failure(error: let error):
+                                                                    print(error)
                                                                 }
-                                                                break
-
-                                                            case .failure(error: let error):
-                                                                print(error)
                                                             }
                                                         }
+                                                        break
+                                                    case .failure(error: let error):
+                                                        print(error)
                                                     }
-                                                    break
-                                                case .failure(error: let error):
-                                                    print(error)
                                                 }
+                                            } catch {
+                                                print(error)
                                             }
-                                        } catch {
-                                            print(error)
                                         }
                                     }
+                                    break
+                                case .failure(error: let error):
+                                    print(error)
                                 }
-                                break
-                            case .failure(error: let error):
-                                print(error)
                             }
                         }
+                        
+
 
 
 
@@ -372,8 +453,7 @@ struct HomeView: View {
                                             )
                                             
                                             .scaleEffect(item.status ? 1.2 : 1)
-                                            .animation(.spring())
-                                        }
+                                                                                    }
                                     }
                                 }
                             }
@@ -455,6 +535,7 @@ struct HomeView: View {
                         }
                         .padding(EdgeInsets(top:280,leading:-80,bottom:0,trailing:0))
                         if(!treeData.isHaveTree){
+                            
                             AddFamilyButton(username: $username, avatar: $avatar)
                         }
                         
@@ -484,7 +565,7 @@ struct HomeView: View {
                                     .cornerRadius(80)
                                     .overlay(
                                             RoundedRectangle(cornerRadius: 80, style: .continuous)
-                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 5)
                                                         )
                                     .offset(x: -20, y: CGFloat(-220))
                                     .contextMenu{
@@ -509,7 +590,7 @@ struct HomeView: View {
                             .cornerRadius(80)
                                 .overlay(
                                         RoundedRectangle(cornerRadius: 80, style: .continuous)
-                                            .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 7)
+                                            .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 5)
                                                     )
 
                             .offset(x: 90, y: CGFloat(-180))
@@ -530,7 +611,7 @@ struct HomeView: View {
                                     .cornerRadius(70)
                                     .overlay(
                                             RoundedRectangle(cornerRadius: 70, style: .continuous)
-                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 5)
                                                         )
                                     .offset(x: -90, y: CGFloat(-110))
                                     .contextMenu{
@@ -551,7 +632,7 @@ struct HomeView: View {
                                     .cornerRadius(70)
                                     .overlay(
                                             RoundedRectangle(cornerRadius: 70, style: .continuous)
-                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 5)
                                                         )
                                     .offset(x: 60, y: CGFloat(-80))
                                     .contextMenu{
@@ -572,7 +653,7 @@ struct HomeView: View {
                                     .cornerRadius(50)
                                     .overlay(
                                             RoundedRectangle(cornerRadius: 50, style: .continuous)
-                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 5)
                                                         )
                                     .offset(x: -80, y: CGFloat(-10))
                                     .contextMenu{
@@ -593,7 +674,7 @@ struct HomeView: View {
                                     .cornerRadius(50)
                                     .overlay(
                                             RoundedRectangle(cornerRadius: 50, style: .continuous)
-                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 8)
+                                                .stroke(Color.init(red: 255/255, green: 150/255, blue: 40/255), lineWidth: 5)
                                                         )
                                     .offset(x: 80, y: CGFloat(0))
                                     .contextMenu{
@@ -677,6 +758,7 @@ struct AddFamilyButton: View {
                                       switch result {
                                       case .success:
                                           // 成功保存之后，执行其他逻辑
+                                          self.isPresented = false//改2021.12.10
                                           break
                                       case .failure(error: let error):
                                           // 异常处理
@@ -702,7 +784,9 @@ struct AddFamilyButton: View {
                 .foregroundColor(.white)
                 .cornerRadius(30)
                 .alert(isPresented:$showingAlert) {
-                    familyIDAlert != "" ? Alert(title: Text("发送申请成功"), message: Text("已向\(familyIDAlert)家庭发送申请")) : Alert(title: Text("发送申请失败"), message: Text("请输入正确的家庭ID"))
+                    familyIDAlert != "" ? Alert(title: Text("发送申请成功"), message: Text("已向\(familyIDAlert)家庭发送申请")) : Alert(title: Text("发送申请失败"), message: Text("请输入正确的家庭ID")
+                        
+                    )
                         }
                 .padding(.top,20)
                 

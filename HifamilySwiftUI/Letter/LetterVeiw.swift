@@ -29,6 +29,7 @@ final class MoreLetter:ObservableObject {
     
     func queryAllMyLetter() {
         // 获取当前用户的Id
+        cards = []
         let myLetterId = LCApplication.default.currentUser?.objectId?.value
         
         let query = LCQuery(className: "Letter")
@@ -178,14 +179,14 @@ final class LLMumber:ObservableObject {
                     case .success(objects: let mumbers):
                         for Item in mumbers {
                             // 如果是自己，不加入
-                            if((Item.objectId?.stringValue!)! != sendLetterId) {
+//                            if((Item.objectId?.stringValue!)! != sendLetterId) {
                                 self.mumbersObjectId.append((Item.objectId?.stringValue!)!)
                                 self.mumbersName.append(self.familyMumber[(Item.familyPosition?.intValue!)!])
                                 let query2 = LCQuery(className: "Letter")
                                 query2.whereKey("receiveLetterId", .equalTo((Item.objectId?.stringValue!)!))
                                 let count = query2.count()
                                 self.mumbersLetterNum.append(count.intValue)
-                            }
+//                            }
                         }
                         self.queryFamilyMumberLetter()
                         print(self.mumbersName)
@@ -202,6 +203,7 @@ final class LLMumber:ObservableObject {
     
     // 查每个家庭成员的所有书信
     func queryFamilyMumberLetter(){
+        pLetter = []
         for i in 0..<mumbersObjectId.count {
             let peLetter = peopleLetter(personObjectId: self.mumbersObjectId[i], personName: self.mumbersName[i], personLetterNum: self.mumbersLetterNum[i], thisLetter: [])
             pLetter.append(peLetter)
@@ -271,16 +273,28 @@ struct LetterView: View {
     var body: some View{
 
         NavigationView {
+            GeometryReader { geometryWithSafeArea in
+                           GeometryReader { geometry in
+            VStack{
+              
+                UpperNavigationBar(familyLetterMumber: familyLetterMumber, myLetter: myLetter, moreLetter: moreLetter)
+                Divider()
+                Spacer()
+       
             ZStack {
-                VStack {
+            VStack {
             // 上层导航栏
-            UpperNavigationBar()
-            Spacer()
-            Divider()
+            
+        
             // 滚动视图
             ScrollView(.vertical) {
                     VStack{
-                        VStack{           
+                        VStack{
+//                            if(myLetter.letters.count > 0) {
+//                                if(myLetter.letters.count >= 3) {
+//                                    ThreeBlockView(moreLetter: moreLetter, name: .constant("我"), letter_1: myLetter.letters, isLetterSelected: $isLetterSelected, name1: $name1, content: $content, yourName: $yourName, date: $date, namefirst: $namefirst)
+//                                }
+//                            }
                             if(familyLetterMumber.pLetter.count > 0) {
                                 ForEach(0..<familyLetterMumber.pLetter.count, id:\.self) { i in
                                     if(familyLetterMumber.pLetter[i].thisLetter.count >= 3 ) {
@@ -992,19 +1006,29 @@ struct LetterView: View {
                     // 第六块
     //                SixBox()
                         }
-                    }
+            }
                 
-                }
+        }
                 if(isLetterSelected == true){
                     DetailLetterView(name1:$name1,content:$content,yourName:$yourName,date:$date,isLetterSelected: $isLetterSelected,namefirst:$namefirst,nameSecond: $nameSecond).contentShape(Rectangle())
                 }
             }
-        }
-        }
+            }
+                           }
+//                           .edgesIgnoringSafeArea()
+//                           .edgesIgnoringSafeArea(.all)
+                                     }
+        }.navigationBarHidden(true)
     }
+}
 //}
 
 struct UpperNavigationBar: View {
+    
+    @ObservedObject var familyLetterMumber:LLMumber
+    @ObservedObject var myLetter:MyLetter
+    @ObservedObject var moreLetter:MoreLetter
+    
     var body: some View {
         HStack {
             Image("Iconly-Bulk-Setting")
@@ -1017,11 +1041,19 @@ struct UpperNavigationBar: View {
                 .foregroundColor(Color("AccentColor"))
                 .font(.system(size: 18))
             Spacer()
-            Image("message-calendar")
-                .resizable()
-                .frame(width:23,
-                       height:23,
-                       alignment:.center)
+            NavigationLink(destination: WriteLetterView())
+            {
+                Image("eventIcon13")
+                    .resizable()
+                    .frame(width:23,
+                           height:23,
+                           alignment:.center)
+            }.navigationBarHidden(true)
+            .navigationTitle("返回")
+            
+                
+//                .padding(EdgeInsets())
+//                .foregroundColor(Color("AccentColor"))
         }.padding()
     }
 }
@@ -1076,6 +1108,11 @@ struct PencilBox: View {
 }
 
 struct PencilBoxVeiw: View {
+    
+//    @ObservedObject var familyLetterMumber:LLMumber
+//    @ObservedObject var myLetter:MyLetter
+//    @ObservedObject var moreLetter:MoreLetter
+    
     var body: some View {
         NavigationLink(destination: WriteLetterView())
         {

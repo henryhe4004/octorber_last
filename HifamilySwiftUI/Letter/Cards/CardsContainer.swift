@@ -59,12 +59,11 @@ struct CardsContainer: View {
 //    }
 //
     var body: some View {
-        NavigationView {
+//        NavigationView {
             CardsGrid(cards: .constant(moreLetter.cards), settings: $settings)
-        }
+//        }
         .sheet(isPresented: $showSettings, content: { SettingsView(settings: self.$settings, screen: .cards, isPresented: self.$showSettings) })
-        .navigationBarTitle(Text("全部家书").foregroundColor(grayColor2)
-                                .font(.system(size: 22)),displayMode: .inline)
+        .navigationBarTitle(Text("全部家书"),displayMode: .inline)
         .navigationBarItems(trailing: self.trailingNavigationBarItems())
 //        .navigationBarItems(leading: self.leadingNavigationBarItems(), trailing: self.trailingNavigationBarItems())
     }
@@ -75,11 +74,12 @@ struct CardsContainer: View {
 //    }
     private func trailingNavigationBarItems() -> some View {
         HStack() {
-//            Button(action: { self.cards = Generator.Cards.random() }) {
+            Button(action: { moreLetter.cards = Generator.Cards.random(moreLetter: moreLetter) }) {
                 Image(systemName: "gobackward")
             }
         }
     }
+}
 //}
 
 //struct CardsContainer_Previews: PreviewProvider {

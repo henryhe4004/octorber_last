@@ -35,8 +35,9 @@ struct ThreeBlockView: View {
 //    @Binding
 //    var nameSecond : String
     
-    
-    
+//    @ObservedObject var familyLetterMumber:LLMumber
+//    @ObservedObject var myLetter:MyLetter
+//    
     var body: some View {
         VStack {
             HStack {

@@ -27,6 +27,8 @@ struct LeftMenuView: View {
 //    @ObservedObject var treeData : FamilyTreeData
     @ObservedObject var person = Person()
     @Binding var familyMemberCountWrite : Int
+    @ObservedObject var avatarListModel : AvatarListModel
+    
 
    
     var body: some View {
@@ -94,6 +96,25 @@ struct LeftMenuView: View {
                                                 switch result {
                                                 case .success(object: let tree):
                                                     let treeId = (tree.get("treeId")?.intValue)!
+                                                  
+                                                    do {
+                                                        let todo = LCObject(className: "InvitationUser", objectId: item.objectId)
+                                                        try todo.set("status", value: 1)
+                                                        todo.save { (result) in
+                                                            switch result {
+                                                            case .success:
+                                                                    person.items.remove(at: index)
+                                                                break
+                                                            case .failure(error: let error):
+                                                                print(error)
+                                                            }
+                                                        }
+                                                    } catch {
+                                                        print(error)
+                                                    }
+
+                                                    
+
                                                 //获取object ID
                                                     let queryObjectId = LCQuery(className: "familyTree")
                                                     queryObjectId.whereKey("familyId", .equalTo(treeId))
@@ -111,6 +132,7 @@ struct LeftMenuView: View {
                                                                         switch result {
                                                                         case .success:
                                                                             familyMemberCountWrite =  familyNum + 1
+                                                                            
                                                                             break
                                                                         case .failure(error: let error):
                                                                             print(error)
@@ -125,31 +147,17 @@ struct LeftMenuView: View {
                                                             break
                                                         case .failure(error: let error):
                                                             print(error)
+                                                            
                                                         }
+                                                       
                                                     }
+                                                    
 
                                                 case .failure(error: let error):
                                                     print(error)
                                                 }
                                             }
-                                            do {
-                                                let todo = LCObject(className: "InvitationUser", objectId: item.objectId)
-                                                try todo.set("status", value: 1)
-                                                todo.save { (result) in
-                                                    switch result {
-                                                    case .success:
-//                                                        withAnimation(){
-                                                            person.items.remove(at: index)
-//                                                        }
-                                                        
-                                                        break
-                                                    case .failure(error: let error):
-                                                        print(error)
-                                                    }
-                                                }
-                                            } catch {
-                                                print(error)
-                                            }
+                                         
                                         }) {
                                             Text("同意")
                                                 .foregroundColor(.white)
@@ -197,16 +205,19 @@ struct LeftMenuView: View {
                         let InvitationUser = LCQuery(className: "InvitationUser")
                         InvitationUser.whereKey("treeId", .equalTo( familyTreeId!))
                         InvitationUser.whereKey("status", .equalTo(0))
+                        
                         _ = InvitationUser.find { result in
                             switch result {
                             case .success(objects: let user):
                                 for item in user{
                                     let personItem = PersonItem(name:(item.username?.stringValue)!, id: ((item.userId?.intValue)!) ,objectId:(item.objectId?.stringValue)!, url: (item.url?.stringValue)!)
                                     self.person.items.append(personItem)
+                                    
         
 
                                 }
-                                print(person.items)
+                                print(person.items.count)
+                               
                                 
                                 break
                             case .failure(error: let error):

@@ -94,19 +94,19 @@ struct LoginUIView: View {
                 
                 TopTitleView(pageType: $pageType)
                     .opacity(isAnimating ? 1 : 0)
-                    .animation(Animation.spring().delay(0))
+//                    .animation(Animation.spring().delay(0))
                 
                 SlideMenuView(pageType: $pageType)
                     .opacity(isAnimating ? 1 : 0)
-                    .animation(Animation.spring().delay(0.2))
+//                    .animation(Animation.spring().delay(0.2))
                 
                 FormView(username: $username, password: $password,againPassword: $againPassword, pageType: $pageType)
                     .opacity(isAnimating ? 1 : 0)
-                    .animation(Animation.spring().delay(0.4))
+//                    .animation(Animation.spring().delay(0.4))
                 
                 LoginView(pageType: $pageType, username: $username, password: $password, isShowLoading: $isShowLoading,isLogin: $isLogin, againPassword: $againPassword,isFirstLogin: $isFirstLogin,isPressed1: $isPressed1,objectId: $objectId)
                     .opacity(isAnimating ? 1 : 0)
-                    .animation(Animation.spring().delay(0.6))
+//                    .animation(Animation.spring().delay(0.6))
                     .debugPrint(("2\(isPressed1)"))
                     
                     
@@ -179,7 +179,7 @@ struct SlideMenuView: View {
                 .fill(Color.orange)
                 .frame(width:30,height:4)
                 .offset(x:pageType == "signin" ? 5 : 75,y:0)
-                .animation(.spring())
+//                .animation(.spring())
         }
         .padding(.top,20)
         

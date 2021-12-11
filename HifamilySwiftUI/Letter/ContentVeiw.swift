@@ -26,6 +26,7 @@ struct ContentVeiw: View {
                 }
             }
             Button("关闭窗体") {
+                txt = lcmumber.mumbersName[selectedItem]
                 self.showSheet = false
             }
         }
